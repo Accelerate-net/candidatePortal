@@ -49,7 +49,7 @@
 
 				<li class="dropdown toolbar-icon-bg">
 					<a href="#" class="dropdown-toggle username unsetBackgroundColor" data-toggle="dropdown">
-						<img class="img-circle" ng-src="{{profileData.photo || 'https://img.icons8.com/color/100/user.png'}}" alt=""/>
+						<img class="img-circle" ng-src="{{dashboardSummaryData.photo || 'https://img.icons8.com/color/100/user.png'}}" alt=""/>
 					</a>
 					<ul class="dropdown-menu userinfo arrow">
 						<li><a href="dashboard.html"><i class="ti ti-home"></i><span>Dashboard</span></a></li>
@@ -75,7 +75,7 @@
 							<div class="row dashboardViewProfileSummary" ng-show="!createView">
 								<div class="col-md-4">
 									<div class="dashboardViewImage">
-									    <img ng-src="{{profileData.photo || 'https://img.icons8.com/color/100/user.png'}}" style="width: 80px; height: 80px; border-radius: 50%; align-self: flex-end;">
+									    <img ng-src="{{dashboardSummaryData.photo || 'https://img.icons8.com/color/100/user.png'}}" style="width: 80px; height: 80px; border-radius: 50%; align-self: flex-end;">
 									    <span style="font-size: 26px; font-weight: 300; align-self: flex-end; color: #FFF; margin-bottom: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Welcome {{dashboardSummaryData.name}}!
 									    	<span style="display: block; font-size: 14px; color: #ffb706; font-weight: 400;">Aspiring Scientist</span></span>
 
@@ -175,7 +175,7 @@
 								</div>
 
 
-								<div class="col-md-4" ng-if="courseListing.seriesProgess.length > 0">
+								<div class="col-md-4" ng-show="courseListing.seriesProgess.length > 0">
 		                           <div class="info-tile info-tile-alt" style="visibility: visible; opacity: 1; display: block; transform: translateY(0px); padding-top: 10px">
 		                              <div class="tile-heading"><span>Score Progress</span></div>
 		                              <div id="socialstats" style="height: 215px;" class="mt-sm mb-sm"></div>
