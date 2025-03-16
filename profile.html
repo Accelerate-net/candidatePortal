@@ -174,7 +174,9 @@
 							</div>
 
 							<div class="about-area">
-						      	<h4 class="sectionTitlePersonal"><i class="fa fa-male" style="margin-right: 10px; color: #135b94"></i><i class="fa fa-female" style="margin-right: 10px; color: #135b94"></i>Personal Information</h4>
+						      	<h4 class="sectionTitlePersonal">
+						      		<i ng-if="profileData.gender != 'Female'" class="fa fa-male" style="margin-right: 10px; color: #135b94"></i>
+						      		<i ng-if="profileData.gender == 'Female'" class="fa fa-female" style="margin-right: 10px; color: #135b94"></i>Personal Information</h4>
 								    <div class="table-responsive">
 								      <table class="table about-table">
 								        <tbody>
