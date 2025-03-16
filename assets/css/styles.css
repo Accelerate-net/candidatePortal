@@ -31171,6 +31171,7 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
     z-index: 2;
 }
 
+/*Course Contents*/
 
 .courseContentContainer {
     display: flex;
@@ -31188,6 +31189,7 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
     transition: transform 0.3s ease;
     max-width: 280px;
     height: 440px;
+    margin-bottom: 15px;
 }
 .courseContentTile img {
     width: 100%;
@@ -31281,7 +31283,7 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
     padding: 20px;
     min-width: 300px;
     overflow: hidden;
-    width: 100%;
+/*    width: 100%;*/
     margin-bottom: 30px;
     border-bottom: 8px solid #c3e0e6;
 }
@@ -31310,10 +31312,30 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
     width: 100%;
 }
 
+.selectCourseBar-option:hover {
+    background-color: rgb(10 145 144);
+    color: #FFF;
+}
+
+.dashboardViewContainer {
+  padding: 60px 60px 10px 60px;
+}
+
+.dashboardViewProfileSummary {
+    padding: 90px 10px 30px 0;
+    background: linear-gradient(135deg, #083e58, #015f73);
+    margin: -10px -16px 20px;
+}
+
+
 .selectCourseBar-options {
     display: flex;
     gap: 10px; /* Space between options */
     width: max-content; /* Allow options to overflow */
+    justify-content: left;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
 }
 
 .selectCourseBar-option {
@@ -31329,7 +31351,69 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
     white-space: nowrap;
 }
 
-.selectCourseBar-option:hover {
-    background-color: rgb(10 145 144);
-    color: #FFF;
+
+.dashboardViewProfileSummaryTile {
+    visibility: visible;
+    opacity: 1;
+    display: block;
+    transform: translateY(0px);
+    margin: 0px 0px 5px;
+    background: linear-gradient(135deg, rgb(49, 95, 117), rgb(30, 71, 79)) !important;
+    border-radius: 8px;
+    min-width: 180px;
+    max-width: 210px;
+    width: 100%;
+}
+
+.dashboardViewTileRow {
+    justify-content: left;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+
+.dashboardViewImage {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    height: 126px;
+    margin-bottom: 10px;
+    padding-left: 20px;
+}
+.dashboardViewContainerForCourse {
+  padding: 10px 60px 60px 60px;
+}
+
+@media (max-width: 991px) {
+    .dashboardViewTileRow {
+      justify-content: center;
+    }
+    .dashboardViewContainer {
+        padding: 0;
+    }
+    .dashboardViewProfileSummary {
+        padding: 00px 10px 30px 0;
+    }
+    .dashboardViewImage {
+        padding-bottom: 20px;
+    }
+    .dashboardViewTileRow {
+      gap: 5px;
+    }
+    .dashboardViewProfileSummaryTile {
+      max-width: 320px;
+    }
+    .selectCourseBar-options {
+      width: auto;
+      gap: 5px;
+    } 
+    .dashboardViewContainerForCourse {
+      padding: 0 10px 40px 10px;
+    }
+    .courseContentContainer {
+      justify-content: center;
+      gap: 5px;
+    }
 }

@@ -64,46 +64,46 @@
                             	<div data-widget-group="group1" class="ui-sortable">
 							
 
-							<div class="row" ng-show="!createView" style="padding: 90px 10px 30px 0;     background: linear-gradient(135deg, #083e58, #015f73); margin: -10px -16px 20px;">
+							<div class="row dashboardViewProfileSummary" ng-show="!createView">
 								<div class="col-md-4">
-									<div style="display: flex ; align-items: flex-end; gap: 10px; height: 126px; margin-bottom: 10px; padding-left: 20px;">
+									<div class="dashboardViewImage">
 									    <img src="https://abhijithcs.in/assets/images/avatar.jpg" style="width: 80px; height: 80px; border-radius: 50%; align-self: flex-end;">
 									    <span style="font-size: 26px; font-weight: 300; align-self: flex-end; color: #FFF; margin-bottom: 10px;">Welcome Abhijith!
 									    	<span style="display: block; font-size: 14px; color: #ffb706; font-weight: 400;">Aspiring Scientist</span></span>
 
 									</div>
 								</div>
-		                        <div class="col-md-2">
-		                           <div class="info-tile info-tile-alt tile-blue" title="Accuracy across all the tests attempted" style="visibility: visible; opacity: 1; display: block; transform: translateY(0px); margin: 0px 0px 5px; background: linear-gradient(135deg, #315f75, #1e474f); border-radius: 8px;">
-		                              <div class="tile-heading"><span>Strike Rate <i class="fa fa-flash" style="margin-left: 5px"></i></span></div>
-		                              <div class="tile-body" style="text-align: left"><span>72.1%</span></div>
-		                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-grey tileBottom">from 7 attempted tests</span></div>
+		                        <div class="col-md-8">
+		                        	<div class="dashboardViewTileRow">
+				                           <div class="info-tile info-tile-alt tile-blue dashboardViewProfileSummaryTile" title="Accuracy across all the tests attempted">
+				                              <div class="tile-heading"><span>Strike Rate <i class="fa fa-flash" style="margin-left: 5px"></i></span></div>
+				                              <div class="tile-body" style="text-align: left"><span>72.1%</span></div>
+				                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-grey tileBottom">from 7 attempted tests</span></div>
+				                           </div>
+
+				                           <div class="info-tile info-tile-alt tile-blue dashboardViewProfileSummaryTile" title="Avg. score across all the tests attempted">
+				                              <div class="tile-heading"><span>Avg Score <i class="fa fa-bar-chart" style="margin-left: 5px"></i></span></div>
+				                              <div class="tile-body" style="text-align: left"><span>180/240</span></div>
+				                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-default tileBottom">from 7 attempted tests</span></div>
+				                           </div>
+
+				                           <div class="info-tile info-tile-alt tile-blue dashboardViewProfileSummaryTile" title="Total PYQs solved">
+				                              <div class="tile-heading"><span>PYQs Solved <i class="fa fa-check" style="margin-left: 5px"></i></span></div>
+				                              <div class="tile-body" style="text-align: left"><span>43</span></div>
+				                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-grey tileBottom">from 500 questions</span></div>
+				                           </div>
+
+				                           <div class="info-tile info-tile-alt tile-blue dashboardViewProfileSummaryTile" title="Your strong subject">
+				                              <div class="tile-heading"><span>Strong Subject <i class="fa fa-star" style="margin-left: 5px"></i></span></div>
+				                              <div class="tile-body" style="text-align: left"><span>Biology</span></div>
+				                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-default tileBottom">contributes 56% to total</span></div>
+				                           </div>
 		                           </div>
 		                        </div>
-		                        <div class="col-md-2">
-		                           	<div class="info-tile info-tile-alt tile-blue" title="Avg. score across all the tests attempted" style="visibility: visible; opacity: 1; display: block; transform: translateY(0px); margin: 0px 0px 5px; background: linear-gradient(135deg, #315f75, #1e474f); border-radius: 8px;">
-		                              <div class="tile-heading"><span>Avg Score <i class="fa fa-bar-chart" style="margin-left: 5px"></i></span></div>
-		                              <div class="tile-body" style="text-align: left"><span>180/240</span></div>
-		                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-default tileBottom">from 7 attempted tests</span></div>
-		                           </div>
-		                        </div>
-		                        <div class="col-md-2">
-		                           <div class="info-tile info-tile-alt tile-blue" title="Total PYQs solved" style="visibility: visible; opacity: 1; display: block; transform: translateY(0px); margin: 0px 0px 5px; background: linear-gradient(135deg, #315f75, #1e474f); border-radius: 8px;">
-		                              <div class="tile-heading"><span>PYQs Solved <i class="fa fa-check" style="margin-left: 5px"></i></span></div>
-		                              <div class="tile-body" style="text-align: left"><span>43</span></div>
-		                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-grey tileBottom">from 500 questions</span></div>
-		                           </div>
-		                        </div>
-		                        <div class="col-md-2">
-		                           <div class="info-tile info-tile-alt tile-blue" title="Your strong subject" style="visibility: visible; opacity: 1; display: block; transform: translateY(0px); margin: 0px 0px 5px; background: linear-gradient(135deg, #315f75, #1e474f); border-radius: 8px;">
-		                              <div class="tile-heading"><span>Strong Subject <i class="fa fa-star" style="margin-left: 5px"></i></span></div>
-		                              <div class="tile-body" style="text-align: left"><span>Biology</span></div>
-		                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-default tileBottom">contributes 56% to total</span></div>
-		                           </div>
-		                        </div>
+
 		                    </div>
 
-							<div class="row" style="padding: 60px;">
+							<div class="row dashboardViewContainer">
 
 								<div class="col-md-8">
 										<div class="selectCourseBar-container">
@@ -123,7 +123,9 @@
 									        </div>
 									    </div>
 								</div>
+							</div>
 
+							<div class="row dashboardViewContainerForCourse">
 								<div class="col-md-8">
 									    <div class="courseContentContainer">
 									        <div class="courseContentTile">
@@ -168,7 +170,7 @@
 								<div class="col-md-4">
 		                           <div class="info-tile info-tile-alt" style="visibility: visible; opacity: 1; display: block; transform: translateY(0px); padding-top: 10px">
 		                              <div class="tile-heading"><span>Score Progress</span></div>
-		                              <div id="socialstats" style="height: 215px;" class="mt-sm mb-sm"></div></div>
+		                              <div id="socialstats" style="height: 215px;" class="mt-sm mb-sm"></div>
 		                           </div>
 								</div>
 
@@ -182,9 +184,8 @@
                     <footer role="contentinfo">
     <div class="clearfix">
         <ul class="list-unstyled list-inline pull-left">
-            <li><h6 style="margin: 0;">&copy; 2015 Avenxo</h6></li>
+            <li><h6 style="margin: 0; text-transform: none">&copy; 2025 Crispr Learning</h6></li>
         </ul>
-        <button class="pull-right btn btn-link btn-xs hidden-print" id="back-to-top"><i class="ti ti-arrow-up"></i></button>
     </div>
 </footer>
 
@@ -232,7 +233,6 @@
 
 <script type="text/javascript" src="assets/js/application.js"></script>
 <script type="text/javascript" src="assets/demo/demo.js"></script>
-<script type="text/javascript" src="assets/demo/demo-switcher.js"></script>
 
 <!-- End loading site level scripts -->
     
@@ -241,7 +241,7 @@
 <script type="text/javascript" src="assets/plugins/form-fseditor/jquery.fseditor-min.js"></script>            			<!-- Fullscreen Editor -->
 <script type="text/javascript" src="assets/plugins/bootbox/bootbox.js"></script> 	<!-- Bootbox -->
 
-<script type="text/javascript" src="assets/demo/demo-mock-test.js"></script>
+<script type="text/javascript" src="assets/demo/demo-dashboard.js"></script>
 
     <!-- End loading page level scripts-->
 
