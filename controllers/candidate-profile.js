@@ -7,20 +7,20 @@ angular.module('CandidateProfileApp', ['ngCookies'])
 
 .controller('candidateProfileController', function($scope, $http, $interval, $cookies) {
 
-    //Check if logged in
-    if($cookies.get("crispriteUserToken")){
-      $scope.isLoggedIn = true;
-    }
-    else{
-      $scope.isLoggedIn = false;
-      window.location = "candidate-profile.html";
-    }
+    // //Check if logged in
+    // if($cookies.get("crispriteUserToken")){
+    //   $scope.isLoggedIn = true;
+    // }
+    // else{
+    //   $scope.isLoggedIn = false;
+    //   window.location = "profile.html";
+    // }
 
     //Logout function
     $scope.logoutNow = function(){
       if($cookies.get("crispriteUserToken")){
         $cookies.remove("crispriteUserToken");
-        window.location = "candidate-login/index.html";
+        window.location = "index.html";
       }
     }
 

@@ -31275,7 +31275,7 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
 }
 
 .selectCourseBar-container {
-    background: white;
+    background: #d8f1f6;
     border-radius: 4px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     padding: 20px;
@@ -31283,6 +31283,7 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
     overflow: hidden;
     width: 100%;
     margin-bottom: 30px;
+    border-bottom: 8px solid #c3e0e6;
 }
 
 .selectCourseBar-header {
@@ -31298,8 +31299,8 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
 }
 
 .selectCourseBar-title {
-    font-size: 14px;
-    font-weight: bold;
+    font-size: 21px;
+    font-weight: 300;
     color: #192839;
     margin: 0;
 }
@@ -31316,16 +31317,16 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
 }
 
 .selectCourseBar-option {
-    background-color: rgba(220, 230, 233, 0.3);
+    background-color: #89b7c1;
     border-radius: 40px;
     padding: 10px 15px;
     text-align: center;
     text-decoration: none;
-    color: #192839;
+    color: #FFF;
     font-size: 14px;
     font-weight: 500;
     transition: background-color 0.3s ease;
-    white-space: nowrap; /* Prevent text from wrapping */
+    white-space: nowrap;
 }
 
 .selectCourseBar-option:hover {
