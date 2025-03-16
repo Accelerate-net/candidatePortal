@@ -83,6 +83,21 @@
 
     <script>
 
+        const cookiesCart = document.cookie;
+        function getCookieByNameForLogin(name) {
+            var match = cookiesCart.match('(?:^|; )' + name + '=([^;]*)');
+            return match ? decodeURIComponent(match[1]) : null;
+        }
+
+        function checkIfLoggedIn() {
+            if(getCookieByNameForLogin('crispriteUserToken')) {
+                //directly go to dashboard
+                window.location.href = "../dashboard.html";
+            }
+        }
+
+        checkIfLoggedIn();        
+
         function maskedMobileNumber(mobileNumber) {
             if (typeof mobileNumber !== 'string' || mobileNumber.length !== 10) {
                 return "";
@@ -200,9 +215,6 @@
                 $.ajax(loginData).done(function (loginResponse) {
                     var response = JSON.parse(loginResponse);
                     if(response.status == "success") {
-                        //Set token in cookies
-                        console.log(response.data);
-
                         //Set cookies
                         var now = new Date();
                         now.setDate(now.getDate() + 7); // Set expiration to 7 days from now

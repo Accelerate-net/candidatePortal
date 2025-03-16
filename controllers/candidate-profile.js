@@ -7,14 +7,14 @@ angular.module('CandidateProfileApp', ['ngCookies'])
 
 .controller('candidateProfileController', function($scope, $http, $interval, $cookies) {
 
-    // //Check if logged in
-    // if($cookies.get("crispriteUserToken")){
-    //   $scope.isLoggedIn = true;
-    // }
-    // else{
-    //   $scope.isLoggedIn = false;
-    //   window.location = "profile.html";
-    // }
+    //Check if logged in
+    if($cookies.get("crispriteUserToken")){
+      $scope.isLoggedIn = true;
+    }
+    else{
+      $scope.isLoggedIn = false;
+      window.location = "profile.html";
+    }
 
     //Logout function
     $scope.logoutNow = function(){
@@ -106,15 +106,13 @@ angular.module('CandidateProfileApp', ['ngCookies'])
          })
          .then(function(response) {
             if(response.data.status == "success"){
-                alert('profile updated')
+              $scope.showToaster("Profile has been updated")
             } else {
-              console.log('failed')
+              $scope.showToaster("Update failed")
             }
       });
     
     }
-
-
 
     $scope.resetProfile = function() {
       const number = $scope.profileData.registeredNumber;
@@ -153,8 +151,6 @@ angular.module('CandidateProfileApp', ['ngCookies'])
           return "";
       }
     }
-
-
 
 
       //Updating Image
@@ -224,7 +220,6 @@ angular.module('CandidateProfileApp', ['ngCookies'])
    }
 
 
-
     $scope.saveCandidatePhoto = function(photoURL){
           var data = {
             "photo" : photoURL
@@ -241,9 +236,20 @@ angular.module('CandidateProfileApp', ['ngCookies'])
            .then(function(response) {            
               if(response.data.status == "success") {
                 $scope.profileData.photo = response.data.data;
+                $scope.showToaster("Profile photo has been updated")
               }
           });   
     };
 
+
+    $scope.showToaster = function(message) {
+        const toaster = document.getElementById('toaster');
+        toaster.textContent = message;
+        toaster.classList.add('show');
+
+        setTimeout(() => {
+            toaster.classList.remove('show');
+        }, 3000);
+    }
 
 });
