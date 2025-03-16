@@ -29,7 +29,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-touch-fullscreen" content="yes">
 
-    <link type='text/css' href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600' rel='stylesheet'>
+    <link type='text/css' href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600' rel='stylesheet'>
 
     <link type="text/css" href="assets/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet">        <!-- Font Awesome -->
     <link type="text/css" href="assets/fonts/themify-icons/themify-icons.css" rel="stylesheet">              <!-- Themify Icons -->
@@ -442,29 +442,29 @@
 
 
 
-      <!-- Image Modal -->
-      <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-         <div class="modal-dialog">
-            <div class="modal-content" style="width: 810px">
-               <div class="modal-body">
-                  <div class="row" style="padding: 15px">
-                     <button class="btn-success btn pull-right" ng-click="saveAttachment()" style="margin-left: 5px" ng-show="photoLoadedToFrame">Save</button>
-                     <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
-                     <div style="padding:5px 10px; background:#00ad2d; border:1px solid #00ad2d; position:relative; color:#fff; border-radius:2px; text-align:center; float:left; cursor:pointer">Select an Image<input type="file" id="fileInput" style="position: absolute; z-index: 1000; opacity: 0; cursor: pointer; right: 0; top: 0; height: 100%; font-size: 24px; width: 100%;"/></div>
-                  </div>
-                  <div style="margin-top: 10px">
-                     <img id="image" ng-src="{{myImage}}" style="max-width: 100%;">
-                  </div>
-                  <p style="margin: 0; padding-top: 15px; color: #bdc3c7">Upload good quality image. Only JPG, PNG files are supported.</p>
-               </div>
-            </div>
-            <!-- /.modal-content -->
-         </div>
-         <!-- /.modal-dialog -->
-      </div>
-      <!-- /.modal -->
-
-
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ <div class="modal-dialog">
+    <div class="modal-content" style="max-width: 810px; width: 100%; min-width: 300px;">
+       <div class="modal-body">
+          <div style="margin-top: 10px">
+             <img id="image" ng-src="{{myImage}}" style="max-width: 100%;">
+          </div>
+          <p style="margin: 0; padding-top: 15px; color: #bdc3c7">Upload good quality image. Only JPG, PNG files are supported.</p>
+       </div>
+       <div class="modal-footer">
+          <div class="row" style="padding: 15px">
+             <button class="btn-success btn pull-right" ng-click="saveAttachment()" style="margin: 0 0 0 10px;" ng-show="photoLoadedToFrame">Save</button>
+             <button type="button" class="btn btn-default pull-right" data-dismiss="modal" style="margin: 0 0 0 10px;">Close</button>
+             <div style="padding:5px 10px; background:#00ad2d; border:1px solid #00ad2d; position:relative; color:#fff; border-radius:2px; text-align:center; float:left; cursor:pointer">Select an Image<input type="file" id="fileInput" style="position: absolute; z-index: 1000; opacity: 0; cursor: pointer; right: 0; top: 0; height: 100%; font-size: 24px; width: 100%;"/></div>
+          </div>
+       </div>
+    </div>
+    <!-- /.modal-content -->
+ </div>
+ <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->	
 
     <!-- Load site level scripts -->
 
