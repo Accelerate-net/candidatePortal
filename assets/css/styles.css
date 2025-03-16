@@ -31386,7 +31386,24 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
   padding: 10px 60px 60px 60px;
 }
 
+.profileEditContainer {
+  padding: 60px;
+}
+
+@media (max-width: 767px) {
+  #candidateProfileTable th, #candidateProfileTable td {
+    padding-left: 4px;
+  }
+}
+
+.unsetBackgroundColor:hover {
+  background: unset !important;
+}
+
 @media (max-width: 991px) {
+    .profileEditContainer {
+      padding: 15px;
+    }
     .dashboardViewTileRow {
       justify-content: center;
     }

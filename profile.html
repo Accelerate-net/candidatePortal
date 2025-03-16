@@ -73,7 +73,7 @@
 
 			<ul class="nav navbar-nav toolbar pull-right">
 				<li class="dropdown toolbar-icon-bg">
-					<a href="#" class="dropdown-toggle username" data-toggle="dropdown">
+					<a href="#" class="dropdown-toggle username unsetBackgroundColor" data-toggle="dropdown">
 						<img class="img-circle" src="https://abhijithcs.in/assets/images/avatar.jpg" alt="Abhijith C S"/>
 					</a>
 					<ul class="dropdown-menu userinfo arrow">
@@ -95,7 +95,7 @@
                     <div class="static-content">
                         <div class="page-content">
 
-                            <div class="container-fluid" style="padding: 60px;">
+                            <div class="container-fluid profileEditContainer">
                                  
 <div data-widget-group="group1">
 	<div class="row">
@@ -164,7 +164,7 @@
 
 				<div class="tab-pane active" id="tab-about">
 					<div class="panel panel-primary">
-						<div class="panel-body">
+						<div class="panel-body" id="candidateProfileTable">
 					      	<div class="about-area">
 						      	<h4 style="color: #444; margin-top: 20px !important">About {{profileData.name}}</h4>
 						      	<p>{{profileData.about}}</p>
@@ -172,7 +172,7 @@
 
 							<div class="about-area">
 						      	<h4 class="sectionTitlePersonal"><i class="fa fa-male" style="margin-right: 10px; color: #135b94"></i><i class="fa fa-female" style="margin-right: 10px; color: #135b94"></i>Personal Information</h4>
-								    <div class="table-responsive" id="candidateProfileTable">
+								    <div class="table-responsive">
 								      <table class="table about-table">
 								        <tbody>
 								          <tr>
