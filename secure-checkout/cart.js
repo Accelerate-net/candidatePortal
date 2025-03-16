@@ -60,7 +60,6 @@ $(document).ready(function() {
 	    }
 	}
 
-
 	function retrieveCart() {
 	    var cartItemsData = localStorage.getItem("crisprCart");
 	    if(!cartItemsData) {
