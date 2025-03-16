@@ -7,14 +7,14 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
 
 .controller('candidateDashboardController', function($scope, $http, $interval, $cookies) {
 
-    //Check if logged in
-    if($cookies.get("crispriteUserToken")){
-      $scope.isLoggedIn = true;
-    }
-    else{
-      $scope.isLoggedIn = false;
-      window.location = "profile.html";
-    }
+    // //Check if logged in
+    // if($cookies.get("crispriteUserToken")){
+    //   $scope.isLoggedIn = true;
+    // }
+    // else{
+    //   $scope.isLoggedIn = false;
+    //   window.location = "profile.html";
+    // }
 
     //Logout function
     $scope.logoutNow = function(){
@@ -25,7 +25,56 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
     }
 
     function getUserToken() {
-      return "Bearer " + $cookies.get("crispriteUserToken");  
+      return "Bearer JXsrcfa+d2hlz\/lJM53V\/nxM5GZEj89YZSMejY\/nfKuqDnArgBztve9PPQt37peEY0Sqqqwqua0oXbmiYhnK4IWV5iYwkrL\/unXQi\/a+YsZiZM45ib2EPxianMK+b7V\/0laTl7uZYyvRpgMZTTGoHVGUGvW8WedkyzTaLEe\/T7k=";
+      //return "Bearer " + $cookies.get("crispriteUserToken");  
     }
+
+
+    $scope.dashboardSummaryData = {};
+    $scope.fetchDashboardSummaryData = function() {
+        $http({
+          method  : 'GET',
+          url     : 'https://crisprtech.app/crispr-apis/user/dashboard-summary.php',
+          headers : {
+            'Content-Type': 'application/json',
+            'Authorization': getUserToken()
+          }
+         })
+         .then(function(response) {
+            if(response.data.status == "success"){
+                $scope.dashboardSummaryData = response.data.data;
+                $scope.dashboardSummaryFound = true;
+            } else {
+                $scope.dashboardSummaryFound = false;
+            }
+        });
+    }
+
+    $scope.fetchDashboardSummaryData();
+
+
+    $scope.courseListing = {};
+    $scope.getCourseListingData = function(id) {
+        $scope.courseIdOpen = id;
+        $http({
+          method  : 'GET',
+          url     : 'https://crisprtech.app/crispr-apis/user/test-series-progress.php?id='+id,
+          headers : {
+            'Content-Type': 'application/json',
+            'Authorization': getUserToken()
+          }
+         })
+         .then(function(response) {
+            if(response.data.status == "success"){
+                $scope.courseListing = response.data.data;
+                $scope.courseListingFound = true;
+            } else {
+                $scope.courseListingFound = false;
+            }
+        });      
+    }
+
+    $scope.courseIdOpen = 1;
+    $scope.getCourseListingData($scope.courseIdOpen);
 
 });

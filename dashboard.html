@@ -49,7 +49,7 @@
 
 				<li class="dropdown toolbar-icon-bg">
 					<a href="#" class="dropdown-toggle username unsetBackgroundColor" data-toggle="dropdown">
-						<img class="img-circle" src="https://abhijithcs.in/assets/images/avatar.jpg" alt="Abhijith C S"/>
+						<img class="img-circle" ng-src="{{profileData.photo || 'https://img.icons8.com/color/100/user.png'}}" alt=""/>
 					</a>
 					<ul class="dropdown-menu userinfo arrow">
 						<li><a href="dashboard.html"><i class="ti ti-home"></i><span>Dashboard</span></a></li>
@@ -75,8 +75,8 @@
 							<div class="row dashboardViewProfileSummary" ng-show="!createView">
 								<div class="col-md-4">
 									<div class="dashboardViewImage">
-									    <img src="https://abhijithcs.in/assets/images/avatar.jpg" style="width: 80px; height: 80px; border-radius: 50%; align-self: flex-end;">
-									    <span style="font-size: 26px; font-weight: 300; align-self: flex-end; color: #FFF; margin-bottom: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Welcome Abhijith!
+									    <img ng-src="{{profileData.photo || 'https://img.icons8.com/color/100/user.png'}}" style="width: 80px; height: 80px; border-radius: 50%; align-self: flex-end;">
+									    <span style="font-size: 26px; font-weight: 300; align-self: flex-end; color: #FFF; margin-bottom: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Welcome {{dashboardSummaryData.name}}!
 									    	<span style="display: block; font-size: 14px; color: #ffb706; font-weight: 400;">Aspiring Scientist</span></span>
 
 									</div>
@@ -85,26 +85,45 @@
 		                        	<div class="dashboardViewTileRow">
 				                           <div class="info-tile info-tile-alt tile-blue dashboardViewProfileSummaryTile" title="Accuracy across all the tests attempted">
 				                              <div class="tile-heading"><span>Strike Rate <i class="fa fa-flash" style="margin-left: 5px"></i></span></div>
-				                              <div class="tile-body" style="text-align: left"><span>72.1%</span></div>
-				                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-grey tileBottom">from 7 attempted tests</span></div>
+				                              <div class="tile-body" style="text-align: left">
+				                              	<span ng-if="dashboardSummaryData.dashboardSummary.strikeRateFrom > 0">{{dashboardSummaryData.dashboardSummary.strikeRate}}%</span>
+				                              	<span ng-if="dashboardSummaryData.dashboardSummary.strikeRateFrom == 0">NA</span>
+				                              </div>
+				                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-grey tileBottom">
+				                              	<tag ng-if="dashboardSummaryData.dashboardSummary.strikeRateFrom > 0">from {{dashboardSummaryData.dashboardSummary.strikeRateFrom}} attempted tests</tag>
+				                              	<tag ng-if="dashboardSummaryData.dashboardSummary.strikeRateFrom == 0">not tests attempted</tag>
+				                              </span></div>
 				                           </div>
 
 				                           <div class="info-tile info-tile-alt tile-blue dashboardViewProfileSummaryTile" title="Avg. score across all the tests attempted">
 				                              <div class="tile-heading"><span>Avg Score <i class="fa fa-bar-chart" style="margin-left: 5px"></i></span></div>
-				                              <div class="tile-body" style="text-align: left"><span>180/240</span></div>
-				                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-default tileBottom">from 7 attempted tests</span></div>
+				                              <div class="tile-body" style="text-align: left">
+				                              	<span ng-if="dashboardSummaryData.dashboardSummary.averageScoreFrom > 0">{{dashboardSummaryData.dashboardSummary.averageScore}}/{{dashboardSummaryData.dashboardSummary.averageScoreBase}}</span>
+				                              	<span ng-if="dashboardSummaryData.dashboardSummary.averageScoreFrom == 0">NA</span></div>
+				                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-default tileBottom">
+				                              	<tag ng-if="dashboardSummaryData.dashboardSummary.averageScoreFrom > 0">from {{dashboardSummaryData.dashboardSummary.averageScoreFrom}} attempted tests</tag>
+				                              	<tag ng-if="dashboardSummaryData.dashboardSummary.averageScoreFrom == 0">not tests attempted</tag>
+				                              </span></div>
 				                           </div>
 
 				                           <div class="info-tile info-tile-alt tile-blue dashboardViewProfileSummaryTile" title="Total PYQs solved">
 				                              <div class="tile-heading"><span>PYQs Solved <i class="fa fa-check" style="margin-left: 5px"></i></span></div>
-				                              <div class="tile-body" style="text-align: left"><span>43</span></div>
-				                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-grey tileBottom">from 500 questions</span></div>
+				                              <div class="tile-body" style="text-align: left"><span>{{dashboardSummaryData.dashboardSummary.pyqSolved}}</span></div>
+				                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-grey tileBottom">
+				                              	<tag ng-if="dashboardSummaryData.dashboardSummary.pyqSolvedFrom > 0">from {{dashboardSummaryData.dashboardSummary.pyqSolvedFrom}} questions</tag>
+				                              	<tag ng-if="dashboardSummaryData.dashboardSummary.pyqSolvedFrom == 0">no PYQs available</tag>
+				                              </span></div>
 				                           </div>
 
 				                           <div class="info-tile info-tile-alt tile-blue dashboardViewProfileSummaryTile" title="Your strong subject">
 				                              <div class="tile-heading"><span>Strong Subject <i class="fa fa-star" style="margin-left: 5px"></i></span></div>
-				                              <div class="tile-body" style="text-align: left"><span>Biology</span></div>
-				                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-default tileBottom">contributes 56% to total</span></div>
+				                              <div class="tile-body" style="text-align: left">
+				                              	<span ng-if="dashboardSummaryData.dashboardSummary.strongSubject != ''">{{dashboardSummaryData.dashboardSummary.strongSubject}}</span>
+				                              	<span ng-if="dashboardSummaryData.dashboardSummary.strongSubject == ''">NA</span></div>
+				                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-default tileBottom">
+				                              	<tag ng-if="dashboardSummaryData.dashboardSummary.strongSubject != ''">contributes {{dashboardSummaryData.dashboardSummary.strongSubjectPercentage}}% to total</tag>
+				                              	<tag ng-if="dashboardSummaryData.dashboardSummary.strongSubject == ''">no sufficient data</tag>
+				                              </span></div>
 				                           </div>
 		                           </div>
 		                        </div>
@@ -123,10 +142,7 @@
 									        </div>
 									        <div class="selectCourseBar-scroll-container">
 									            <div class="selectCourseBar-options">
-									                <a href="https://razorpay.com/assisted-discovery/?step=accept-payments" class="selectCourseBar-option">Mock Test Series - Complimentary</a>
-									                <a href="https://razorpay.com/assisted-discovery/?step=make-payments" class="selectCourseBar-option">IAT Gear Up - 2025</a>
-									                <a href="https://razorpay.com/assisted-discovery/?step=make-payments" class="selectCourseBar-option">PYQ Series</a>
-									                <a href="https://razorpay.com/assisted-discovery/?step=make-payments" class="selectCourseBar-option">IAT Gear Up - 2025</a>
+									                <span href="" ng-click="getCourseListingData(courseItemTile.id)" class="selectCourseBar-option" ng-repeat="courseItemTile in courseListing.testSeriesEnrolled track by $index" ng-class="{'selectCourseBar-optionActive' : courseItemTile.id == courseIdOpen}">{{courseItemTile.title}}</span>
 									            </div>
 									        </div>
 									    </div>
@@ -136,46 +152,30 @@
 							<div class="row dashboardViewContainerForCourse">
 								<div class="col-md-8">
 									    <div class="courseContentContainer">
-									        <div class="courseContentTile">
+									        
+									        <div class="courseContentTile" ng-repeat="courseItem in courseListing.coursesList track by $index" ng-click="" ng-class="{'blockedCourseContent' : courseItem.status == 5}">
 									            <div class="courseContentIcon">
-									                <img src="https://img.icons8.com/color/48/checked--v1.png" alt="checked"/>
+									                <img src="assets/icons/course-locked.png" alt=""/>
 									            </div>
-									            <img src="https://framerusercontent.com/images/PO3jvnd7SsSrVTmlNhcBgaCbic.webp" alt="Payroll for Startups">
+									            <img ng-src="{{courseItem.photo}}" alt="Payroll for Startups">
 									            <div class="courseContentTileContent">
-									                <h5>Payroll for Startups</h5>
-									                <p>Master payroll and compliance with a solution built just for startups</p>
-									                <a href="#">Sign Up</a>
-									                <a href="#">Know More</a>
+									                <h5>{{courseItem.title}}</h5>
+									                <p>{{courseItem.brief}}</p>
+									                <span ng-if="courseItem.status == 1">
+									                	<a href="">Attempt Now</a>
+									                	<a href="">See Report</a>
+									                </span>
+									                <span ng-if="courseItem.status == 0">
+									                	<a href="" class="courseContentPurchase">Unlock</a>
+									                </span>
 									            </div>
 									        </div>
-									        <div class="courseContentTile blockedCourseContent">
-									            <div class="courseContentIcon">
-									                <img src="https://img.icons8.com/color/48/lock--v1.png" alt="lock"/>
-									            </div>
-									            <img src="https://framerusercontent.com/images/kBkn3kow2IEQLe8kETylFOwTY.webp" alt="Payroll for CAs">
-									            <div class="courseContentTileContent">
-									                <h5>Payroll for CAs</h5>
-									                <p>Transform payroll and compliance for your clients with RazorpayX</p>
-									                <a href="#" class="courseContentPurchase">Unlock</a>
-									            </div>
-									        </div>
-									        <div class="courseContentTile">
-									            <div class="courseContentIcon">
-									                <img src="https://img.icons8.com/color/48/unlock--v1.png" alt="unlock"/>
-									            </div>
-									            <img src="https://framerusercontent.com/images/fZzv5kzp6j1r6W6yYgbQ530SebA.webp" alt="Payroll for Enterprises">
-									            <div class="courseContentTileContent">
-									                <h5>Payroll for Enterprises</h5>
-									                <p>Get India's No.1 payroll software for enterprises with RazorpayX</p>
-									                <a href="#">Sign Up</a>
-									                <a href="#">Know More</a>
-									            </div>
-									        </div>
+
 									    </div>
 								</div>
 
 
-								<div class="col-md-4">
+								<div class="col-md-4" ng-if="courseListing.seriesProgess.length > 0">
 		                           <div class="info-tile info-tile-alt" style="visibility: visible; opacity: 1; display: block; transform: translateY(0px); padding-top: 10px">
 		                              <div class="tile-heading"><span>Score Progress</span></div>
 		                              <div id="socialstats" style="height: 215px;" class="mt-sm mb-sm"></div>

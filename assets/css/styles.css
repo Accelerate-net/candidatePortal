@@ -31315,6 +31315,12 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
 .selectCourseBar-option:hover {
     background-color: rgb(10 145 144);
     color: #FFF;
+    cursor: pointer;
+}
+
+.selectCourseBar-optionActive {
+    background: rgb(10 145 144) !important;
+    color: #FFF;
 }
 
 .dashboardViewContainer {
