@@ -19,20 +19,17 @@
     <link type="text/css" href="assets/plugins/codeprettifier/prettify.css" rel="stylesheet">                <!-- Code Prettifier -->
     <link type="text/css" href="assets/plugins/iCheck/skins/minimal/blue.css" rel="stylesheet">              <!-- iCheck -->
 
-    <!--[if lt IE 10]>
-        <script type="text/javascript" src="assets/js/media.match.min.js"></script>
-        <script type="text/javascript" src="assets/js/respond.min.js"></script>
-        <script type="text/javascript" src="assets/js/placeholder.min.js"></script>
-    <![endif]-->
-    <!-- The following CSS are included as plugins and can be removed if unused-->
-    
-<link type="text/css" href="assets/plugins/form-fseditor/fseditor.css" rel="stylesheet">                      		<!-- FullScreen Editor -->
+	<link type="text/css" href="assets/plugins/form-fseditor/fseditor.css" rel="stylesheet">                      		<!-- FullScreen Editor -->
 
-
+    <!-- Controller -->
+  	<script src="assets/js/jquery.js"></script>
+  	<script src="assets/js/angular.min.js"></script>
+  	<script src="assets/js/angular-cookies.min.js"></script>
+  	<script src="controllers/candidate-profile.js"></script>
 
     </head>
 
-    <body class="animated-content">
+    <body class="animated-content" ng-app="CandidateDashboardApp" ng-controller="candidateDashboardController">
         
         <header id="topnav" class="navbar navbar-teal navbar-fixed-top" role="banner" style="background: linear-gradient(135deg, #083e58, #015f73);">
 
@@ -47,8 +44,9 @@
 						<img class="img-circle" src="https://abhijithcs.in/assets/images/avatar.jpg" alt="Abhijith C S"/>
 					</a>
 					<ul class="dropdown-menu userinfo arrow">
+						<li><a href="dashboard.html"><i class="ti ti-home"></i><span>Home</span></a></li>
 						<li><a href="profile.html"><i class="ti ti-user"></i><span>Profile</span></a></li>
-						<li><a href="#/"><i class="ti ti-shift-right"></i><span>Sign Out</span></a></li>
+						<li ng-click="logoutNow()"><a href="#/"><i class="ti ti-shift-right"></i><span>Sign Out</span></a></li>
 					</ul>
 				</li>
 
