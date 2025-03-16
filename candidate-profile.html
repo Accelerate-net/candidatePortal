@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Candidate Profile</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="description" content="Avenxo Admin Theme">
+    <meta name="author" content="KaijuThemes">
+
+    <link type='text/css' href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600' rel='stylesheet'>
+
+    <link type="text/css" href="assets/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet">        <!-- Font Awesome -->
+    <link type="text/css" href="assets/fonts/themify-icons/themify-icons.css" rel="stylesheet">              <!-- Themify Icons -->
+    <link type="text/css" href="assets/css/styles.css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
+
+    <link type="text/css" href="assets/plugins/codeprettifier/prettify.css" rel="stylesheet">                <!-- Code Prettifier -->
+    <link type="text/css" href="assets/plugins/iCheck/skins/minimal/blue.css" rel="stylesheet">              <!-- iCheck -->
+
+    <!--[if lt IE 10]>
+        <script type="text/javascript" src="assets/js/media.match.min.js"></script>
+        <script type="text/javascript" src="assets/js/respond.min.js"></script>
+        <script type="text/javascript" src="assets/js/placeholder.min.js"></script>
+    <![endif]-->
+    <!-- The following CSS are included as plugins and can be removed if unused-->
+
+        <!-- Controller -->
+      <script src="assets/js/jquery.js"></script>
+      <script src="assets/js/angular.min.js"></script>
+      <script src="assets/js/angular-cookies.min.js"></script>
+      <script src="controllers/candidate-profile.js"></script>
+
+          <!-- CROPPER -->
+      <script src="assets/plugins/cropper/cropper.js"></script>
+      <link type="text/css" href="assets/plugins/cropper/cropper.css" rel="stylesheet">
+
+<link type="text/css" href="assets/plugins/form-fseditor/fseditor.css" rel="stylesheet">                      		<!-- FullScreen Editor -->
+
+	
+    </head>
+
+    <body class="animated-content" ng-app="CandidateProfileApp" ng-controller="candidateProfileController">
+        
+        <header id="topnav" class="navbar navbar-teal navbar-fixed-top" role="banner">
+
+	<div class="logo-area">
+		<span id="trigger-sidebar" class="toolbar-trigger toolbar-icon-bg">
+			<a data-toggle="tooltips" data-placement="right" title="Toggle Sidebar">
+				<span class="icon-bg">
+					<i class="ti ti-menu"></i>
+				</span>
+			</a>
+		</span>
+		
+		<span class="navbar-brand"></span>
+	</div><!-- logo-area -->
+
+	<ul class="nav navbar-nav toolbar pull-right">
+
+		<li class="dropdown toolbar-icon-bg">
+			<a href="#" class="dropdown-toggle username" data-toggle="dropdown">
+				<img class="img-circle" ng-src="{{profileData.photo || 'https://img.icons8.com/color/100/user.png'}}" alt="Logged In User"/>
+			</a>
+			<ul class="dropdown-menu userinfo arrow">
+				<li><a href="candidate-profile.html"><i class="ti ti-user"></i><span>Profile</span></a></li>
+				<li ng-click="logoutNow()"><a href="#/"><i class="ti ti-shift-right"></i><span>Sign Out</span></a></li>
+			</ul>
+		</li>
+
+	</ul>
+
+</header>
+
+        <div id="wrapper">
+            <div id="layout-static">
+                <div class="static-sidebar-wrapper sidebar-bluegray">
+                    <div class="static-sidebar">
+                        <div class="sidebar">
+
+							<!-- Sidebar -->
+							<div class="widget stay-on-collapse" id="widget-sidebar">
+						        <nav role="navigation" class="widget-body">
+									<ul class="acc-menu">
+										<li><a href="candidate-profile.html"><i class="ti ti-user"></i><span>My Profile</span></a></li>
+										<!--
+										<li><a href="mock-test.html"><i class="ti ti-write"></i><span>Mock Tests</span></a></li>
+										-->
+									</ul>
+								</nav>
+						    </div>
+
+						</div>
+                    </div>
+                </div>
+                <div class="static-content-wrapper">
+                    <div class="static-content">
+                        <div class="page-content">
+
+                            <div class="container-fluid" style="padding-top: 20px;">
+                                 
+<div data-widget-group="group1">
+	<div class="row">
+		<div class="col-sm-3">
+			<div class="panel panel-profile">
+			  <div class="panel-body" id="userProfilePart">
+
+				<div class="photo-container" ng-click="attachPhoto()">
+				  <img ng-src="{{profileData.photo || 'https://img.icons8.com/color/100/user.png'}}" class="img-circle photo">
+				  <span class="overlay-text">Change Photo</span>
+				</div>
+
+			    <div class="name">{{profileData.name}}</div>
+			    <div class="info" style="color: #01a9f4; font-weight: bold;">{{profileData.aspiration}}</div>
+			   	<p style="margin: 10px 0 0 0; font-size: 10px; color: #838383;">Joined on {{profileData.joined}}</p>
+			  </div>
+			</div><!-- panel -->
+			<div class="list-group list-group-alternate mb-n nav nav-tabs">
+				<a href="#tab-about" id="profileTab1" ng-click="changeActiveTab(1)" role="tab" data-toggle="tab" class="list-group-item" ng-class="getActiveClass(1)"><i class="ti ti-user"></i> About {{profileData.name}}</a>
+				<a href="#tab-projects" id="profileTab2" ng-click="changeActiveTab(2)" role="tab" data-toggle="tab" class="list-group-item" ng-class="getActiveClass(2)"><i class="ti ti-view-list-alt"></i> Courses Enrolled <span class="badge badge-primary">{{profileData.courses.length}}</span></a>
+				<a href="#tab-edit" id="profileTab3" ng-click="changeActiveTab(3)" ole="tab" data-toggle="tab" class="list-group-item" ng-class="getActiveClass(3)"><i class="ti ti-pencil"></i> Edit Details</a>
+			</div>
+		</div><!-- col-sm-3 -->
+		<div class="col-sm-9">
+			<div class="tab-content">
+				<div class="tab-pane" id="tab-projects">
+					<div class="panel panel-bluegray">
+						<div class="panel-heading">
+							<h2 class="profileSubTitle">Courses Enrolled by {{profileData.name}}</h2>
+						</div>
+						<div class="panel-body">
+							<div class="table-responsive">
+								<table class="table m-n">
+									<thead>
+										  <tr>
+										    <th>#</th>
+										    <th>Course</th>
+										    <th>Commencement</th>
+										    <th>Conclusion</th>
+										    <th>Progess</th>
+										  </tr>
+									</thead>
+									<tbody>
+										  <tr ng-repeat="courseItem in profileData.courses track by $index" ng-click="openCourseEnrolled($index + 1)">
+										    <th scope="row">{{$index + 1}}</th>
+										    <td><strong>{{courseItem.title}}</strong></td>
+										    <td>{{courseItem.startDate}}</td>
+										    <td>{{courseItem.endDate}}</td>
+										    <td class="vam" ng-if="courseItem.status == 'DUE'">
+				                                 Yet to Start
+				                            </td>
+										    <td class="vam" ng-if="courseItem.status != 'DUE'">
+										    	<span ng-if="courseItem.progress == 0">{{courseItem.status}}</span>
+												<div class="progress m-n" ng-if="courseItem.progress > 0">
+				                                  <div class="progress-bar progress-bar-success" ng-style="{width: courseItem.progress +'%'}"></div>
+				                                </div>
+				                            </td>
+										  </tr>
+									</tbody>
+								</table>
+							</div><!-- /.table-responsive -->
+						</div> <!-- /.panel-body -->
+					</div>
+
+				</div> <!-- #tab-projects -->
+
+				<div class="tab-pane active" id="tab-about">
+					<div class="panel panel-primary">
+						<div class="panel-body">
+					      	<div class="about-area">
+						      	<h4 style="color: #444; margin-top: 20px !important">About {{profileData.name}}</h4>
+						      	<p>{{profileData.about}}</p>
+							</div>
+
+							<div class="about-area">
+						      	<h4 class="sectionTitlePersonal"><i class="fa fa-male" style="margin-right: 10px; color: #135b94"></i><i class="fa fa-female" style="margin-right: 10px; color: #135b94"></i>Personal Information</h4>
+								    <div class="table-responsive" id="candidateProfileTable">
+								      <table class="table about-table">
+								        <tbody>
+								          <tr>
+								            <th>Full Name</th>
+								            <td>{{profileData.name}}</td>
+								          </tr>
+								          <tr>
+								            <th>Birthday</th>
+								            <td>{{profileData.dob}}</td>
+								          </tr>
+								          <tr>
+								            <th>Gender</th>
+								            <td>{{profileData.gender}}</td>
+								          </tr>
+								          <tr>
+								            <th>Place</th>
+								            <td>{{profileData.place}}</td>
+								          </tr>
+								          <tr>
+								            <th>Parents</th>
+								            <td>{{getParentsNames(profileData)}}</td>
+								          </tr>
+								        </tbody>
+								      </table>
+								    </div>
+							</div>
+							<div class="about-area">
+						      	<h4 class="sectionTitlePersonal"><i class="fa fa-graduation-cap" style="margin-right: 10px; color: #135b94"></i>Educational Information</h4>
+								    <div class="table-responsive">
+								      <table class="table about-table">
+								        <tbody>
+								          <tr>
+								            <th>Aspiration</th>
+								            <td><a href="#">{{profileData.aspiration}}</a></td>
+								          </tr>
+								          <tr>
+								            <th>Class of Study</th>
+								            <td><a href="#">{{profileData.classOfStudy}} <span ng-if="profileData.lastInstitution != ''">{{profileData.lastInstitution}}</span></a></td>
+								          </tr>
+								          <tr>
+								            <th>Board & Year of Passing Class 12</th>
+								            <td>{{getBoardAndYearOfPassing(profileData)}}</td>
+								          </tr>
+								        </tbody>
+								      </table>
+								    </div>
+							</div>
+							<div class="about-area">
+						      	<h4 class="sectionTitlePersonal"><i class="fa fa-envelope" style="margin-right: 10px; color: #135b94"></i>Communication Details</h4>
+								    <div class="table-responsive">
+								      <table class="table about-table">
+								        <tbody>
+								          <tr>
+								            <th>Registered Mobile Number</th>
+								            <td>{{profileData.registeredMobile}} <i class="fa fa-check-circle" style="color: #04c804"></i></td>
+								          </tr>
+								          <tr>
+								            <th>Phone for Communication</th>
+								            <td>{{profileData.communicationMobile}}</td>
+								          </tr>
+								          <tr>
+								            <th>Email for Communication</th>
+								            <td>{{profileData.email}}</td>
+								          </tr>
+								        </tbody>
+								      </table>
+								    </div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="tab-pane" id="tab-edit">
+					<div class="panel panel-bluegray">
+						<div class="panel-heading">
+							<h2 class="profileSubTitle">Edit Details</h2>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-md-12">
+									<form class="form-horizontal tabular-form">
+										<div class="form-group">
+											<label for="form-name" class="col-sm-3 control-label">Name</label>
+											<div class="col-sm-7 tabular-border">
+												<input type="text" ng-model="profileData.name" class="form-control" placeholder="Full Name">
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="form-name" class="col-sm-3 control-label">Registered Mobile</label>
+											<div class="col-sm-7 tabular-border">
+												<input type="text" class="form-control" ng-value="profileData.registeredMobile" disabled>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label">Place</label>
+											<div class="col-sm-7">
+												<select class="form-control" ng-model="profileData.place">
+													<option value="">Not Known</option>
+													<optgroup label="Kerala">
+														<option value="Alappuzha">Alappuzha</option>
+														<option value="Ernakulam">Ernakulam</option>
+														<option value="Idukki">Idukki</option>
+														<option value="Kannur">Kannur</option>
+														<option value="Kasaragod">Kasaragod</option>
+														<option value="Kollam">Kollam</option>
+														<option value="Kottayam">Kottayam</option>
+														<option value="Kozhikode">Kozhikode</option>
+														<option value="Malappuram">Malappuram</option>
+														<option value="Palakkad">Palakkad</option>
+														<option value="Pathanamthitta">Pathanamthitta</option>
+														<option value="Thiruvananthapuram">Thiruvananthapuram</option>
+														<option value="Thrissur">Thrissur</option>
+														<option value="Wayanad">Wayanad</option>
+													</optgroup>
+													<optgroup label="Rest of India">
+														<option value="Lakshadweep">Lakshadweep</option>
+														<option value="Rest Of India">Rest of India</option>
+													</optgroup>
+													<optgroup label="Rest of the World">
+														<option value="Bahrain">Bahrain</option>
+														<option value="Kuwait">Kuwait</option>
+														<option value="Oman">Oman</option>
+														<option value="Qatar">Qatar</option>
+														<option value="Saudi Arabia">Saudi Arabia</option>
+														<option value="United Arab Emirates">United Arab Emirates</option>
+													</optgroup>
+													<optgroup label="Others">
+														<option value="Others">Others</option>
+													</optgroup>
+												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="form-website" class="col-sm-3 control-label">Date of Birth</label>
+											<div class="col-sm-7 tabular-border">
+												<input id="dob_edit" ng-model="profileData.dob" type="text" class="form-control" placeholder="dd-mm-yyyy">
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label">Gender</label>
+											<div class="col-sm-7">
+												<select class="form-control" ng-model="profileData.gender">
+													<option value="">Not Selected</option>
+													<option value="Male">Male</option>
+													<option value="Female">Female</option>
+													<option value="Trans Gender">Trans Gender</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="form-name" class="col-sm-3 control-label">Father's Name</label>
+											<div class="col-sm-7 tabular-border">
+												<input type="text" class="form-control" placeholder="Father's Name" ng-model="profileData.fatherName">
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="form-name" class="col-sm-3 control-label">Mother's Name</label>
+											<div class="col-sm-7 tabular-border">
+												<input type="text" class="form-control" placeholder="Mother's Name" ng-model="profileData.motherName">
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label">Class of Study</label>
+											<div class="col-sm-7">
+												<select class="form-control" ng-model="profileData.classOfStudy">
+													<option value="">None</option>
+													<option value="Class 11 Going">Class 11 Going</option>
+													<option value="Class 12 Going">Class 12 Going</option>
+													<option value="Repeater">Repeater</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label">Your Aspiration</label>
+											<div class="col-sm-7">
+												<select class="form-control" ng-model="profileData.aspiration">
+													<option value="">None</option>
+													<option value="Aspiring Engineer">Aspiring Engineer</option>
+													<option value="Aspiring Doctor">Aspiring Doctor</option>
+													<option value="Aspiring Scientist">Aspiring Scientist</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="form-name" class="col-sm-3 control-label">Year of Passing Class 12</label>
+											<div class="col-sm-7 tabular-border">
+												<input type="text" class="form-control" placeholder="Year of Passing Class 12" ng-model="profileData.yearOfPassing">
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label">Class 12 Board</label>
+											<div class="col-sm-7">
+												<select class="form-control" ng-model="profileData.board">
+													<option value="Kerala State Board">Kerala State Board</option>
+													<option value="CBSE">CBSE</option>
+													<option value="ICSE">ICSE</option>
+													<option value="OTHER">Others</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="form-name" class="col-sm-3 control-label">Last Studied Institution</label>
+											<div class="col-sm-7 tabular-border">
+												<input type="text" class="form-control" ng-model="profileData.lastInstitution" placeholder="Name of the School or Coaching Institution">
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label for="form-name" class="col-sm-3 control-label">Phone for Communication</label>
+											<div class="col-sm-7 tabular-border">
+												<input type="text" class="form-control" ng-model="profileData.communicationMobile" placeholder="WhatsApp number preferred">
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label for="form-name" class="col-sm-3 control-label">Email for Communication</label>
+											<div class="col-sm-7 tabular-border">
+												<input type="text" class="form-control" ng-model="profileData.email" placeholder="Email Address">
+											</div>
+										</div>
+
+										
+										<div class="form-group">
+											<label class="col-sm-3 control-label">Few words about you!</label>
+											<div class="col-sm-7">
+												<textarea class="form-control fullscreen" ng-model="profileData.about"></textarea>
+											</div>
+										</div>
+										
+									</form>	
+								</div>
+							</div>
+						</div>
+						<div class="panel-footer">
+							<div class="row">
+								<div class="col-sm-8 col-sm-offset-2">
+									<button class="btn-primary btn" ng-click="saveProfile(profileData)">Save</button>
+									<button class="btn-default btn" ng-click="resetProfile()">Reset</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div><!-- .tab-content -->
+		</div><!-- col-sm-8 -->
+	</div>
+</div>
+
+                            </div> <!-- .container-fluid -->
+                        </div> <!-- #page-content -->
+                    </div>
+                    <footer role="contentinfo">
+    <div class="clearfix">
+        <ul class="list-unstyled list-inline pull-left">
+            <li><h6 style="margin: 0; text-transform: none">&copy; 2025 Crispr Learning</h6></li>
+        </ul>
+        <button class="pull-right btn btn-link btn-xs hidden-print" id="back-to-top"><i class="ti ti-arrow-up"></i></button>
+    </div>
+</footer>
+
+                </div>
+            </div>
+        </div>
+
+    
+
+
+
+      <!-- Image Modal -->
+      <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+         <div class="modal-dialog">
+            <div class="modal-content" style="width: 810px">
+               <div class="modal-body">
+                  <div class="row" style="padding: 15px">
+                     <button class="btn-success btn pull-right" ng-click="saveAttachment()" style="margin-left: 5px" ng-show="photoLoadedToFrame">Save</button>
+                     <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                     <div style="padding:5px 10px; background:#00ad2d; border:1px solid #00ad2d; position:relative; color:#fff; border-radius:2px; text-align:center; float:left; cursor:pointer">Select an Image<input type="file" id="fileInput" style="position: absolute; z-index: 1000; opacity: 0; cursor: pointer; right: 0; top: 0; height: 100%; font-size: 24px; width: 100%;"/></div>
+                  </div>
+                  <div style="margin-top: 10px">
+                     <img id="image" ng-src="{{myImage}}" style="max-width: 100%;">
+                  </div>
+                  <p style="margin: 0; padding-top: 15px; color: #bdc3c7">Upload good quality image. Only JPG, PNG files are supported.</p>
+               </div>
+            </div>
+            <!-- /.modal-content -->
+         </div>
+         <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+
+
+
+    <!-- Load site level scripts -->
+
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script> -->
+
+<script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script> 							<!-- Load jQuery -->
+<script type="text/javascript" src="assets/js/jqueryui-1.10.3.min.js"></script> 							<!-- Load jQueryUI -->
+<script type="text/javascript" src="assets/js/bootstrap.min.js"></script> 								<!-- Load Bootstrap -->
+<script type="text/javascript" src="assets/js/enquire.min.js"></script> 									<!-- Load Enquire -->
+
+<script type="text/javascript" src="assets/plugins/velocityjs/velocity.min.js"></script>					<!-- Load Velocity for Animated Content -->
+<script type="text/javascript" src="assets/plugins/velocityjs/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="assets/plugins/wijets/wijets.js"></script>     						<!-- Wijet -->
+
+<script type="text/javascript" src="assets/plugins/codeprettifier/prettify.js"></script> 				<!-- Code Prettifier  -->
+<script type="text/javascript" src="assets/plugins/bootstrap-switch/bootstrap-switch.js"></script> 		<!-- Swith/Toggle Button -->
+
+<script type="text/javascript" src="assets/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js"></script>  <!-- Bootstrap Tabdrop -->
+
+<script type="text/javascript" src="assets/plugins/iCheck/icheck.min.js"></script>     					<!-- iCheck -->
+
+<script type="text/javascript" src="assets/plugins/nanoScroller/js/jquery.nanoscroller.min.js"></script> <!-- nano scroller -->
+
+<script type="text/javascript" src="assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+
+<script type="text/javascript" src="assets/js/application.js"></script>
+<script type="text/javascript" src="assets/demo/demo.js"></script>
+
+<!-- End loading site level scripts -->
+    
+    <!-- Load page level scripts-->
+    
+<script type="text/javascript" src="assets/plugins/form-fseditor/jquery.fseditor-min.js"></script>            			<!-- Fullscreen Editor -->
+<script type="text/javascript" src="assets/plugins/bootbox/bootbox.js"></script> 	<!-- Bootbox -->
+
+<script type="text/javascript" src="assets/demo/demo-candidate-profile.js"></script>
+
+    <!-- End loading page level scripts-->
+
+    </body>
+</html>

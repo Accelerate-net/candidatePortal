@@ -1,0 +1,231 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #76d4f5, #015f73);
+    padding: 20px;
+}
+
+.roboto-slim {
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+  font-size: 10px;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    max-width: 1000px;
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.left-panel, .right-panel {
+    padding: 60px;
+    flex: 1;
+}
+
+.left-panel {
+    background-color: #015f73;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.left-panel h1 {
+    color: #004c80;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.left-panel p {
+    font-size: 1.2rem;
+    color: #333;
+    text-align: center;
+}
+
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.right-panel h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.right-panel p {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    color: #555;
+}
+
+.input-group {
+    display: flex;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.input-group input {
+    padding: 15px;
+    font-size: 1rem;
+    border: none;
+    outline: none;
+}
+
+.input-group div {
+    padding: 15px 10px;
+    font-size: 1rem;
+    border: none;
+    outline: none;
+    background-color: #f4f4f4;
+    min-width: 75px;
+    text-align: center;
+}
+
+.input-group input {
+    flex: 1;
+}
+
+.otp .otpEntry { 
+    max-width: 50px;
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    margin: 0 5px;
+}
+
+.continue-btn {
+    background-color: #015f73;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 400;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.3s;
+    width: 100%;
+}
+
+.continue-btn:hover {
+    background-color: #034756;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+    font-size: 1rem;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: #555;
+}
+
+.footer-links a:hover {
+    color: #004c80;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .left-panel, .right-panel {
+        padding: 40px;
+    }
+
+    .left-panel h1 {
+        font-size: 2rem;
+    }
+
+    .right-panel h2 {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .left-panel, .right-panel {
+        padding: 30px;
+    }
+
+    .left-panel h1, .right-panel h2 {
+        font-size: 1.5rem;
+    }
+
+    .continue-btn {
+        font-size: 1rem;
+        padding: 12px;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+}
+
+.toaster {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 16px;
+    position: fixed;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+}
+.toaster.show {
+    visibility: visible;
+    opacity: 1;
+}
+.toaster.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Loader container */
+.loader {
+  width: 30px;
+  height: 30px;
+  border: 2px solid #ffffff;
+  border-top: 2px solid #ffb706;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Keyframe animation for spinning */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

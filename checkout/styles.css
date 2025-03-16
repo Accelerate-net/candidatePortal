@@ -1,0 +1,338 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(90deg, #009688, #015f73);
+    color: #333;
+    padding: 20px;
+    font-weight: 400;
+}
+
+/* Header */
+.header {
+    text-align: center;
+    padding: 20px;
+}
+
+.header img {
+    max-width: 200px;
+    max-height: 80px;
+}
+
+.loginSection {
+    margin-bottom: 30px;
+}
+
+.input-group {
+    display: flex;
+    width: 100%;
+    border: 1px solid #ccc;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.input-group input {
+    padding: 15px;
+    font-size: 1rem;
+    border: none;
+    outline: none;
+    margin: 0;
+}
+
+.input-group div {
+    padding: 15px 10px;
+    font-size: 1rem;
+    border: none;
+    outline: none;
+    background-color: #f4f4f4;
+    min-width: 75px;
+    text-align: center;
+}
+
+.input-group input {
+    flex: 1;
+}
+
+/* Container */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background: #fff;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Form Section */
+.form-section {
+    flex: 1;
+    min-width: 300px;
+    padding: 20px;
+    position: relative;
+}
+
+h2 {
+    font-size: 21px;
+    font-weight: 400;
+    margin-bottom: 10px;
+}
+
+input, select, button {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+}
+
+/* Billing Group */
+.billing-group {
+    display: flex;
+    gap: 10px;
+}
+
+.billing-group input, .billing-group select {
+    flex: 1;
+}
+
+/* Payment Section */
+.payment-section {
+    border-top: 1px solid #eee;
+    font-weight: 300;
+    font-size: 12px;
+    padding: 10px 0;
+    margin-top: 20px;
+    line-height: 18px;
+    position: absolute;
+    bottom: 0;
+    bottom: 0;
+    margin-right: 20px;
+}
+
+.pay-btn {
+    background-color: #ffa31b;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    border: none;
+    border-radius: 4px;
+    padding: 15px;
+    margin: 20px 0;
+    text-transform: uppercase;
+}
+
+.pay-btn:hover {
+    background-color: #fe9b0a;
+}
+
+.addressSection input:focus {
+    outline: none !important;
+}
+
+.apply-section input:focus {
+    outline: none !important;
+}
+
+.summary-item-remove {
+    position: absolute;
+    width: 30px;
+    height: 20px;
+    right: 0px;
+    top: 5px;
+    text-align: right;
+    opacity: 0.4;
+    cursor: pointer;
+}
+
+.summary-item-remove:hover {
+    opacity: 1;
+}
+
+/* Summary Section */
+.summary-section {
+    flex: 1;
+    min-width: 300px;
+    background-color: #f5f5f5;
+    padding: 30px;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    position: relative;
+}
+
+.cartItems .summary-item {
+    border-top: 1px solid #dbdbdb;
+    padding: 10px 0;
+    margin: 0;
+}
+
+.product-info {
+    display: flex;
+    align-items: center;
+}
+
+.product-info img {
+    max-width: 60px;
+}
+
+.product-details {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+}
+
+.product-name {
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.product-size {
+    font-size: 0.9em;
+    color: #666;
+    font-weight: 400;
+}
+
+.price {
+    font-weight: 400;
+}
+
+.total .price {
+    font-weight: bold;
+}
+
+.total {
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+/* Apply Section */
+.apply-section {
+    display: flex;
+    gap: 10px;
+    border-top: 1px solid #dbdbdb;
+    padding-top: 10px;
+}
+
+.apply-btn {
+    background-color: #307191;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 400;
+    border: none;
+    max-width: 120px;
+}
+
+.apply-btn:hover {
+    background-color: #205773;
+}
+
+#giftVoucherSection {
+    margin-bottom: 15px;
+}
+
+#giftVoucherSection input, select, button {
+    margin-bottom: 0 !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        padding: 20px;
+    }
+    .billing-group, .apply-section {
+        flex-direction: column;
+    }
+    .payment-section {
+        border-top: 1px solid #eee;
+        font-weight: 300;
+        font-size: 12px;
+        padding: 10px 0;
+        margin-top: 30px;
+        line-height: 18px;
+        position: relative;
+        margin-right: 0;
+    }
+}
+
+
+.toaster {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 16px;
+    position: fixed;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+}
+.toaster.show {
+    visibility: visible;
+    opacity: 1;
+}
+.toaster.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Loader container */
+.loader {
+  width: 30px;
+  height: 30px;
+  border: 2px solid #ffffff;
+  border-top: 2px solid #ffb706;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Keyframe animation for spinning */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+.otp .otpEntry { 
+    max-width: 50px;
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    margin: 0 5px;
+}
+
+
+.continue-btn {
+    background-color: #015f73;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 400;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.3s;
+    max-width: 180px;
+}
+
+.continue-btn:hover {
+    background-color: #034756;
+}   

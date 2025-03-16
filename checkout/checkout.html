@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crispr Checkout</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link type="text/css" href="../assets/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+    <script src="../assets/js/jquery.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="cart.js"></script>
+    <style type="text/css">
+        #loaderScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 21px;
+            font-weight: bold;
+            color: #838383;
+            z-index: 1000;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #loaderScreen::after {
+            content: "";
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid #838383;
+            border-top: 3px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 15px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="../assets/logo/crispr-logo-for-dark-bg.png" alt="allbirds logo">
+    </header>
+
+    <div id="toaster" class="toaster"></div>
+    <div class="container" id="containerContent" style="position: relative;">
+        <div id="loaderScreen">Loading</div>
+        <section class="form-section">
+            <div class="loginSection">
+
+                <div id="loginStep1">
+                    <h2>Login / Register</h2>
+                    <p style="font-weight: 300;">Please enter your mobile number to continue.</p>
+                    <div class="input-group" style="margin-top: 20px">
+                        <div>🇮🇳 <b>+91</b></div>
+                        <input id="mobile" type="tel" style="font-weight: bold;" maxlength="10" required>
+                    </div>
+                </div>
+
+                <div id="loginStep2" style="display: none">
+                    <h2>Continue <span style="font-weight: 300; font-size: 50%;"><span id="loginAttemptingMobile"></span></span></h2>
+                    <p style="font-weight: 300;">Please enter the one-time passcode.</p>
+                    <p style="font-weight: 300; font-size: 12px; margin: 0 0 10px 0;"></p>
+                    <div class="input-group otp" style="border: 1px solid transparent;">
+                        <input class="otpEntry" style="margin-left: 0" id="otp1" type="tel" maxlength="1" required>
+                        <input class="otpEntry" id="otp2" type="tel" maxlength="1" required>
+                        <input class="otpEntry" id="otp3" type="tel" maxlength="1" required>
+                        <input class="otpEntry" style="margin-right: 0" id="otp4" type="tel" maxlength="1" required>
+                    </div>
+                </div>
+                <button class="continue-btn" id="loginStep1Button" onclick="sendOTP()" style="position: relative;">
+                    Continue
+                    <span id="loginLoader1" style="display: none; position: absolute; right: 10px; top: 10px"><div class="loader"></div></span>
+                </button>
+                <button class="continue-btn" id="loginStep2Button" onclick="processLogin()" style="display: none; position: relative;">
+                    Login Now
+                    <span id="loginLoader2" style="display: none; position: absolute; right: 10px; top: 10px"><div class="loader"></div></span>
+                </button>
+
+
+                <!-- Error Messages -->
+                <div style="position: relative; margin-top: 5px; height: 15px; display: block;" id="mobileErrorHolder">
+                    <p id="mobileError" style="margin: 0; font-size: 12px; color: rgb(230, 113, 113); text-align: left;"></p>
+                </div>
+
+                <div id="loginStep3" style="display: none;">
+                    <h2>Logged in <span style="font-weight: 300; font-size: 70%;">as <span id="loggedInAsName"></span></span>
+                        <span style="font-weight: 300; text-align: right; float: right; margin-top: 10px; font-size: 12px; text-decoration: underline; color: #27b6e7; cursor: pointer; display: none;" id="logoutButton" onclick="logoutCurrentUser()">Logout</span>
+                    </h2>
+                    <div class="input-group">
+                        <div>🇮🇳 <b>+91</b></div>
+                        <input id="mobileRegistered" type="tel" style="font-weight: bold;" maxlength="10" required="" disabled>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="addressSection" id="billingAddressView" style="display: none">
+                <h2>Billing Address</h2>
+                <div class="billing-group">
+                    <input type="text" placeholder="Full Name" id="fullname">
+                </div>
+                <div class="billing-group">
+                    <input type="text" placeholder="Address" id="address">
+                    <input type="text" placeholder="Locality or Landmark" id="locality">
+                </div>
+                <div class="billing-group">
+                    <input type="text" placeholder="City" id="city">
+                    <input type="text" placeholder="State" id="state">
+                    <input type="tel" placeholder="Pincode" maxlength="6" id="pincode">
+                </div>
+                <input type="text" placeholder="Email for Communication" id="email">
+            </div>
+            
+            <section class="payment-section">
+                <p>By placing this order, you agree to our <a href="https://crisprlearning.com/terms-and-conditions/" target="new">Terms of Service</a> and understand our <a href="https://crisprlearning.com/privacy-policy/" target="new">Privacy Policy</a>.</p>
+            </section>
+        </section>
+
+        <section class="summary-section">
+            <h2>Order Summary</h2>
+            
+            <div class="cartItems" id="crisprCartItems">
+            </div>
+
+            <div class="apply-section" id="giftVoucherSection">
+            </div>
+
+            <div id="crisprCartSummary"></div>
+
+            <button class="pay-btn" id="payNowButton" style="background: gray;">Pay Now</button>
+        </section>
+    </div>
+
+
+<script>
+
+        const cookiesCart = document.cookie;
+        function getCookieByNameForCart(name) {
+            var match = cookiesCart.match('(?:^|; )' + name + '=([^;]*)');
+            return match ? decodeURIComponent(match[1]) : null;
+        }
+
+        function hideOverallLoader() {
+            document.getElementById('loaderScreen').style.display = 'none';
+        }
+
+        function unsetCookieByNameForCart(name) {
+            document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+        }
+
+        function getUserTokenForCart() {
+            return "Bearer " + getCookieByNameForCart('crispriteUserToken');
+        }
+
+        function logoutCurrentUser() {
+            console.log('log out');
+            window.location.reload(true);
+            unsetCookieByNameForCart('crispriteUserToken');
+        }
+
+        function checkLoggedIn() {
+            const userToken = getUserTokenForCart();
+            if(!userToken) {
+                hideOverallLoader();
+                return;
+            }
+
+            //Hit API and prefill data
+            var billingDetailsRequest = {
+              "url": "https://crisprtech.app/crispr-apis/user/get-billing-address.php",
+              "method": "GET",
+              "timeout": 0,
+              "headers": {
+                "Content-Type": "application/json",
+                "Authorization": getUserTokenForCart()
+              },
+            };
+
+            $.ajax(billingDetailsRequest).done(function (billingResponse) {
+                if(billingResponse.status == "success") {
+                    document.getElementById("loginStep1").style.display = 'none';
+                    document.getElementById("loginStep1Button").style.display = 'none';
+                    document.getElementById("loginLoader1").style.display = 'none';
+                    document.getElementById('mobileErrorHolder').style.display = 'none';
+                    document.getElementById("loginStep3").style.display = 'block';
+                    document.getElementById("logoutButton").style.display = 'block';
+
+                    //Set details to Cookie, and localstorate. Refresh should not lose.
+                    document.getElementById("mobileRegistered").value = billingResponse.data.mobile;
+
+
+                    //Billing address mandatory to proceed (prefilled for regd user)
+                    document.getElementById("billingAddressView").style.display = 'block';
+                    document.getElementById('fullname').focus();
+
+                    fillUpLoggedInDetails(billingResponse.data);
+                }
+
+                hideOverallLoader();
+            });
+        }
+
+        checkLoggedIn(); //Default rendering logged-in details
+
+
+        function maskedMobileNumber(mobileNumber) {
+            if (typeof mobileNumber !== 'string' || mobileNumber.length !== 10) {
+                return "";
+            }
+
+            const digits = mobileNumber.split('');
+            // Mask the 3rd, 4th, 6th, and 7th positions with 'X'
+            digits[2] = 'X'; // 3rd position (index 2)
+            digits[3] = 'X'; // 4th position (index 3)
+            digits[5] = 'X'; // 6th position (index 5)
+            digits[6] = 'X'; // 7th position (index 6)
+
+            return digits.join('');
+        }
+
+        function sendOTP() {
+
+            //Update URL param
+            const url = new URL(window.location);
+            url.searchParams.set("step", 1);
+            window.history.pushState({}, '', url);
+
+            var mobileNumber = document.getElementById('mobile').value;
+            const indianMobileRegex = /^[6-9]\d{9}$/;
+
+            if (indianMobileRegex.test(mobileNumber)) {
+
+                //Disable button
+                document.getElementById("loginStep1Button").disabled = true;
+
+                //Call Login API
+                document.getElementById("loginLoader1").style.display = 'block';
+
+                var authData = {
+                  "url": "https://crisprtech.app/crispr-apis/user/authenticate.php",
+                  "method": "POST",
+                  "timeout": 0,
+                  "headers": {
+                    "Content-Type": "application/json"
+                  },
+                  "data": JSON.stringify({
+                    "username": mobileNumber
+                  }),
+                };
+
+                $.ajax(authData).done(function (authResponse) {
+                    var response = JSON.parse(authResponse);
+                    if(response.status == "success") {
+                        showToaster(response.message);
+
+                        //Update URL param
+                        const url = new URL(window.location);
+                        url.searchParams.set("key", response.data);
+                        url.searchParams.set("step", 2);
+                        window.history.pushState({}, '', url);
+
+                        //Post Success
+                        setTimeout(() => {
+                            document.getElementById("loginStep1Button").style.display = 'none';
+                            document.getElementById("loginLoader1").style.display = 'none';
+                            document.getElementById('mobileErrorHolder').style.display = 'none';
+                            document.getElementById("loginStep1").style.display = 'none';
+                            document.getElementById("loginStep1Button").disabled = false;
+                            document.getElementById("loginStep2").style.display = 'block';
+                            document.getElementById("loginStep2Button").style.display = 'block';
+                            document.getElementById('otp1').focus();
+                            document.getElementById('loginAttemptingMobile').innerHTML = 'as ' + maskedMobileNumber(mobileNumber);
+                        }, 500);
+
+                    } else {
+                        showToaster(response.error);
+                        //Post Failure
+                        document.getElementById("loginLoader1").style.display = 'none';
+                        document.getElementById("loginStep1Button").disabled = false;
+                    }
+                });
+            } else {
+                showToaster("Enter a valid mobile number");
+            }
+        }
+
+        function processLogin() {
+            var mobileNumber = document.getElementById('mobile').value;
+            const indianMobileRegex = /^[6-9]\d{9}$/;
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const key = urlParams.get('key');
+
+
+            if (indianMobileRegex.test(mobileNumber) && key) {
+                const otp = getOTP();
+                if(otp.length != 4) {
+                    showToaster("Please enter all 4 digits of one-time passcode")
+                    document.getElementById('otp4').focus();
+                    return;
+                }
+
+                //Loader
+                document.getElementById("loginLoader2").style.display = 'block';
+
+
+                var loginData = {
+                  "url": "https://crisprtech.app/crispr-apis/user/login.php",
+                  "method": "POST",
+                  "timeout": 0,
+                  "headers": {
+                    "Content-Type": "application/json"
+                  },
+                  "data": JSON.stringify({
+                    "username": mobileNumber,
+                    "passcode": otp,
+                    "key": key
+                  }),
+                };
+
+                $.ajax(loginData).done(function (loginResponse) {
+                    var response = JSON.parse(loginResponse);
+                    if(response.status == "success") {
+                        //Set token in cookies
+                        console.log(response.data);
+
+                        //Set cookies
+                        var now = new Date();
+                        now.setDate(now.getDate() + 7); // Set expiration to 7 days from now
+                        document.cookie = "crispriteUserToken=" + encodeURIComponent(response.data) + "; expires=" + now.toUTCString() + "; path=/";
+
+                        //Loader end:
+                        document.getElementById("loginStep2Button").style.display = 'none';
+                        document.getElementById("loginLoader2").style.display = 'none';
+                        document.getElementById('mobileErrorHolder').style.display = 'none';
+                        document.getElementById("loginStep2").style.display = 'none';
+                        document.getElementById("loginStep3").style.display = 'block';
+                        document.getElementById("logoutButton").style.display = 'block';
+
+                        //Set details to Cookie, and localstorate. Refresh should not lose.
+                        document.getElementById("mobileRegistered").value = mobileNumber;
+
+
+                        //Billing address mandatory to proceed (prefilled for regd user)
+                        document.getElementById("billingAddressView").style.display = 'block';
+                        document.getElementById('fullname').focus();
+
+                        preloadBillingDetails();
+
+                    } else {
+                        showToaster(response.error ?? "Something went wrong");
+                        
+                        //Loader end:
+                        document.getElementById("loginLoader2").style.display = 'none';
+                        document.getElementById('otp4').focus();
+                    }
+                });
+                return;
+            } else {
+                showToaster('Something went wrong');
+            }
+
+        }
+
+        function removeUndefined(value) {
+            if(!value || value == 'undefined')
+                return "";
+            return value;
+        }
+
+        //From profile OR previous bills
+        function preloadBillingDetails() {
+            var billingDetailsRequest = {
+              "url": "https://crisprtech.app/crispr-apis/user/get-billing-address.php",
+              "method": "GET",
+              "timeout": 0,
+              "headers": {
+                "Content-Type": "application/json",
+                "Authorization": getUserTokenForCart()
+              },
+            };
+
+            $.ajax(billingDetailsRequest).done(function (billingResponse) {
+                if(billingResponse.status == "success") {
+                    fillUpLoggedInDetails(billingResponse.data);
+                }
+            });
+        }
+
+        function fillUpLoggedInDetails(billingDetails) {
+            //NOTE: Do not overrite "mobile" value
+            var name = billingDetails.name && billingDetails.name != "Crisprite" ? removeUndefined(billingDetails.name):"";
+            document.getElementById("loggedInAsName").innerHTML = name;
+            document.getElementById("fullname").value = name;
+            document.getElementById("address").value = removeUndefined(billingDetails.address);
+            document.getElementById("locality").value = removeUndefined(billingDetails.locality);
+            document.getElementById("city").value = removeUndefined(billingDetails.city);
+            document.getElementById("state").value = removeUndefined(billingDetails.state);
+            document.getElementById("pincode").value = removeUndefined(billingDetails.pincode);
+            document.getElementById("email").value = removeUndefined(billingDetails.email);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('start')
+            if(document.getElementById('mobile'))
+                document.getElementById('mobile').focus();
+        });
+
+
+        // Function to move focus to the next OTP input
+        function moveToNext(currentInput, nextInputId) {
+            if (currentInput.value.length === 1) {
+                document.getElementById(nextInputId).focus();
+            }
+        }
+
+        // Function to handle OTP submission
+        function submitOtp() {
+            const otp = getOTP();
+        }
+
+        function getOTP(argument) {
+            const otp1 = document.getElementById('otp1').value;
+            const otp2 = document.getElementById('otp2').value;
+            const otp3 = document.getElementById('otp3').value;
+            const otp4 = document.getElementById('otp4').value;
+            const otp = otp1 + otp2 + otp3 + otp4;
+            return otp;
+        }
+
+        // Function to handle backspace and move focus backward
+        function handleBackspace(currentInput, previousInputId) {
+            if (currentInput.value.length === 0 && previousInputId) {
+                document.getElementById(previousInputId).focus();
+            }
+        }
+
+        // Add event listeners to OTP inputs
+        document.getElementById('otp1').addEventListener('input', function() {
+            moveToNext(this, 'otp2');
+        });
+
+        document.getElementById('otp2').addEventListener('input', function() {
+            moveToNext(this, 'otp3');
+        });
+
+        document.getElementById('otp3').addEventListener('input', function() {
+            moveToNext(this, 'otp4');
+        });
+
+        document.getElementById('otp4').addEventListener('input', function() {
+            if (this.value.length === 1) {
+                submitOtp();
+            }
+        });
+
+        // Add keydown event listeners for backspace
+        document.getElementById('otp1').addEventListener('keydown', function(event) {
+            if (event.key === 'Backspace') {
+                handleBackspace(this, null); // No previous input for otp1
+            }
+        });
+
+        document.getElementById('otp2').addEventListener('keydown', function(event) {
+            if (event.key === 'Backspace') {
+                handleBackspace(this, 'otp1');
+            }
+        });
+
+        document.getElementById('otp3').addEventListener('keydown', function(event) {
+            if (event.key === 'Backspace') {
+                handleBackspace(this, 'otp2');
+            }
+        });
+
+        document.getElementById('otp4').addEventListener('keydown', function(event) {
+            if (event.key === 'Backspace') {
+                handleBackspace(this, 'otp3');
+            }
+        });
+
+        function validateMobile(mobileNumber) {
+            const indianMobileRegex = /^[6-9]\d{9}$/;
+
+            if (indianMobileRegex.test(mobileNumber)) {
+                document.getElementById('mobileError').innerHTML = '';
+            } else {
+                document.getElementById('mobileError').innerHTML = 'Invalid Mobile Number';
+            }
+        }
+        document.getElementById('mobile').addEventListener('change', function() {
+            validateMobile(this.value);
+        });
+        document.getElementById('mobile').addEventListener('input', function() {
+            if(this.value.length == 10)
+                validateMobile(this.value);
+            else {
+                document.getElementById('mobileError').innerHTML = '';
+            }
+        });
+
+        function showToaster(message) {
+            const toaster = document.getElementById('toaster');
+            toaster.textContent = message;
+            toaster.classList.add('show');
+
+            setTimeout(() => {
+                toaster.classList.remove('show');
+            }, 3000);
+        }
+
+    </script>
+
+
+
+</body>
+</html>

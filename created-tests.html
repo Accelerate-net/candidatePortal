@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <title>Created Tests</title>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+      <meta name="apple-mobile-web-app-capable" content="yes">
+      <meta name="apple-touch-fullscreen" content="yes">
+      <meta name="description" content="Avenxo Admin Theme">
+      <meta name="author" content="KaijuThemes">
+      <link type='text/css' href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600' rel='stylesheet'>
+      <link type="text/css" href="assets/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+      <!-- Font Awesome -->
+      <link type="text/css" href="assets/fonts/themify-icons/themify-icons.css" rel="stylesheet">
+      <!-- Themify Icons -->
+      <link type="text/css" href="assets/css/styles.css" rel="stylesheet">
+      <!-- Core CSS with all styles -->
+      <link type="text/css" href="assets/plugins/codeprettifier/prettify.css" rel="stylesheet">
+      <!-- Code Prettifier -->
+      <link type="text/css" href="assets/plugins/iCheck/skins/minimal/blue.css" rel="stylesheet">
+      <!-- iCheck -->
+      <link type="text/css" href="assets/plugins/gridforms/gridforms/gridforms.css" rel="stylesheet">
+      <!-- Gridforms -->
+      <link type="text/css" href="assets/plugins/clockface/css/clockface.css" rel="stylesheet">
+      <!--[if lt IE 10]>
+      <script type="text/javascript" src="assets/js/media.match.min.js"></script>
+      <script type="text/javascript" src="assets/js/respond.min.js"></script>
+      <script type="text/javascript" src="assets/js/placeholder.min.js"></script>
+      <![endif]-->
+      <!-- The following CSS are included as plugins and can be removed if unused-->
+      <link type="text/css" href="assets/plugins/form-fseditor/fseditor.css" rel="stylesheet">
+<link type="text/css" href="assets/plugins/bootstrap-tokenfield/css/bootstrap-tokenfield.css" rel="stylesheet">   <!-- Tokenfield -->
+
+         <link type="text/css" href="assets/plugins/fullcalendar/fullcalendar.css" rel="stylesheet">   <!-- Calendar Plugin -->
+
+<link type="text/css" href="assets/plugins/form-select2/select2.css" rel="stylesheet">                        <!-- Select2 -->
+
+      <!-- FullScreen Editor -->
+      <style type="text/css">
+         .studentRow:hover{
+         cursor: pointer;
+         }
+      </style>
+      <!-- Controller -->
+      <script src="assets/js/jquery.js"></script>
+      <script src="assets/js/angular.min.js"></script>
+      <script src="assets/js/angular-cookies.min.js"></script>
+      <script src="controllers/people.js"></script>
+      <!-- CROPPER -->
+      <script src="assets/plugins/cropper/cropper.js"></script>
+      <link type="text/css" href="assets/plugins/cropper/cropper.css" rel="stylesheet">
+   </head>
+   <body class="animated-content" ng-app="peopleApp" ng-controller="peopleController" ng-cloak>
+
+
+    
+     <header id="topnav" class="navbar navbar-default navbar-fixed-top" role="banner">
+        <div class="logo-area">
+           <span id="trigger-sidebar" class="toolbar-trigger toolbar-icon-bg">
+           <a data-toggle="tooltips" data-placement="right" title="Toggle Sidebar">
+           <span class="icon-bg">
+           <i class="ti ti-menu"></i>
+           </span>
+           </a>
+           </span>
+           <a class="navbar-brand" href="index.html" style="width: 125px"></a>
+           <h1 style="font-size: 18px; font-weight: bold; text-transform: uppercase">{{outletCode}}</h1>
+        </div>
+        <!-- logo-area -->
+        <ul class="nav navbar-nav toolbar pull-right">
+           <li class="toolbar-icon-bg hidden-xs" id="trigger-fullscreen">
+              <a href="#" class="toggle-fullscreen"><span class="icon-bg"><i class="ti ti-zoom-in"></i></span></i></a>
+           </li>
+           <li class="dropdown toolbar-icon-bg">
+              <a href="#" class="dropdown-toggle username" data-toggle="dropdown">
+              <img class="img-circle" src="assets/img/default_user.png" alt="" />
+              </a>
+              <ul class="dropdown-menu userinfo arrow">
+                 <li><a href="settings.html"><i class="ti ti-settings"></i><span>Settings</span></a></li>
+                 <li ng-click="logoutNow()"><a href="#/"><i class="ti ti-shift-right"></i><span>Sign Out</span></a></li>
+              </ul>
+           </li>
+        </ul>
+     </header>
+     
+      <div id="wrapper">
+
+         <div id="layout-static">
+           <div class="static-sidebar-wrapper sidebar-default">
+              <div class="static-sidebar">
+                 <div class="sidebar">
+                    <div class="widget stay-on-collapse" id="widget-sidebar">
+                       <nav role="navigation" class="widget-body">
+                           <ul class="acc-menu">
+                              <li>
+                                  <a href="created-tests.html"><i class="ti ti-tablet"></i><span>Mock Tests</a>
+                              </li>
+                              <li>
+                                <a href="question-bank.html"><i class="ti ti-bookmark-alt"></i><span>Question Bank</span><span class="badge badge-teal" ng-if="pending_orders_length > 0">{{pending_orders_length}}</span></a>
+                              </li>
+                              <!--
+                              <li>
+                                  <a href="submissions.html"><i class="ti ti-check-box"></i><span>Test Submissions</span><span class="badge badge-teal" ng-if="smart_orders_length > 0">{{smart_orders_length}}</span></a>
+                              </li>
+                              <li><a href="helpline-inbox.html"><i class="ti ti-headphone-alt"></i><span>Helpdesk</span><span class="badge badge-inverse" ng-if="helprequests_length > 0">{{helprequests_length}}</span></a></li>
+                              <li><a href="edit-menu.html"><i class="ti ti-money"></i><span>Payments</span></a></li>
+                              <li><a href="reservations.html"><i class="ti ti-user"></i><span>Students Profile</span><span class="badge badge-inverse" ng-if="reservations_length > 0">{{reservations_length}}</span></a></li>
+                              <li><a href="feedback.html"><i class="ti ti-thumb-up"></i><span>Faculty Feedbacks</span></a></li>
+                              <li>
+                                    <a href="javascript:;"><i class="ti ti-book"></i><span>Courses</span></a>
+                                    <ul class="acc-menu">
+                                        <li><a href="smart-orders-rejected.html">Courses - Active</a></li>
+                                        <li><a href="failed-orders.html">Courses - Completed</a></li>
+                                     </ul>
+                              </li>
+                              <li>
+                                     <a href="javascript:;"><i class="ti ti-view-grid"></i><span>Tools</span></a>
+                                     <ul class="acc-menu">
+                                        <li><a href="staff-registry.html">Faculty Registry</a></li>
+                                        <li><a href="finance-ledger.html">Sales Ledger</a></li>
+                                     </ul>
+                              </li>
+                              <li>
+                                     <a href="javascript:;"><i class="ti ti-stats-up"></i><span>Marketing</span></a>
+                                     <ul class="acc-menu">
+                                        <li><a href="promotions.html">Coupons Manager</a></li>
+                                        <li><a href="marketing-wizard.html">Marketing Content</a></li>
+                                        <li><a href="messenger.html">Messenger</a></li>
+                                        <li><a href="analytics.html">Sales Analytics</a></li>
+                                        <li><a href="vouchers.html">Vouchers Manager</a></li>
+                                     </ul>
+                              </li>
+                              -->
+                           </ul>
+                       </nav>
+                    </div>
+                 </div>
+              </div>
+           </div>
+
+
+            <div class="static-content-wrapper">
+               <div class="static-content">
+                  <div class="page-content">
+
+
+                     <div class="container-fluid" style="padding-top: 4%;">
+
+
+
+<!-- Exam Creation Wizard -->
+<div data-widget-group="group1">
+   <div class="row">
+       <div class="col-md-12">
+
+         <div class="panel panel-info" data-widget='{"draggable": "false"}'>
+           <div class="panel-heading">
+               <h2>Create an Exam</h2>
+           </div>
+           <div class="panel-body">
+            <div class="tab-content">
+               <div class="tab-pane active" id="domwizard">
+                  <form action="#" id="basicwizard" class="form-horizontal">
+                     <fieldset title="Step 1">
+                        <legend>Basic Details</legend>
+                        <div class="form-group">
+                           <label class="col-md-3 control-label">Title</label>
+                           <div class="col-md-6">
+                              <input type="text" placeholder="username" class="form-control">
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <label class="col-md-3 control-label">Brief</label>
+                           <div class="col-md-6">
+                              <input type="text" placeholder="example@address.com" class="form-control">
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <label class="col-md-3 control-label">Listing Image</label>
+                           <div class="col-md-6">
+                              <input type="text" placeholder="http://address.com" class="form-control">
+                           </div>
+                        </div>
+                     </fieldset>
+                     <fieldset title="Step 2">
+                        <legend>Schedule & Structure</legend>
+                        <div class="form-group">
+                           <label class="col-md-3 control-label">Total Duration</label>
+                           <div class="col-md-6">
+                              <input type="text" placeholder="username" class="form-control">
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <label class="col-md-3 control-label">Total Number of Questions</label>
+                           <div class="col-md-6">
+                              <input type="text" placeholder="example@address.com" class="form-control">
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <label class="col-md-3 control-label">Total Marks</label>
+                           <div class="col-md-6">
+                              <input type="text" placeholder="username" class="form-control">
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <label class="col-md-3 control-label">Number of Sections</label>
+                           <div class="col-md-6">
+                              <input type="text" placeholder="http://address.com" class="form-control">
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <label class="col-md-3 control-label">Scheduled Exam</label>
+                           <div class="col-md-6">
+                              <input type="text" placeholder="http://address.com" class="form-control">
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <label class="col-md-3 control-label">Multiple Attempts Allowed</label>
+                           <div class="col-md-6">
+                              <input type="text" placeholder="http://address.com" class="form-control">
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <label class="col-md-3 control-label">Challenge Question Allowed</label>
+                           <div class="col-md-6">
+                              <input type="text" placeholder="http://address.com" class="form-control">
+                           </div>
+                        </div>
+                     </fieldset>
+                     <fieldset title="Step 3">
+                        <legend>Sections & Questions</legend>
+                        <div class="form-group">
+                           <label class="col-md-3 control-label">Switching Sections Allowed</label>
+                           <div class="col-md-6">
+                              <input type="text" placeholder="username" class="form-control">
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <label class="col-md-3 control-label">Marking Scheme</label>
+                           <div class="col-md-6">
+                              <input type="text" placeholder="username" class="form-control">
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <label class="col-md-3 control-label">Correct Answer Marking</label>
+                           <div class="col-md-6">
+                              <input type="text" placeholder="username" class="form-control">
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <label class="col-md-3 control-label">Wrong Answer Marking</label>
+                           <div class="col-md-6">
+                              <input type="text" placeholder="username" class="form-control">
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <label class="col-md-3 control-label">Unattempted Question Marking</label>
+                           <div class="col-md-6">
+                              <input type="text" placeholder="username" class="form-control">
+                           </div>
+                        </div>
+                        <div class="form-group" style="margin: 0"><div class="col-md-3"></div><div class="col-md-6"><p class="createExamSection">Section 1 of 4</p></div></div>
+                        <div class="form-group">
+                           <label class="col-md-3 control-label">Section Name</label>
+                           <div class="col-md-6">
+                              <input type="text" placeholder="example@address.com" class="form-control">
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <label class="col-md-3 control-label">Duration</label>
+                           <div class="col-md-6">
+                              <input type="text" placeholder="http://address.com" class="form-control">
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <label class="col-md-3 control-label">Number of Questions</label>
+                           <div class="col-md-6">
+                              <input type="text" placeholder="http://address.com" class="form-control">
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <label class="col-sm-3 control-label">Questions IDs</label>
+                           <div class="col-sm-6">
+                              <input type="text" class="form-control" id="tokenfield-typeahead" value="red,green,blue" />
+                           </div>
+                        </div>
+                     </fieldset>
+                  <input type="submit" class="finish btn-success btn" value="Create Exam" />
+               </form>
+            </div>
+         
+               
+   <div class="tab-pane" id="codewizard">
+   <pre class="prettyprint linenums">
+   &lt;form id=&quot;basicwizard&quot;&gt;
+      &lt;fieldset title=&quot;Step 1&quot;&gt;
+         &lt;legend&gt;No Validation&lt;/legend&gt;
+         ...
+      &lt;/fieldset&gt;
+      &lt;fieldset title=&quot;Step 2&quot;&gt;
+         &lt;legend&gt;Just Text&lt;/legend&gt;
+         ...
+      &lt;/fieldset&gt;
+   &lt;/form&gt;
+   </pre>
+   </div>
+   </div>
+               
+           </div>
+         </div>
+
+
+
+       </div>
+   </div>
+</div>
+
+
+                     </div>
+                     <!-- .container-fluid -->
+                  </div>
+                  <!-- #page-content -->
+               </div>
+            </div>
+
+
+         </div>
+      </div>
+
+
+               
+
+<!-- OTHER MODALS -->
+
+               <!-- FILTER MODAL -->
+               <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                     <div class="modal-content">
+                               <div class="modal-header" style="color: #27ae60; border: none; padding-bottom: 0">
+                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                 <h4 class="modal-title" style="font-size: 16px">Available Branches</h4>
+                               </div>                                            
+                        <div class="modal-body">      
+                           <button ng-repeat="branch in branchList" type="button" class="btn btn-default btn-block" ng-click="searchWithBranchAction(branch.code)" style="text-transform: none; text-align: left; font-size: 18px; font-weight: 400">{{branch.name}}</button>                     
+                        </div>
+                     </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+              </div><!-- /.modal -->
+               
+
+               <!-- FILTER MODAL -->
+               <div class="modal fade" id="filterModalRole" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                     <div class="modal-content">
+                               <div class="modal-header" style="color: #27ae60; border: none; padding-bottom: 0">
+                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                 <h4 class="modal-title" style="font-size: 16px">Designations</h4>
+                               </div>                                            
+                        <div class="modal-body">      
+                           <button ng-repeat="role in roleList" type="button" class="btn btn-default btn-block" ng-click="searchWithRoleAction(role.code)" style="text-transform: none; text-align: left; font-size: 18px; font-weight: 400">{{role.name}}</button>                     
+                        </div>
+                     </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+              </div><!-- /.modal -->
+
+
+
+
+               <!-- IMAGE PREVIEW MODAL -->
+               <div class="modal fade" id="imagePreviewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                     <div class="modal-content" style="width: 540px">
+                        <div class="modal-body" style="padding: 0">
+                              <img ng-src="{{currentImage}}" style="max-width: 100%;">
+                              <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 100%; height: 60px">Close</button>
+                        </div>
+                     </div>
+                  </div><!-- /.modal-dialog -->
+              </div><!-- /.modal -->
+
+
+<!-- Syllabus -->
+<select id="source2" style="display: none">
+      <option value="">None</option>
+   <optgroup label="Physics - Plus One">
+      <option value="1P01">Chapter 1: Physical World</option>
+      <option value="1P02">Chapter 2: Units and Measurements</option>
+      <option value="1P03">Chapter 3: Motion in a Straight Line</option>
+      <option value="1P04">Chapter 4: Motion in a Plane</option>
+      <option value="1P05">Chapter 5: Laws of Motion</option>
+      <option value="1P06">Chapter 6: Work, Energy and Power</option>
+      <option value="1P07">Chapter 7: System of Particles and Rotational Motion</option>
+      <option value="1P08">Chapter 8: Gravitation</option>
+      <option value="1P09">Chapter 9: Mechanical Properties of Solids</option>
+      <option value="1P10">Chapter 10: Mechanical Properties of Fluids</option>
+      <option value="1P11">Chapter 11: Thermal Properties of Matter</option>
+      <option value="1P12">Chapter 12: Thermodynamics</option>
+      <option value="1P13">Chapter 13: Kinetic Theory of Gases</option>
+      <option value="1P14">Chapter 14: Oscillations</option>
+      <option value="1P15">Chapter 15: Waves</option>
+   </optgroup>
+
+   <optgroup label="Chemistry - Plus One">
+      <option value="1C01">Chapter 1: Some Basic Concepts of Chemistry</option>
+      <option value="1C02">Chapter 2: Structure of Atom</option>
+      <option value="1C03">Chapter 3: Classification of Elements and Periodicity in Properties</option>
+      <option value="1C04">Chapter 4: Chemical Bonding and Molecular Structure</option>
+      <option value="1C05">Chapter 5: States of Matter: Gases and Liquids</option>
+      <option value="1C06">Chapter 6: Thermodynamics</option>
+      <option value="1C07">Chapter 7: Equilibrium</option>
+      <option value="1C08">Chapter 8: Redox Reactions</option>
+      <option value="1C09">Chapter 9: Hydrogen</option>
+      <option value="1C10">Chapter 10: The s-Block Element (Alkali and Alkaline earth metals)</option>
+      <option value="1C11">Chapter 11: Some p-Block Elements</option>
+      <option value="1C12">Chapter 12: Organic Chemistry - Some Basic Principles and Techniques</option>
+      <option value="1C13">Chapter 13: Hydrocarbons</option>
+      <option value="1C14">Chapter 14: Environmental Chemistry</option>
+   </optgroup>
+
+   <optgroup label="Mathematics - Plus One">
+      <option value="1M01">Chapter 1: Sets</option>
+      <option value="1M02">Chapter 2: Relations and Functions</option>
+      <option value="1M03">Chapter 3: Trigonometric Functions</option>
+      <option value="1M04">Chapter 4: Principle of Mathematical Induction</option>
+      <option value="1M05">Chapter 5: Complex Numbers and Quadratic Equations</option>
+      <option value="1M06">Chapter 6: Linear Inequalities</option>
+      <option value="1M07">Chapter 7: Permutations and Combinations</option>
+      <option value="1M08">Chapter 8: Binomial Theorem</option>
+      <option value="1M09">Chapter 9: Sequence and Series</option>
+      <option value="1M10">Chapter 10: Straight Lines</option>
+      <option value="1M11">Chapter 11: Conic Sections</option>
+      <option value="1M12">Chapter 12: Introduction to Three Dimensional Geometry</option>
+      <option value="1M13">Chapter 13: Limits and Derivatives</option>
+      <option value="1M14">Chapter 14: Mathematical Reasoning</option>
+      <option value="1M15">Chapter 15: Statistics</option>
+      <option value="1M16">Chapter 16: Probability</option>
+   </optgroup>
+
+   <optgroup label="Biology - Plus One">
+      <option value="1B01">Chapter 1: Diversity of the Living World</option>
+      <option value="1B02">Chapter 2: Biological Classification</option>
+      <option value="1B03">Chapter 3: Plant Kingdom</option>
+      <option value="1B04">Chapter 4: Animal Kingdom</option>
+      <option value="1B05">Chapter 5: Morphology of Flowering Plants</option>
+      <option value="1B06">Chapter 6: Anatomy of Flowering Plants</option>
+      <option value="1B07">Chapter 7: Structural Organisation in Animals</option>
+      <option value="1B08">Chapter 8: Cell - The Unit of Life</option>
+      <option value="1B09">Chapter 9: Biomolecules</option>
+      <option value="1B10">Chapter 10: Cell Cycle and Cell Division</option>
+      <option value="1B11">Chapter 11: Transport in Plants</option>
+      <option value="1B12">Chapter 12: Mineral Nutrition</option>
+      <option value="1B13">Chapter 13: Photosynthesis in Higher Plants</option>
+      <option value="1B14">Chapter 14: Respiration in Plants</option>
+      <option value="1B15">Chapter 15: Plant Growth and Development</option>
+      <option value="1B16">Chapter 16: Digestion and Absorption</option>
+      <option value="1B17">Chapter 17: Breathing and Exchange of Gases</option>
+      <option value="1B18">Chapter 18: Body Fluids and Circulation</option>
+      <option value="1B19">Chapter 19: Excretory Products and Their Elimination</option>
+      <option value="1B20">Chapter 20: Locomotion and Movement</option>
+      <option value="1B21">Chapter 21: Neural Control and Coordination</option>
+      <option value="1B22">Chapter 22: Chemical Coordination and Integration</option>
+   </optgroup>
+
+   <optgroup label="Physics - Plus Two">
+      <option value="2P01">Chapter 1: Electric Charges and Fields</option>
+      <option value="2P02">Chapter 2: Electrostatic Potential and Capacitance</option>
+      <option value="2P03">Chapter 3: Current Electricity</option>
+      <option value="2P04">Chapter 4: Moving Charges and Magnetism</option>
+      <option value="2P05">Chapter 5: Magnetism and Matter</option>
+      <option value="2P06">Chapter 6: Electromagnetic Induction</option>
+      <option value="2P07">Chapter 7: Alternating Current</option>
+      <option value="2P08">Chapter 8: Electromagnetic Waves</option>
+      <option value="2P09">Chapter 9: Ray Optics and Optical Instruments</option>
+      <option value="2P10">Chapter 10: Wave Optics</option>
+      <option value="2P11">Chapter 11: Dual Nature of Radiation and Matter</option>
+      <option value="2P12">Chapter 12: Atoms</option>
+      <option value="2P13">Chapter 13: Nuclei</option>
+      <option value="2P14">Chapter 14: Semiconductor Electronics: Materials, Devices, and Simple Circuits</option>
+      <option value="2P15">Chapter 15: Communication Systems</option>
+   </optgroup>
+
+   <optgroup label="Chemistry - Plus Two">
+      <option value="2C01">Chapter 1: Solid State</option>
+      <option value="2C02">Chapter 2: Solutions</option>
+      <option value="2C03">Chapter 3: Electrochemistry</option>
+      <option value="2C04">Chapter 4: Chemical Kinetics</option>
+      <option value="2C05">Chapter 5: Surface Chemistry</option>
+      <option value="2C06">Chapter 6: General Principles and Processes of Isolation of Elements</option>
+      <option value="2C07">Chapter 7: The p-Block Element</option>
+      <option value="2C08">Chapter 8: The d- and f-Block Element</option>
+      <option value="2C09">Chapter 9: Coordination Compounds</option>
+      <option value="2C10">Chapter 10: Haloalkanes and Haloarenes</option>
+      <option value="2C11">Chapter 11: Alcohols, Phenols and Ethers</option>
+      <option value="2C12">Chapter 12: Aldehydes, Ketones and Carboxylic Acids</option>
+      <option value="2C13">Chapter 13: Organic Compounds Containing Nitrogen</option>
+      <option value="2C14">Chapter 14: Biomolecules</option>
+      <option value="2C15">Chapter 15: Polymers</option>
+      <option value="2C16">Chapter 16: Chemistry in Everyday Life</option>
+   </optgroup>
+
+   <optgroup label="Mathematics - Plus Two">
+      <option value="2M01">Chapter 1: Relations and Functions</option>
+      <option value="2M02">Chapter 2: Inverse Trigonometric Functions</option>
+      <option value="2M03">Chapter 3: Matrices</option>
+      <option value="2M04">Chapter 4: Determinants</option>
+      <option value="2M05">Chapter 5: Continuity and Differentiability</option>
+      <option value="2M06">Chapter 6: Applications of Derivatives</option>
+      <option value="2M07">Chapter 7: Integrals</option>
+      <option value="2M08">Chapter 8: Applications of Integrals</option>
+      <option value="2M09">Chapter 9: Differential Equations</option>
+      <option value="2M10">Chapter 10: Vectors</option>
+      <option value="2M11">Chapter 11: Three Dimensional Geometry</option>
+      <option value="2M12">Chapter 12: Linear Programming</option>
+      <option value="2M13">Chapter 13: Probability</option>
+   </optgroup>
+
+   <optgroup label="Biology - Plus Two">
+      <option value="2B01">Chapter 1: Reproduction in Organisms</option>
+      <option value="2B02">Chapter 2: Sexual Reproduction in Flowering Plants</option>
+      <option value="2B03">Chapter 3: Human Reproduction</option>
+      <option value="2B04">Chapter 4: Reproductive Health</option>
+      <option value="2B05">Chapter 5: Principles of Inheritance and Variation</option>
+      <option value="2B06">Chapter 6: Molecular Basis of Inheritance</option>
+      <option value="2B07">Chapter 7: Evolution</option>
+      <option value="2B08">Chapter 8: Human Health and Disease</option>
+      <option value="2B09">Chapter 9: Strategies for Enhancement in Food Production</option>
+      <option value="2B10">Chapter 10: Microbes in Human Welfare</option>
+      <option value="2B11">Chapter 11: Biotechnology: Principles and Processes</option>
+      <option value="2B12">Chapter 12: Biotechnology and Its Applications</option>
+      <option value="2B13">Chapter 13: Organisms and Populations</option>
+      <option value="2B14">Chapter 14: Ecosystem</option>
+      <option value="2B15">Chapter 15: Biodiversity and Conservation</option>
+      <option value="2B16">Chapter 16: Environmental Issues</option>
+   </optgroup>
+</select>
+
+
+
+      <!-- Image Modal -->
+      <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+         <div class="modal-dialog">
+            <div class="modal-content" style="width: 810px">
+               <div class="modal-body">
+                  <div class="row" style="padding: 15px">
+                     <button class="btn-success btn pull-right" ng-click="saveAttachment()" style="margin-left: 5px" ng-show="photoLoadedToFrame">Save</button>
+                     <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                     <div style="padding:5px 10px; background:#00ad2d; border:1px solid #00ad2d; position:relative; color:#fff; border-radius:2px; text-align:center; float:left; cursor:pointer">Select an Image<input type="file" id="fileInput" style="position: absolute; z-index: 1000; opacity: 0; cursor: pointer; right: 0; top: 0; height: 100%; font-size: 24px; width: 100%;"/></div>
+                  </div>
+                  <div style="margin-top: 10px">
+                     <img id="image" ng-src="{{myImage}}" style="max-width: 100%;">
+                  </div>
+                  <p style="margin: 0; padding-top: 15px; color: #bdc3c7">Upload High Quality image only. Use minimum 853x480 resolution(Width: 853px Height: 480px). Only JPG, PNG files supported.</p>
+               </div>
+            </div>
+            <!-- /.modal-content -->
+         </div>
+         <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+      <!-- Load site level scripts -->
+      <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script> -->
+      <script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>                      <!-- Load jQuery -->
+      <script type="text/javascript" src="assets/js/jqueryui-1.10.3.min.js"></script>                    <!-- Load jQueryUI -->
+      <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>                       <!-- Load Bootstrap -->
+      <script type="text/javascript" src="assets/js/enquire.min.js"></script>                            <!-- Load Enquire -->
+      <script type="text/javascript" src="assets/plugins/velocityjs/velocity.min.js"></script>              <!-- Load Velocity for Animated Content -->
+      <script type="text/javascript" src="assets/plugins/velocityjs/velocity.ui.min.js"></script>
+      <script type="text/javascript" src="assets/plugins/wijets/wijets.js"></script>                     <!-- Wijet -->
+      <script type="text/javascript" src="assets/plugins/codeprettifier/prettify.js"></script>           <!-- Code Prettifier  -->
+      <script type="text/javascript" src="assets/plugins/bootstrap-switch/bootstrap-switch.js"></script>       <!-- Swith/Toggle Button -->
+      <script type="text/javascript" src="assets/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js"></script>  <!-- Bootstrap Tabdrop -->
+      <script type="text/javascript" src="assets/plugins/iCheck/icheck.min.js"></script>                    <!-- iCheck -->
+
+      <script type="text/javascript" src="assets/plugins/nanoScroller/js/jquery.nanoscroller.min.js"></script> <!-- nano scroller -->
+
+      <script type="text/javascript" src="assets/plugins/form-select2/select2.min.js"></script>  <!-- Advanced Select Boxes -->
+      <script type="text/javascript" src="assets/js/application.js"></script>
+      <script type="text/javascript" src="assets/demo/demo.js"></script>
+      <script type="text/javascript" src="assets/demo/demo-switcher.js"></script>
+
+      <script type="text/javascript" src="assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script> <!-- DateTime Picker -->
+      <!-- End loading site level scripts -->
+      <!-- Load page level scripts-->
+      <script type="text/javascript" src="assets/plugins/form-fseditor/jquery.fseditor-min.js"></script>                   <!-- Fullscreen Editor -->
+      <script type="text/javascript" src="assets/plugins/bootbox/bootbox.js"></script>    <!-- Bootbox -->
+      <script type="text/javascript" src="assets/demo/demo-profile.js"></script>
+      <!-- End loading page level scripts-->
+
+
+<script>
+    function copyToClipboard(text, element) {
+        navigator.clipboard.writeText(text).then(() => {
+            const message = element.querySelector('.copiedMessage');
+            message.style.display = 'block';
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 1000); // Message vanishes after 1 seconds
+        }).catch(err => {
+        });
+    }
+</script>
+
+    
+    <!-- Quicksearch to go with Multisearch Plugin -->
+<script type="text/javascript" src="assets/plugins/form-typeahead/typeahead.bundle.min.js"></script>   
+
+<script type="text/javascript" src="assets/plugins/datatables/jquery.dataTables.js"></script>
+<script type="text/javascript" src="assets/plugins/datatables/dataTables.bootstrap.js"></script>
+<script type="text/javascript" src="assets/plugins/form-stepy/jquery.stepy.js"></script>                          <!-- Stepy Plugin -->
+
+<script type="text/javascript" src="assets/plugins/bootstrap-tokenfield/bootstrap-tokenfield.min.js"></script>          <!-- Tokenfield -->
+            <script type="text/javascript" src="assets/plugins/fullcalendar/moment.min.js"></script>   <!-- Moment.js Dependency -->
+      <script type="text/javascript" src="assets/plugins/fullcalendar/fullcalendar.min.js"></script>   <!-- Calendar Plugin -->
+   </body>
+</html>
