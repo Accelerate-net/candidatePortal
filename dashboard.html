@@ -143,6 +143,9 @@
 									        <div class="selectCourseBar-scroll-container">
 									            <div class="selectCourseBar-options">
 									                <span href="" ng-click="getCourseListingData(courseItemTile.id)" class="selectCourseBar-option" ng-repeat="courseItemTile in courseListing.testSeriesEnrolled track by $index" ng-class="{'selectCourseBar-optionActive' : courseItemTile.id == courseIdOpen}">{{courseItemTile.title}}</span>
+									                <p style="font-size: 16px;" ng-if="!courseListingFound">You are not enrolled to any test series yet.
+									              		 <a href="https://crisprlearning.com/courses/" target="new">Click here</a> to enroll for Crispr Tests Series.
+									                </p>
 									            </div>
 									        </div>
 									    </div>

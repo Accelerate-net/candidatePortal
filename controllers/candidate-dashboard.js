@@ -57,7 +57,7 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
         $scope.courseIdOpen = id;
         $http({
           method  : 'GET',
-          url     : 'https://crisprtech.app/crispr-apis/user/test-series-progress.php?id='+id,
+          url     : 'https://crisprtech.app/crispr-apis/user/test-series-progress.php',
           headers : {
             'Content-Type': 'application/json',
             'Authorization': getUserToken()
