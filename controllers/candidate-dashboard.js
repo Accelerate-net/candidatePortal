@@ -29,7 +29,7 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
     }
 
     function getUserTokenRaw() {
-        $cookies.get("crispriteUserToken")
+        return $cookies.get("crispriteUserToken");
     }
 
 
