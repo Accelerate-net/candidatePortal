@@ -79,13 +79,13 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
 
     $scope.getCourseIconImage = function(courseData) {
         if(courseData.locked) {
-            return "/assets/icons/course-locked.png";
+            return "assets/icons/course-locked.png";
         } else if(courseData.previousAttemptId) {
-            return "/assets/icons/course-completed.png";
+            return "assets/icons/course-completed.png";
         } else if(!courseData.previousAttemptId && courseData.availableForAttempt) {
-            return "/assets/icons/course-unlocked.png";
+            return "assets/icons/course-unlocked.png";
         } else {
-            return "/assets/icons/course-locked.png";
+            return "assets/icons/course-locked.png";
         }
     }
 
