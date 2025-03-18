@@ -138,7 +138,7 @@
 									            <div class="selectCourseBar-icon">
 									                <img src="https://img.icons8.com/color/96/system-information.png" width="28px">
 									            </div>
-									            <h2 class="selectCourseBar-title">Subscribed Test Series</h2>
+									            <h2 class="selectCourseBar-title">Enrolled Test Series</h2>
 									        </div>
 									        <div class="selectCourseBar-scroll-container">
 									            <div class="selectCourseBar-options">
@@ -155,18 +155,18 @@
 									        
 									        <div class="courseContentTile" ng-repeat="courseItem in courseListing.coursesList track by $index" ng-click="" ng-class="{'blockedCourseContent' : courseItem.status == 5}">
 									            <div class="courseContentIcon">
-									                <img src="assets/icons/course-locked.png" alt=""/>
+									                <img ng-src="getCourseIconImage(courseItem)"/>
 									            </div>
 									            <img ng-src="{{courseItem.photo}}" alt="Payroll for Startups">
 									            <div class="courseContentTileContent">
 									                <h5>{{courseItem.title}}</h5>
 									                <p>{{courseItem.brief}}</p>
-									                <span ng-if="courseItem.status == 1">
-									                	<a href="">Attempt Now</a>
-									                	<a href="">See Report</a>
+									                <span ng-if="!courseItem.locked">
+									                	<a ng-click="attemptExam(courseItem.key, courseListing.currentTestSeriesInfo.series)" ng-if="courseItem.availableForAttempt">Attempt Now</a>
+									                	<a ng-click="viewLastReport(courseItem.previousAttemptId)" ng-if="courseItem.previousAttemptId">See Report</a>
 									                </span>
-									                <span ng-if="courseItem.status == 0">
-									                	<a href="" class="courseContentPurchase">Unlock</a>
+									                <span ng-if="courseItem.locked">
+									                	<a ng-click="goToPurchaseLink(courseListing.currentTestSeriesInfo.code)" class="courseContentPurchase">Unlock</a>
 									                </span>
 									            </div>
 									        </div>

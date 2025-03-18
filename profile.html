@@ -461,7 +461,7 @@
           <div class="row" style="padding: 15px">
              <button class="btn-success btn pull-right" ng-click="saveAttachment()" style="margin: 0 0 0 10px;" ng-show="photoLoadedToFrame">Save</button>
              <button type="button" class="btn btn-default pull-right" data-dismiss="modal" style="margin: 0 0 0 10px;">Close</button>
-             <div style="padding:5px 10px; background:#00ad2d; border:1px solid #00ad2d; position:relative; color:#fff; border-radius:2px; text-align:center; float:left; cursor:pointer">Select an Image<input type="file" id="fileInput" style="position: absolute; z-index: 1000; opacity: 0; cursor: pointer; right: 0; top: 0; height: 100%; font-size: 24px; width: 100%;"/></div>
+             <div style="padding:5px 10px; background:#00ad2d; border:1px solid #00ad2d; position:relative; color:#fff; border-radius:2px; text-align:center; float:left; cursor:pointer">Select an Image<input type="file" id="fileInput" accept="image/jpeg, image/png" style="position: absolute; z-index: 1000; opacity: 0; cursor: pointer; right: 0; top: 0; height: 100%; font-size: 24px; width: 100%;"/></div>
           </div>
        </div>
     </div>
@@ -496,6 +496,7 @@
 <script type="text/javascript" src="assets/plugins/nanoScroller/js/jquery.nanoscroller.min.js"></script> <!-- nano scroller -->
 
 <script type="text/javascript" src="assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/heic2any@latest/dist/heic2any.min.js"></script>
 
 <script type="text/javascript" src="assets/js/application.js"></script>
 <script type="text/javascript" src="assets/demo/demo.js"></script>

@@ -166,26 +166,63 @@ angular.module('CandidateProfileApp', ['ngCookies'])
   
       var handleFileSelect = function(evt) {
         var file = evt.currentTarget.files[0];
-        var reader = new FileReader();
-        reader.onload = function (evt) {
-          $scope.$apply(function($scope){
-            $scope.myImage = evt.target.result;
-            setTimeout(function(){ 
-              image = document.getElementById('image');
-              $scope.cropper = new Cropper(image, {
-              aspectRatio: 1 / 1,
-              autoCropArea: 0.9,
-              scalable: false,
-              ready: function () {
-                  // Strict mode: set crop box data first
-                  $scope.cropper.setCropBoxData($scope.cropBoxData).setCanvasData($scope.canvasData);
-                }
-              });           
-            }, 1000);
-              $scope.photoLoadedToFrame = true;
-          });
-        };
-        reader.readAsDataURL(file);
+
+        if (file.type === "image/heic" || file.type === "image/heif") {
+              
+              heic2any({
+                blob: file,
+                toType: "image/jpeg",
+              }).then(function (resultBlob) {
+                var reader = new FileReader();
+                reader.onload = function (evt) {
+                  $scope.$apply(function ($scope) {
+
+                      $scope.myImage = evt.target.result;
+                      setTimeout(function(){ 
+                        image = document.getElementById('image');
+                        $scope.cropper = new Cropper(image, {
+                        aspectRatio: 1 / 1,
+                        autoCropArea: 0.9,
+                        scalable: false,
+                        ready: function () {
+                            // Strict mode: set crop box data first
+                            $scope.cropper.setCropBoxData($scope.cropBoxData).setCanvasData($scope.canvasData);
+                          }
+                        });           
+                      }, 1000);
+                        $scope.photoLoadedToFrame = true;
+
+                  });
+                };
+                reader.readAsDataURL(resultBlob);
+              });
+
+        } else {
+
+              var reader = new FileReader();
+              reader.onload = function (evt) {
+                $scope.$apply(function($scope){
+
+                      $scope.myImage = evt.target.result;
+                      setTimeout(function(){ 
+                        image = document.getElementById('image');
+                        $scope.cropper = new Cropper(image, {
+                        aspectRatio: 1 / 1,
+                        autoCropArea: 0.9,
+                        scalable: false,
+                        ready: function () {
+                            // Strict mode: set crop box data first
+                            $scope.cropper.setCropBoxData($scope.cropBoxData).setCanvasData($scope.canvasData);
+                          }
+                        });           
+                      }, 1000);
+                        $scope.photoLoadedToFrame = true;
+
+                });
+              };
+              reader.readAsDataURL(file);
+        }
+
       };
       
       angular.element(document.querySelector('#fileInput')).on('change', handleFileSelect);

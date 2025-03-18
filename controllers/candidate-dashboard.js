@@ -76,4 +76,33 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
     $scope.courseIdOpen = 1;
     $scope.getCourseListingData($scope.courseIdOpen);
 
+
+    $scope.getCourseIconImage = function(courseData) {
+        if(courseData.locked) {
+            return "/assets/icons/course-locked.png";
+        } else if(courseData.previousAttemptId) {
+            return "/assets/icons/course-completed.png";
+        } else if(!courseData.previousAttemptId && courseData.availableForAttempt) {
+            return "/assets/icons/course-unlocked.png";
+        } else {
+            return "/assets/icons/course-locked.png";
+        }
+    }
+
+
+    //Start the Exam
+    $scope.attemptExam = function(courseKey, seriesKey) {
+        console.log('Launching exam courseKey: '+ courseKey+' / seriesKey: '+seriesKey);
+    }
+
+    //view last attempt report
+    $scope.viewLastReport = function(attemptId) {
+        console.log('Viewing last report '+attemptId);
+    }
+
+    //Go to Purchasing of the course
+    $scope.goToPurchaseLink = function(testSeriesCode) {
+        window.open("https://candidate.crisprlearning.com/secure-checkout/checkout.html?addItem="+testSeriesCode, "_blank");
+    }
+
 });
