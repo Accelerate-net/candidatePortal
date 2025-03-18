@@ -91,8 +91,30 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
 
 
     //Start the Exam
-    $scope.attemptExam = function(courseKey, seriesKey) {
-        console.log('Launching exam courseKey: '+ courseKey+' / seriesKey: '+seriesKey);
+    $scope.attemptExam = function(examKey, seriesKey) {
+
+        var data = {
+            "exam": examKey,
+            "series": seriesKey
+        }
+
+        $http({
+          method  : 'POST',
+          url     : 'https://crisprtech.app/crispr-apis/user/start-exam.php',
+          headers : {
+            'Content-Type': 'application/json',
+            'Authorization': getUserToken()
+          },
+          data    : data
+         })
+         .then(function(response) {
+            if(response.data.status == "success"){
+                var redirectURL = "https://portal2.crisprlearning.com/attempt.html?exam=" + encodeURIComponent();
+                window.open(redirectURL, "_blank");
+            } else {
+                alert("Something went wrong");
+            }
+        });
     }
 
     //view last attempt report
