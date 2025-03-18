@@ -109,7 +109,7 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
          })
          .then(function(response) {
             if(response.data.status == "success"){
-                var redirectURL = "https://portal2.crisprlearning.com/attempt.html?exam=" + encodeURIComponent();
+                var redirectURL = "https://portal2.crisprlearning.com/attempt.html?exam=" + encodeURIComponent(response.data.data.examToken);
                 window.open(redirectURL, "_blank");
             } else {
                 alert("Something went wrong");
