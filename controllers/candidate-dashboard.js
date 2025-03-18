@@ -28,6 +28,10 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
         return "Bearer " + $cookies.get("crispriteUserToken");  
     }
 
+    function getUserTokenRaw() {
+        $cookies.get("crispriteUserToken")
+    }
+
 
     $scope.dashboardSummaryData = {};
     $scope.fetchDashboardSummaryData = function() {
@@ -109,7 +113,7 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
          })
          .then(function(response) {
             if(response.data.status == "success"){
-                var redirectURL = "https://portal2.crisprlearning.com/attempt.html?exam=" + encodeURIComponent(response.data.data.examToken);
+                var redirectURL = "https://portal2.crisprlearning.com/attempt.html?exam=" + encodeURIComponent(response.data.data.examToken) + "&user=" + encodeURIComponent(getUserTokenRaw());
                 window.open(redirectURL, "_blank");
             } else {
                 alert("Something went wrong");
