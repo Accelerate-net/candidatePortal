@@ -156,14 +156,12 @@
 								<div class="col-md-8">
 									    <div class="courseContentContainer">
 									        
-									        <div class="courseContentTile" ng-repeat="courseItem in courseListing.coursesList track by $index" ng-click="" ng-class="{'blockedCourseContent' : courseItem.status == 5}">
-									            <div class="courseContentIcon">
-									                <img ng-src="getCourseIconImage(courseItem)"/>
-									            </div>
-									            <img ng-src="{{courseItem.photo}}" alt="Payroll for Startups">
+									        <div class="courseContentTile" ng-repeat="courseItem in courseListing.coursesList track by $index" ng-click="" ng-class="{'blockedCourseContent' : courseItem.locked}">
+									            <div class="courseContentIcon" ng-class="getCourseIconImage(courseItem)"></div>
+									            <img ng-src="{{courseItem.photo}}" alt="">
 									            <div class="courseContentTileContent">
 									                <h5>{{courseItem.title}}</h5>
-									                <p>{{courseItem.brief}}</p>
+									                <p class="multiline-ellipsis">{{courseItem.brief}}</p>
 									                <span ng-if="!courseItem.locked">
 									                	<a ng-click="attemptExam(courseItem.key, courseListing.currentTestSeriesInfo.series)" ng-if="courseItem.availableForAttempt">Attempt Now</a>
 									                	<a ng-click="viewLastReport(courseItem.previousAttemptId)" ng-if="courseItem.previousAttemptId">See Report</a>

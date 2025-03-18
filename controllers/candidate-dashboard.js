@@ -25,7 +25,7 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
     }
 
     function getUserToken() {
-      return "Bearer " + $cookies.get("crispriteUserToken");  
+        return "Bearer " + $cookies.get("crispriteUserToken");  
     }
 
 
@@ -79,13 +79,13 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
 
     $scope.getCourseIconImage = function(courseData) {
         if(courseData.locked) {
-            return "assets/icons/course-locked.png";
+            return "lockedIcon";
         } else if(courseData.previousAttemptId) {
-            return "assets/icons/course-completed.png";
+            return "";
         } else if(!courseData.previousAttemptId && courseData.availableForAttempt) {
-            return "assets/icons/course-unlocked.png";
+            return "availableIcon";
         } else {
-            return "assets/icons/course-locked.png";
+            return "";
         }
     }
 

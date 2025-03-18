@@ -31234,6 +31234,7 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
 .courseContentTile:hover img {
     transform: scale(1.05);
 }
+
 .courseContentIcon {
     position: absolute;
     top: 10px;
@@ -31245,13 +31246,33 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
     justify-content: center;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.4);
+    background-image: url("../icons/course-completed.png");
+    background-size: 80%;
+    background-position: center;
+    background-repeat: no-repeat;
     z-index: 10;
 }
-.courseContentIcon img {
-    width: 32px;
-    height: 32px;
+
+.multiline-ellipsis {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limit to 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 3em; /* Adjust based on font size and line-height */
+    line-height: 1.5em; /* Ensures correct height for 2 lines */
+    word-break: break-word;
 }
-.courseContentTile:hover .courseContentIcon img {
+
+.courseContentIcon.lockedIcon{
+  background-image: url("../icons/course-locked.png");
+}
+
+.courseContentIcon.availableIcon{
+  background-image: url("../icons/course-unlocked.png");
+}
+
+.courseContentTile:hover .courseContentIcon {
     transform: scale(1.1);
 }
 .blockedCourseContent img {
