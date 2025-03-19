@@ -8,13 +8,13 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
 .controller('candidateDashboardController', function($scope, $http, $interval, $cookies) {
 
     //Check if logged in
-    // if($cookies.get("crispriteUserToken")){
-    //   $scope.isLoggedIn = true;
-    // }
-    // else{
-    //   $scope.isLoggedIn = false;
-    //   window.location = "index.html";
-    // }
+    if($cookies.get("crispriteUserToken")){
+      $scope.isLoggedIn = true;
+    }
+    else{
+      $scope.isLoggedIn = false;
+      window.location = "index.html";
+    }
 
     //Logout function
     $scope.logoutNow = function(){
@@ -25,8 +25,7 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
     }
 
     function getUserToken() {
-        return "Bearer PMhCPBXEpj6vbAD1P5ZoCr29chAj+YgKpiwO7VEJcn9NN9G+87gpzPaPiJTuKj+8r4xgRdOnmSWA3vuRjNE5fWqX+vRk0Q69ktbOxsm2gjr6sBt2AXPARlPkKuUWrrhLpyvydLN58qhKVb9b2wqOSy6THVfUMCbuWeMb6x4ckpU="
-      //return "Bearer " + $cookies.get("crispriteUserToken");  
+        return "Bearer " + $cookies.get("crispriteUserToken");  
     }
 
     function getUserTokenRaw() {
