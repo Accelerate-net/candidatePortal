@@ -124,6 +124,8 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
     //view last attempt report
     $scope.viewLastReport = function(attemptId) {
         console.log('Viewing last report '+attemptId);
+        var redirectURL = "https://candidate.crisprlearning.com/report.html?attemptId="+attemptId;
+        window.location.href = redirectURL;
     }
 
     //Go to Purchasing of the course
