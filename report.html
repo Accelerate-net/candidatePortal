@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Performance Report</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <link type='text/css' href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600' rel='stylesheet'>
+
+    <link type="text/css" href="assets/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet">        <!-- Font Awesome -->
+    <link type="text/css" href="assets/fonts/themify-icons/themify-icons.css" rel="stylesheet">              <!-- Themify Icons -->
+    <link type="text/css" href="assets/css/styles.css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
+
+    <link type="text/css" href="assets/css/report.css" rel="stylesheet">  
+
+    <link type="text/css" href="assets/plugins/codeprettifier/prettify.css" rel="stylesheet">                <!-- Code Prettifier -->
+    <link type="text/css" href="assets/plugins/iCheck/skins/minimal/blue.css" rel="stylesheet">              <!-- iCheck -->
+
+    <!--[if lt IE 10]>
+        <script type="text/javascript" src="assets/js/media.match.min.js"></script>
+        <script type="text/javascript" src="assets/js/respond.min.js"></script>
+        <script type="text/javascript" src="assets/js/placeholder.min.js"></script>
+    <![endif]-->
+    <!-- The following CSS are included as plugins and can be removed if unused-->
+    
+<link type="text/css" href="assets/plugins/fullcalendar/fullcalendar.css" rel="stylesheet"> 						<!-- FullCalendar -->
+<link type="text/css" href="assets/plugins/jvectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet"> 			<!-- jVectorMap -->
+<link type="text/css" href="assets/plugins/switchery/switchery.css" rel="stylesheet">   							<!-- Switchery -->
+
+    <!-- Controller -->
+  	<script src="assets/js/jquery.js"></script>
+  	<script src="assets/js/angular.min.js"></script>
+  	<script src="assets/js/angular-cookies.min.js"></script>
+  	<script src="controllers/candidate-report.js"></script>
+
+
+    </head>
+
+    <body class="animated-content" ng-app="CandidateReportApp" ng-controller="candidateReportController">
+        
+        <header id="topnav" class="navbar navbar-midnish navbar-fixed-top" role="banner" style="background: linear-gradient(135deg, #083e58, #015f73)">
+			<div class="logo-area">
+				<span class="navbar-brand"></span>
+			</div><!-- logo-area -->
+
+			<ul class="nav navbar-nav toolbar pull-right">
+				<li class="dropdown toolbar-icon-bg">
+					<a href="#" class="dropdown-toggle username" data-toggle="dropdown">
+						<img class="img-circle" src="https://abhijithcs.in/assets/images/avatar.jpg" alt="Abhijith C S"/>
+					</a>
+					<ul class="dropdown-menu userinfo arrow">
+						<li><a href="candidate-profile.html"><i class="ti ti-user"></i><span>Profile</span></a></li>
+						<li><a href="#/"><i class="ti ti-shift-right"></i><span>Sign Out</span></a></li>
+					</ul>
+				</li>
+			</ul>
+		</header>
+
+        <div id="wrapper">
+            <div id="layout-static">
+
+                <div class="static-content-wrapper">
+                    <div class="static-content">
+                        <div class="page-content">
+                            <div class="container-fluid" style="padding-top: 30px !important">
+                                
+
+
+<div data-widget-group="group1">
+	
+	<div class="row">
+
+		<div class="resource-module-holder">
+	    <div class="resource-module">
+	        <div class="module-header">
+	            <h2 class="introHeader">Great Going Abhijith!</h2>
+	            <a href="#" class="view-all-btn">View Detailed Report</a>
+	        </div>
+
+	        <p class="module-description">
+	            Great job on completing your mock test! Every attempt brings you one step closer to mastering the exam. Keep practicing, analyze your performance, and strive for continuous improvement — success is built through consistency! 🚀
+	        </p>
+
+
+
+
+				<div class="reportSummaryContainer">
+					<div class="reportSummaryTileHolder">
+						<div class="info-tile tile-success reportSummaryTile">
+							<div class="tile-icon"><i class="ti ti-stats-up greenTileIcon"></i></div>
+							<div class="tile-heading summaryTimesHeaderText"><span>Score</span></div>
+							<div class="tile-body"><span>{{reportData.totalScore}} / 240</span></div>
+							<div class="tile-footer">
+								<span class="text-success greenTileIcon" ng-if="reportData.totalScoreDeviation >= 0">
+									+{{reportData.totalScoreDeviation}} marks<i class="ti ti-arrow-up reportSummaryFooterIcon"></i>
+								</span>
+								<span class="text-success redTileIcon" ng-if="reportData.totalScoreDeviation < 0">
+									{{reportData.totalScoreDeviation}} marks<i class="ti ti-arrow-down reportSummaryFooterIcon"></i>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="reportSummaryTileHolder">
+						<div class="info-tile tile-success reportSummaryTile">
+							<div class="tile-icon"><i class="ti ti-bolt redTileIcon"></i></div>
+							<div class="tile-heading summaryTimesHeaderText"><span>Strike Rate</span></div>
+							<div class="tile-body"><span>{{(reportData.strikeRate).toFixed(1)}}%</span></div>
+							<div class="tile-footer">
+								<span class="text-danger greenTileIcon" ng-if="reportData.strikeRateDeviation >= 0">
+								 +{{reportData.strikeRateDeviation}}% down<i class="ti ti-arrow-up reportSummaryFooterIcon"></i>
+								</span>
+								<span class="text-danger redTileIcon" ng-if="reportData.strikeRateDeviation < 0">
+								 {{reportData.strikeRateDeviation}}% down<i class="ti ti-arrow-down reportSummaryFooterIcon"></i>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="reportSummaryTileHolder">
+						<div class="info-tile tile-info reportSummaryTile">
+							<div class="tile-icon"><i class="ti ti-medall blueTileIcon"></i></div>
+							<div class="tile-heading summaryTimesHeaderText"><span>Position</span></div>
+							<div class="tile-body"><span>{{reportData.globalAverage}} / {{reportData.scoreBase}}</span></div>
+							<div class="tile-footer"><span class="text-info" style="color: #616161"> global average<i class="ti ti-world reportSummaryFooterIcon"></i></span></div>
+						</div>
+					</div>
+					<div class="reportSummaryTileHolder">
+						<div class="info-tile tile-danger reportSummaryTile">
+							<div class="tile-heading summaryTimesHeaderText"><span>Attempted Questions</span></div>
+							<div class="tile-body" style="line-height: 0">
+
+							<div class="toughnessTileContainer">
+									<div class="toughnessTileItem">
+									  <div class="toughnessTileCircle toughnessTileGreen">
+									    <div class="toughnessTileTop">{{reportData.questionLevel['1']['attempted']}}</div>
+									    <div class="toughnessTileLine"></div>
+									    <div class="toughnessTileBottom">{{reportData.questionLevel['1']['total']}}</div>
+									  </div>
+									  <div class="toughnessTileLabel">Easy</div>
+									</div>
+									<div class="toughnessTileItem">
+									  <div class="toughnessTileCircle toughnessTileYellow">
+									    <div class="toughnessTileTop">{{reportData.questionLevel['3']['attempted']}}</div>
+									    <div class="toughnessTileLine"></div>
+									    <div class="toughnessTileBottom">{{reportData.questionLevel['3']['total']}}</div>
+									  </div>
+									  <div class="toughnessTileLabel">Medium</div>
+									</div>
+									<div class="toughnessTileItem">
+									  <div class="toughnessTileCircle toughnessTileRed">
+									    <div class="toughnessTileTop">{{reportData.questionLevel['3']['attempted']}}</div>
+									    <div class="toughnessTileLine"></div>
+									    <div class="toughnessTileBottom">{{reportData.questionLevel['3']['total']}}</div>
+									  </div>
+									  <div class="toughnessTileLabel">Hard</div>
+									</div>
+							</div>
+
+							</div>
+							<div class="tile-footer"></div>
+						</div>
+					</div>
+				</div>
+
+
+
+
+
+
+	        
+	        <div class="module-tiles responseSheetTopLine">
+	         
+				<div class="panel responseSheetContainer">
+					<h2 class="responseSheetHeader">Response Sheet</h2>
+					<div class="panel-body" style="padding: 0; background: none;">
+
+							<div class="alert alert-info mb-xl responseSheetHeaderLiner">
+								<div class="responseSheetContainer">
+								    <div class="responseSheet" ng-repeat="sectionResponse in reportData.sectionWiseResponse track by $index">
+								        <span class="responseSheetTitle">{{sectionResponse.sectionName}}</span>
+								        <span class="responseSheetNumbers">
+								        	<span class="responseSheetIcon" ng-repeat="questionItem in sectionResponse.questions track by $index" ng-class="{'wrongAnswer' : (questionItem.attempt != '' && questionItem.answer != questionItem.attempt), 'correctAnswer' : (questionItem.attempt != '' && questionItem.answer == questionItem.attempt)}" ng-click="viewQuestionAndAnswer(questionItem, sectionResponse.sectionName)">{{questionItem.order}}</span>
+								        </span>
+								        <span class="responseSheetSummary">{{sectionResponse.sectionSummary.correct}} Correct <i class="fa fa-circle"></i> {{sectionResponse.sectionSummary.attempted - sectionResponse.sectionSummary.correct}} Wrong <i class="fa fa-circle"></i> {{sectionResponse.sectionSummary.totalMarks}} Marks</span>
+								    </div>
+								</div>
+							</div>					
+
+
+					</div>
+				</div>
+
+
+
+
+
+
+	        </div>
+	    </div>
+	    </div>
+
+	</div>
+
+
+
+
+
+	<!-- MORE DETAILED REPORT  -->
+
+<div class="detailedReportHolder">
+
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-10">
+			<div class="panel panel-gray">
+                <div class="panel-heading">
+                	<h2>Crispr Insights</h2>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-1"></div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-1"> </div>
+		<div class="col-md-3">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                    <h2>Subject Strength</h2>
+              </div>
+              <div class="panel-body">
+                    <div id="subjectStrengthPieChart" style="width:100%; height: 240px" class="centered"></div>
+              </div>
+            </div>
+        </div>
+		<div class="col-md-3"> 
+			<div class="panel panel-default" id="subjectWiseAccuracy">
+              	<div class="panel-heading">
+                    <h2>Accuracy - Subject Wise</h2>
+              	</div>
+              	<div class="panel-body">
+              		<div style="height: 240px">
+		              	<div ng-repeat="sectionResponse in reportData.sectionWiseResponse track by $index">
+				          	<p class="subjectLine">{{sectionResponse.sectionName}}<i ng-if="sectionResponse.sectionName == reportData.mostScoredSection" class="fa fa-star subjectLineStar"></i></p>
+							<div class="progress" ng-init="coverage = getSubjectCoverage(sectionResponse.sectionSummary)">
+							    <div class="progress-bar progress-bar-success" ng-style="coverage.correct">{{ sectionResponse.sectionSummary.correct }}</div>
+							    <div class="progress-bar progress-bar-warning" ng-style="coverage.unattempted">{{ sectionResponse.sectionSummary.total - sectionResponse.sectionSummary.attempted }}</div>
+							    <div class="progress-bar progress-bar-danger" ng-style="coverage.wrong">{{ sectionResponse.sectionSummary.attempted - sectionResponse.sectionSummary.correct }}</div>
+							</div>
+				        </div>
+
+
+						<p class="subjectLine" style="font-size: 9px !important">
+							<i class="fa fa-circle" style="color: #4caf50 !important"></i> <tag>Correct</tag>
+							<i class="fa fa-circle" style="color: #ffc008 !important"></i> <tag>Unattempted</tag>
+							<i class="fa fa-circle" style="color: #e51c23 !important"></i> <tag>Wrong</tag>
+						</p>
+
+			        </div>
+
+
+            	</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="panel panel-teal">
+				<div class="panel-heading">
+					<h2>Topic Wise Accuracy</h2>
+				</div>
+				<div class="panel-body no-padding">
+					<div style="height: 240px;">
+						<table class="table browsers m-n">
+							<tbody>
+								<tr>
+									<td>Organic Chemistry</td>
+									<td class="text-right">0%</td>
+									<td class="vam" style="width: 56px;">
+										<div class="progress m-n">
+		                                  <div class="progress-bar progress-bar-teal" style="width: 100%"></div>
+		                                </div>
+		                            </td>
+								</tr>
+								<tr>
+									<td>Inorganic Chemistry</td>
+									<td class="text-right">0%</td>
+									<td class="vam" style="width: 56px;">
+										<div class="progress m-n">
+		                                  <div class="progress-bar progress-bar-teal" style="width: 100%"></div>
+		                                </div>
+		                            </td>
+								</tr>
+								<tr>
+									<td>Physical Chemistry</td>
+									<td class="text-right">0%</td>
+									<td class="vam" style="width: 56px;">
+										<div class="progress m-n">
+		                                  <div class="progress-bar progress-bar-teal" style="width: 100%"></div>
+		                                </div>
+		                            </td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-1"> </div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-1"> </div>
+		<div class="col-md-3">
+			<div class="panel panel-bluegray">
+				<div class="panel-heading">
+					<h2>Session Wise Stats</h2>
+				</div>
+				<div class="panel-body">
+					<div id="earnings" style="height: 272px;" class="mt-sm mb-sm"></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-7">
+			<div class="panel panel-realtime">
+                <div class="panel-heading" id="timeDistributor">
+                    <h2>Time Distribution</h2>
+                    <p class="subjectLine" style="font-size: 9px !important; margin: 0; text-align: right;">
+						<i class="fa fa-square" style="color: #4caf50 !important"></i> <tag>Correct</tag>
+						<i class="fa fa-square" style="color: #ffc008 !important"></i> <tag>Spent time but not answered</tag>
+						<i class="fa fa-square" style="color: #e51c23 !important"></i> <tag>Wrongly answered</tag>
+					</p>
+                </div>
+                <div class="panel-body">
+                    <div id="realtime-updates" style="height: 300px" class="centered"></div>
+                </div>
+            </div>
+		</div>
+		<div class="col-md-1"> </div>
+	</div>
+</div>
+
+							</div>
+
+                            </div> <!-- .container-fluid -->
+                        </div> <!-- #page-content -->
+                    </div>
+
+
+                    <footer role="contentinfo">
+					    <div class="clearfix">
+					        <ul class="list-unstyled list-inline pull-left">
+					            <li><h6 style="margin: 0; text-transform: none">&copy; 2025 Crispr Learning</h6></li>
+					        </ul>
+					    </div>
+					</footer>
+
+                </div>
+            </div>
+        </div>
+
+    
+
+<!-- QUESTION AND SOLUTION PREVIEW -->
+<div class="modal fade" id="questionPreviewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content" style="width: 540px">
+         <div class="modal-body" style="padding: 0">
+              
+
+                                 <div class="row">
+                                    <div class="col-md-12">
+                                       <div class="panel panel-info" style="margin: 0;">
+                                          <div class="panel-body" style="position: relative; padding: 0;">
+                                             <span class="label label-primary subjectLabel">{{questionData.sectionName}} <tag ng-class="{'redLevelIcon' : questionData.level == 'Hard', 'greenLevelIcon' : questionData.level == 'Easy', 'yellowLevelIcon' : questionData.level == 'Medium'}"><i class="fa  fa-angle-double-right"></i> {{questionData.level}}</tag></span>
+                                             <span class="label label-primary" style="margin: 0; position: absolute; left: 10px; top: 10px; font-size: 16px; z-index: 10;" ng-class="{'modalNegativeMarks' : questionData.marks < 0, 'modalZeroMarks': questionData.marks == 0, 'modalPositiveMarks' : questionData.marks > 0}">{{questionData.marks}} Marks</span>
+                                             <div class="scrollable-content" style="height: 400px; overflow-y: auto; padding-top: 20px;">
+                                                <img ng-src="{{questionData.url}}" width="100%">
+                                             </div>
+                                          </div>
+
+                                          <div class="panel-footer" style="background: #9e9e9e; padding: 10px;" ng-class="{'answerNotSetQuestion' : questionData.attempt != '' && questionData.attempt != questionData.answer, 'answerCorrectlySetQuestion' : questionData.attempt != '' && questionData.attempt == questionData.answer}">
+                                             <div class="form-group">
+                                                <div class="col-sm-12" style="text-align: center;">
+                                                   <button class="btn" ng-class="{'btn-primary':questionData.attempt == 'A', 'btn-default':questionData.attempt != 'A'}">Option A
+                                                   		<i class="fa fa-check-circle" style="color: #56e55a" ng-if="questionData.answer == 'A'"></i>
+                                                   </button>
+                                                   <button class="btn" ng-class="{'btn-primary':questionData.attempt == 'B', 'btn-default':questionData.attempt != 'B'}">Option B
+                                                   		<i class="fa fa-check-circle" style="color: #56e55a" ng-if="questionData.answer == 'B'"></i>
+                                               		</button>
+                                                   	<button class="btn" ng-class="{'btn-primary':questionData.attempt == 'C', 'btn-default':questionData.attempt != 'C'}">Option C
+                                                   		<i class="fa fa-check-circle" style="color: #56e55a" ng-if="questionData.answer == 'C'"></i>
+                                                   </button>
+                                                   <button class="btn" ng-class="{'btn-primary':questionData.attempt == 'D', 'btn-default':questionData.attempt != 'D'}">Option D
+                                                   		<i class="fa fa-check-circle" style="color: #56e55a" ng-if="questionData.answer == 'D'"></i>
+                                                   </button>
+                                                </div>
+                                             </div>
+                                          </div>
+
+                                       </div>
+                                    </div>
+                                 </div>
+
+
+               <button type="button" class="btn btn-default" data-dismiss="modal" style="width: 100%; height: 60px">Hide</button>
+         </div>
+      </div>
+   </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+    <!-- Load site level scripts -->
+
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script> -->
+
+<script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script> 							<!-- Load jQuery -->
+<script type="text/javascript" src="assets/js/jqueryui-1.10.3.min.js"></script> 							<!-- Load jQueryUI -->
+<script type="text/javascript" src="assets/js/bootstrap.min.js"></script> 								<!-- Load Bootstrap -->
+<script type="text/javascript" src="assets/js/enquire.min.js"></script> 									<!-- Load Enquire -->
+
+<script type="text/javascript" src="assets/plugins/velocityjs/velocity.min.js"></script>					<!-- Load Velocity for Animated Content -->
+<script type="text/javascript" src="assets/plugins/velocityjs/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="assets/plugins/wijets/wijets.js"></script>     						<!-- Wijet -->
+
+<script type="text/javascript" src="assets/plugins/codeprettifier/prettify.js"></script> 				<!-- Code Prettifier  -->
+<script type="text/javascript" src="assets/plugins/bootstrap-switch/bootstrap-switch.js"></script> 		<!-- Swith/Toggle Button -->
+
+<script type="text/javascript" src="assets/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js"></script>  <!-- Bootstrap Tabdrop -->
+
+<script type="text/javascript" src="assets/plugins/iCheck/icheck.min.js"></script>     					<!-- iCheck -->
+
+<script type="text/javascript" src="assets/plugins/nanoScroller/js/jquery.nanoscroller.min.js"></script> <!-- nano scroller -->
+
+<script type="text/javascript" src="assets/js/application.js"></script>
+<script type="text/javascript" src="assets/demo/demo.js"></script>
+
+<!-- End loading site level scripts -->
+    
+    <!-- Load page level scripts-->
+    
+
+
+
+
+
+<script type="text/javascript" src="assets/plugins/charts-flot/jquery.flot.min.js"></script>             	<!-- Flot Main File -->
+<script type="text/javascript" src="assets/plugins/charts-flot/jquery.flot.pie.min.js"></script>             <!-- Flot Pie Chart Plugin -->
+<script type="text/javascript" src="assets/plugins/charts-flot/jquery.flot.stack.min.js"></script>       	<!-- Flot Stacked Charts Plugin -->
+<script type="text/javascript" src="assets/plugins/charts-flot/jquery.flot.orderBars.min.js"></script>   	<!-- Flot Ordered Bars Plugin-->
+<script type="text/javascript" src="assets/plugins/charts-flot/jquery.flot.resize.min.js"></script>          <!-- Flot Responsive -->
+<script type="text/javascript" src="assets/plugins/charts-flot/jquery.flot.tooltip.min.js"></script> 		<!-- Flot Tooltips -->
+<script type="text/javascript" src="assets/plugins/charts-flot/jquery.flot.spline.js"></script> 				<!-- Flot Curved Lines -->
+
+
+
+<script type="text/javascript" src="assets/plugins/sparklines/jquery.sparklines.min.js"></script> 			 <!-- Sparkline -->
+
+<script type="text/javascript" src="assets/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js"></script>       <!-- jVectorMap -->
+<script type="text/javascript" src="assets/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>   <!-- jVectorMap -->
+
+<script type="text/javascript" src="assets/plugins/switchery/switchery.js"></script>     					<!-- Switchery -->
+<script type="text/javascript" src="assets/plugins/easypiechart/jquery.easypiechart.js"></script>
+<script type="text/javascript" src="assets/plugins/fullcalendar/moment.min.js"></script> 		 			<!-- Moment.js Dependency -->
+<script type="text/javascript" src="assets/plugins/fullcalendar/fullcalendar.min.js"></script>   			<!-- Calendar Plugin -->
+
+<script type="text/javascript" src="assets/demo/demo-report.js"></script> 									<!-- Initialize scripts for this page-->
+
+    <!-- End loading page level scripts-->
+
+    </body>
+</html>

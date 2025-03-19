@@ -31007,6 +31007,7 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
   font-weight: 400;
   display: inline-block;
   cursor: pointer;
+  margin-left: 4px;
 }
 
 .responseSheetTitle {

@@ -13,7 +13,7 @@ angular.module('CandidateProfileApp', ['ngCookies'])
     }
     else{
       $scope.isLoggedIn = false;
-      window.location = "profile.html";
+      window.location = "index.html";
     }
 
     //Logout function

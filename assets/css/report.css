@@ -1,0 +1,226 @@
+.resource-module-holder {
+    margin: 0 50px; /* reduce for smaller screens */
+}
+
+.resource-module {
+    background: linear-gradient(135deg, #083e58, #015f73);
+    color: white;
+    padding: 30px;
+    border-radius: 16px;
+    width: 100%;
+    padding-top: 50px;
+}
+
+/* Header */
+.module-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+h2 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.introHeader {
+    color: #fff;
+    font-size: 26px;
+}
+
+/* View All Button */
+.view-all-btn {
+    background: none;
+    border: 2px solid white;
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: 0.3s;
+}
+
+.view-all-btn:hover {
+    background: white;
+    color: #004680;
+}
+
+/* Description */
+.module-description {
+    font-size: 16px;
+    margin: 15px 0 40px 0;
+    line-height: 1.5;
+    font-weight: 300;
+    width: 80%;
+}
+
+/* Tile Section */
+.module-tiles {
+    margin-top: 20px;
+}
+
+/* Example Tile */
+.tile {
+    width: 100%;
+    height: 40px;
+    background-color: black;
+    border-radius: 8px;
+}
+
+
+.reportSummaryContainer {
+    display: flex;
+    justify-content: left; /* Center align for smaller screens */
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;    
+}
+
+.reportSummaryTileHolder {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 900px;
+    min-width: 240px;
+}
+
+.reportSummaryTile {
+    width: 100% !important;
+    margin: 0;
+    border-radius: 6px !important;
+}
+
+.responseSheetContainer {
+    margin: 10px 0px;
+    visibility: visible;
+    opacity: 1;
+    display: block;
+    transform: translateY(0px);
+    background: none;
+    box-shadow: none;
+}
+
+.responseSheetHeader {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    color: #e7fcff;
+}
+
+.responseSheetHeaderLiner {
+    margin: 0 !important;
+    border-radius: 8px;
+}
+
+.responseSheetTopLine {
+    margin-top: 50px;
+}
+
+.detailedReportHolder {
+    margin-top: 80px;  
+}
+
+.reportSummaryFooterIcon {
+    margin-left: 5px;
+}
+
+.redTileIcon {
+   color: #fa686d !important;
+}
+
+.blueTileIcon {
+   color: #5b838f !important;
+}
+
+.greenTileIcon {
+   color: #65ab67 !important;
+}
+
+.summaryTimesHeaderText {
+    color: #517484 !important;
+    height: 16px;
+    line-height: 6px !important;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+    text-transform: uppercase;
+    font-family: "Noto Sans", sans-serif !important;
+}
+
+#subjectWiseAccuracy .progress {
+    height: 12px !important;
+}
+
+#subjectWiseAccuracy .progress-bar {
+    font-size: 10px !important;
+    line-height: 12px !important;
+}
+
+#subjectWiseAccuracy .subjectLine {
+    margin: 0 0 3px 0; text-transform: uppercase; font-size: 11px;
+}
+
+#subjectWiseAccuracy .subjectLine i {
+    margin-right: 2px;
+}
+
+#subjectWiseAccuracy .subjectLine tag {
+    margin-right: 5px;
+}
+
+#timeDistributor .subjectLine i {
+    margin-right: 2px;
+}
+
+#timeDistributor .subjectLine tag {
+    margin-right: 5px;
+}
+
+#subjectWiseAccuracy .subjectLineStar {
+    margin-left: 5px;
+    color: #00cbe9;
+}
+
+.answerCorrectlySetQuestion {
+    background: #e1ffbe !important;
+}
+
+.progress-bar-success {
+    background: #4caf50 !important;
+}
+
+
+#questionPreviewModal .modalNegativeMarks {
+    background: #e51c23 !important;    
+}
+
+#questionPreviewModal .modalZeroMarks {
+    background: #ffc107 !important;    
+}
+
+#questionPreviewModal .modalPositiveMarks {
+    background: #4caf50 !important;    
+}
+
+#questionPreviewModal .subjectLabel {
+    margin: 0;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 14px;
+    z-index: 10;
+    border: 1px solid #03a9f4;
+    background: none;
+    color: #03a9f4;
+    font-weight: 400;
+    border-radius: 0;
+}
+
+.redLevelIcon {
+    color: #999ea0 !important;
+}
+
+.yellowLevelIcon {
+    color: #999ea0 !important;
+}
+
+.greenLevelIcon {
+    color: #999ea0 !important;
+}
