@@ -21270,7 +21270,7 @@ body.error .error-wrapper h1 {
 }
 @media (max-width: 767px) {
   #topnav .navbar-brand {
-    width: 68px;
+    width: 100px;
   }
 }
 #topnav.navbar-default .navbar-brand,
@@ -31225,16 +31225,45 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
 }
 
 .courseContentPurchase {
-    background: #05ad9d !important;
+    background: #feb448 !important;
 }
 
 .courseContentPurchase:hover {
-    background: #009688 !important;
+    background: #f6a227 !important;
 }
 
 .courseContentTile:hover img {
     transform: scale(1.05);
 }
+
+
+.courseContentSummary {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    max-width: 70%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    border-radius: 3px;
+    background: rgb(19 19 19 / 40%);
+    z-index: 10;
+    padding: 0 10px;
+    color: #FFF;
+    
+    /* Ensuring text ellipsis works */
+    overflow: hidden; /* Needed for ellipsis */
+}
+
+.courseContentSummary span {
+    flex: 1; /* Allows text to shrink properly */
+    white-space: nowrap; /* Prevents wrapping */
+    overflow: hidden; /* Ensures overflow is clipped */
+    text-overflow: ellipsis; /* Displays "..." */
+}
+
+
 
 .courseContentIcon {
     position: absolute;
@@ -31280,7 +31309,7 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
     filter: grayscale(100%);
 }
 .blockedCourseContent::after {
-    content: "Not included in the Subscribed Course";
+    content: "Not included with the Free Access";
     position: absolute;
     top: 50%;
     left: 50%;
@@ -31296,6 +31325,14 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
 }
 .blockedCourseContent:hover::after {
     opacity: 1;
+}
+
+.courseContentTile .viewReport {
+  background: #839ba7 !important;
+}
+
+.courseContentTile .viewReport:hover {
+  background: #607d8b !important;
 }
 
 .selectCourseBar-container {
@@ -31463,3 +31500,62 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
     }
 }
 
+
+.myCustomToaster {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 16px;
+    position: fixed;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+}
+.myCustomToaster.show {
+    visibility: visible;
+    opacity: 1;
+}
+.myCustomToaster.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+
+
+.testSeriesProgressChartPanel {
+    visibility: visible;
+    opacity: 1;
+    display: block;
+    transform: translateY(0px);
+    border: none;
+    box-shadow: none;
+    text-align: center;
+    position: relative;
+    background: none;
+}
+
+.testSeriesProgressChartPanel p {
+  margin: 0;
+  margin-top: 4px;
+  text-transform: uppercase;
+  font-size: 14px;
+  padding: 0 10px;
+  line-height: 16px;
+}
+
+.testSeriesProgressChartPanelBody {
+    height: 320px;
+    padding: 0 10px;
+    width: 100%;
+    background: none !important;
+    border: none;
+    box-shadow: none;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}

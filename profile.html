@@ -64,7 +64,7 @@
 
     <body class="animated-content" ng-app="CandidateProfileApp" ng-controller="candidateProfileController">
         
-        <div id="toaster" class="toaster"></div>
+        <div id="toaster" class="myCustomToaster"></div>
         <header id="topnav" class="navbar navbar-midnightblue navbar-fixed-top" role="banner" style="background: linear-gradient(135deg, #083e58, #015f73);">
 
 			<div class="logo-area">
@@ -133,9 +133,10 @@
 										  <tr>
 										    <th>#</th>
 										    <th>Course</th>
-										    <th>Commencement</th>
-										    <th>Conclusion</th>
-										    <th>Progess</th>
+										    <th>Type</th>
+										    <th>Schedule</th>
+										    <th>Access</th>
+										    <th>Valid Till</th>
 										  </tr>
 									</thead>
 									<tbody>
@@ -143,19 +144,17 @@
 										    <th scope="row">{{$index + 1}}</th>
 										    <td>
 										    	<strong ng-if="courseItem.type != 'Test Series'">{{courseItem.title}}</strong>
-										    	<a href="../dashboard.html" ng-if="courseItem.type == 'Test Series'"><strong>{{courseItem.title}}</strong>strong</a>
+										    	<a href="../dashboard.html" ng-if="courseItem.type == 'Test Series'"><strong>{{courseItem.title}}</strong></a>
 										    </td>
-										    <td>{{courseItem.startDate}}</td>
-										    <td>{{courseItem.endDate}}</td>
-										    <td class="vam" ng-if="courseItem.status == 'DUE'">
-				                                 Yet to Start
-				                            </td>
-										    <td class="vam" ng-if="courseItem.status != 'DUE'">
-										    	<span ng-if="courseItem.progress == 0">{{courseItem.status}}</span>
-												<div class="progress m-n" ng-if="courseItem.progress > 0">
-				                                  <div class="progress-bar progress-bar-success" ng-style="{width: courseItem.progress +'%'}"></div>
-				                                </div>
-				                            </td>
+										    <td>{{courseItem.type}}</td>
+										    <td>
+										    	<tag ng-if="courseItem.metadata">{{courseItem.metadata.commencement}} to {{courseItem.metadata.conclusion}}</tag>
+										    </td>
+										    <td>{{courseItem.accessLevel}}</td>
+										    <td>
+										    	<tag ng-if="courseItem.expiry != 'Unknown'">until {{courseItem.expiry}}</tag>
+										    	<tag ng-if="courseItem.expiry == 'Unknown'">Unlimited</tag>
+										    </td>
 										  </tr>
 									</tbody>
 								</table>
@@ -413,12 +412,9 @@
 							</div>
 						</div>
 						<div class="panel-footer">
-							<div class="row">
-								<div class="col-sm-8 col-sm-offset-2">
-									<button class="btn-primary btn" ng-click="saveProfile(profileData)">Save</button>
-									<button class="btn-default btn" ng-click="resetProfile()">Reset</button>
-								</div>
-							</div>
+							<button class="btn-primary btn pull-right" ng-click="saveProfile(profileData)">
+							<i class="fa fa-save" style="margin-right: 5px;"></i>
+							Save Profile</button>
 						</div>
 					</div>
 				</div>

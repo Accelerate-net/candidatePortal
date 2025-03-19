@@ -243,8 +243,8 @@ angular.module('CandidateProfileApp', ['ngCookies'])
    $scope.saveAttachment = function(){
       $scope.isPhotoAttached = true;   
           $scope.canvasData = $scope.cropper.getCroppedCanvas({
-          width: 200,
-          height: 200,
+          width: 100,
+          height: 100,
           fillColor: '#fff',
           imageSmoothingEnabled: false,
           imageSmoothingQuality: 'high',

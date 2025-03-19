@@ -39,6 +39,7 @@
 
     <body class="animated-content" ng-app="CandidateDashboardApp" ng-controller="candidateDashboardController">
         
+        <div id="toaster" class="myCustomToaster"></div>
         <header id="topnav" class="navbar navbar-midnightblue navbar-fixed-top" role="banner" style="background: linear-gradient(135deg, #083e58, #015f73);">
 
 			<div class="logo-area">
@@ -86,7 +87,7 @@
 				                           <div class="info-tile info-tile-alt tile-blue dashboardViewProfileSummaryTile" title="Accuracy across all the tests attempted">
 				                              <div class="tile-heading"><span>Strike Rate <i class="fa fa-flash" style="margin-left: 5px"></i></span></div>
 				                              <div class="tile-body" style="text-align: left">
-				                              	<span ng-if="dashboardSummaryData.dashboardSummary.strikeRateFrom > 0">{{dashboardSummaryData.dashboardSummary.strikeRate}}%</span>
+				                              	<span ng-if="dashboardSummaryData.dashboardSummary.strikeRateFrom > 0">{{(dashboardSummaryData.dashboardSummary.strikeRate / 100).toFixed(1)}}%</span>
 				                              	<span ng-if="dashboardSummaryData.dashboardSummary.strikeRateFrom == 0">NA</span>
 				                              </div>
 				                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-grey tileBottom">
@@ -98,7 +99,7 @@
 				                           <div class="info-tile info-tile-alt tile-blue dashboardViewProfileSummaryTile" title="Avg. score across all the tests attempted">
 				                              <div class="tile-heading"><span>Avg Score <i class="fa fa-bar-chart" style="margin-left: 5px"></i></span></div>
 				                              <div class="tile-body" style="text-align: left">
-				                              	<span ng-if="dashboardSummaryData.dashboardSummary.averageScoreFrom > 0">{{dashboardSummaryData.dashboardSummary.averageScore}}/{{dashboardSummaryData.dashboardSummary.averageScoreBase}}</span>
+				                              	<span ng-if="dashboardSummaryData.dashboardSummary.averageScoreFrom > 0">{{(dashboardSummaryData.dashboardSummary.averageScore / 100).toFixed(0)}} / {{dashboardSummaryData.dashboardSummary.averageScoreBase}}</span>
 				                              	<span ng-if="dashboardSummaryData.dashboardSummary.averageScoreFrom == 0">NA</span></div>
 				                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-default tileBottom">
 				                              	<tag ng-if="dashboardSummaryData.dashboardSummary.averageScoreFrom > 0">from {{dashboardSummaryData.dashboardSummary.averageScoreFrom}} attempted tests</tag>
@@ -121,7 +122,7 @@
 				                              	<span ng-if="dashboardSummaryData.dashboardSummary.strongSubject != ''">{{dashboardSummaryData.dashboardSummary.strongSubject}}</span>
 				                              	<span ng-if="dashboardSummaryData.dashboardSummary.strongSubject == ''">NA</span></div>
 				                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-default tileBottom">
-				                              	<tag ng-if="dashboardSummaryData.dashboardSummary.strongSubject != ''">contributes {{dashboardSummaryData.dashboardSummary.strongSubjectPercentage}}% to total</tag>
+				                              	<tag ng-if="dashboardSummaryData.dashboardSummary.strongSubject != ''">contributes {{(dashboardSummaryData.dashboardSummary.strongSubjectPercentage/100).toFixed(0)}}% to total</tag>
 				                              	<tag ng-if="dashboardSummaryData.dashboardSummary.strongSubject == ''">no sufficient data</tag>
 				                              </span></div>
 				                           </div>
@@ -142,7 +143,7 @@
 									        </div>
 									        <div class="selectCourseBar-scroll-container">
 									            <div class="selectCourseBar-options">
-									                <span href="" ng-click="getCourseListingData(courseItemTile.id)" class="selectCourseBar-option" ng-repeat="courseItemTile in courseListing.testSeriesEnrolled track by $index" ng-class="{'selectCourseBar-optionActive' : courseItemTile.id == courseIdOpen}">{{courseItemTile.title}}</span>
+									                <span href="" ng-click="getCourseListingData(courseItemTile.code)" class="selectCourseBar-option" ng-repeat="courseItemTile in courseListing.testSeriesEnrolled track by $index" ng-class="{'selectCourseBar-optionActive' : courseItemTile.code == courseIdOpen}">{{courseItemTile.title}}</span>
 									                <p style="font-size: 16px;" ng-if="!courseListingFound">You are not enrolled to any test series yet.
 									              		 <a href="https://crisprlearning.com/courses/" target="new">Click here</a> to enroll for Crispr Tests Series.
 									                </p>
@@ -157,6 +158,8 @@
 									    <div class="courseContentContainer">
 									        
 									        <div class="courseContentTile" ng-repeat="courseItem in courseListing.coursesList track by $index" ng-click="" ng-class="{'blockedCourseContent' : courseItem.locked}">
+									        	<div class="courseContentSummary" ng-if="courseItem.lastScore"><span>
+									        	Scored <b>{{(courseItem.lastScore/100).toFixed(0)}}</b> on {{courseItem.lastAttempted}}</span></div>
 									            <div class="courseContentIcon" ng-class="getCourseIconImage(courseItem)"></div>
 									            <img ng-src="{{courseItem.photo}}" alt="">
 									            <div class="courseContentTileContent">
@@ -167,10 +170,10 @@
 									                		<tag ng-if="courseItem.previousAttemptId">Attempt Again</tag>
 									                		<tag ng-if="!courseItem.previousAttemptId">Attempt Now</tag>
 									                	</a>
-									                	<a ng-click="viewLastReport(courseItem.previousAttemptId)" ng-if="courseItem.previousAttemptId">See Report</a>
+									                	<a ng-click="viewLastReport(courseItem.previousAttemptId)" ng-if="courseItem.previousAttemptId" class="viewReport">Score Card</a>
 									                </span>
 									                <span ng-if="courseItem.locked">
-									                	<a ng-click="goToPurchaseLink(courseListing.currentTestSeriesInfo.code)" class="courseContentPurchase">Unlock</a>
+									                	<a ng-click="goToPurchaseLink(courseListing.currentTestSeriesInfo.code)" class="courseContentPurchase"> <i class="ti ti-crown"></i> Members Only</a>
 									                </span>
 									            </div>
 									        </div>
@@ -179,11 +182,18 @@
 								</div>
 
 
-								<div class="col-md-4" ng-show="courseListing.seriesProgess.length > 0">
-		                           <div class="info-tile info-tile-alt" style="visibility: visible; opacity: 1; display: block; transform: translateY(0px); padding-top: 10px">
-		                              <div class="tile-heading"><span>Score Progress</span></div>
-		                              <div id="socialstats" style="height: 215px;" class="mt-sm mb-sm"></div>
-		                           </div>
+								<!-- Progress Graph -->
+								<div class="col-md-4" ng-show="courseListing.coursesList && courseListing.coursesList.length > 0">
+										<div class="panel testSeriesProgressChartPanel">
+										    <div class="panel-body testSeriesProgressChartPanelBody" style="height: 320px; padding: 0 10px;">
+										        <!-- Scrollable wrapper for the chart -->
+										        <div class="chart-scrollable-wrapper" style="overflow-x: auto; overflow-y: hidden; height: 100%; border: 2px solid #e6eded; padding: 10px;">
+										            <!-- Chart container with dynamic width -->
+										            <div id="testSeriesProgressChart" style="height: 280px; width: 400px;" class="mt-sm mb-sm"></div>
+										        </div>
+										    </div>
+										    <p>Your Progress in <b style="color: #0a9190">{{courseNameOpen}}</b></p>
+										</div>
 								</div>
 
 							</div>
