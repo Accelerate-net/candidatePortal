@@ -191,6 +191,7 @@ $(document).ready(function() {
 	}
 
 	function renderNoItemsInCartMessage() {
+		clearCheckoutData();
 		document.getElementById("containerContent").innerHTML = '<h1 style=" font-size: 21px; font-weight: 300; text-align: center; width: 100%; margin: 50px 0; ">Oho! There is nothing here, something went wrong. <a href="https://crisprlearning.com" style=" display: block; font-size: 70%; margin-top: 20px; ">Take Me Home</a></h1>';
 	}
 
