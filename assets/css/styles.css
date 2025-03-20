@@ -31574,12 +31574,13 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
 
 .premiumContentNudge {
     border-radius: 100%;
-    width: 21px;
-    height: 21px;
+    width: 20px;
+    height: 20px;
     background: #feb448;
     color: #FFF;
-    right: 6px;
     font-size: 12px;
-    line-height: 20px; 
+    line-height: 20px;
     margin: 0 3px;
+    display: inline-block;
+    text-align: center;
 }
