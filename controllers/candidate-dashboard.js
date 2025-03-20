@@ -272,7 +272,7 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
 
         $http({
           method  : 'POST',
-          url     : 'https://crisprtech.app/crispr-apis/user/start-exam.php' + (continueExam == 1 ? '&continue=1' : ''),
+          url     : 'https://crisprtech.app/crispr-apis/user/start-exam.php?termsAccepted=0' + (continueExam == 1 ? '&continue=1' : ''),
           headers : {
             'Content-Type': 'application/json',
             'Authorization': getUserToken()
