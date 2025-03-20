@@ -563,7 +563,7 @@
                     }
                 });
 
-                if(!getCookieByNameForCart()) //Not logged in
+                if(!getCookieByNameForCart('crispriteUserToken')) //Not logged in
                     allFilled = false;
 
                 document.getElementById("payNowButton").disabled = !allFilled;
