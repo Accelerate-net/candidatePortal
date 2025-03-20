@@ -52,16 +52,13 @@ $(document).ready(function() {
 	    if(!cartItemsData) {
 	    	cartItemsData = [];
 	    	localStorage.setItem("crisprCart", JSON.stringify(cartItemsData));
-	    }
-	    if (cartItemsData) {
+	    } else if (cartItemsData) {
 	        try {
 	            return JSON.parse(cartItemsData);
 	        } catch (error) {
 	            console.log('Error parsing cart data:', error);
 	        }
-	    } else {
-	  
-	    }		
+	    }	
 	}
 
 	function removeUrlParam(param) {
@@ -191,7 +188,6 @@ $(document).ready(function() {
 	}
 
 	function renderNoItemsInCartMessage() {
-		clearCheckoutData();
 		document.getElementById("containerContent").innerHTML = '<h1 style=" font-size: 21px; font-weight: 300; text-align: center; width: 100%; margin: 50px 0; ">Oho! There is nothing here, something went wrong. <a href="https://crisprlearning.com" style=" display: block; font-size: 70%; margin-top: 20px; ">Take Me Home</a></h1>';
 	}
 
