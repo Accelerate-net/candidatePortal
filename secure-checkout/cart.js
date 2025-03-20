@@ -367,11 +367,7 @@ $(document).ready(function() {
 			    "Authorization": getUserToken(),
 			    "Content-Type": "application/json"
 			  },
-			  "data": JSON.stringify({
-			    "cart": paymentDetails.,
-			    "discountCode": discountCode,
-			    "billingAddress": billingAddress
-			  })
+			  "data": JSON.stringify(paymentDetails)
 		};
 
 		$.ajax(createOrderAPI).done(function (response) {
