@@ -281,9 +281,9 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
          })
          .then(function(response) {
             if(response.data.status == "success") {
-                var redirectURL = response.data.data.url;
+                var redirectUrl = response.data.data.url;
                 redirectUrl = redirectUrl + '&metadata=' + encodeURIComponent(JSON.stringify(response.data.data.metadata));
-                window.open(redirectURL, "_blank");
+                window.open(redirectUrl, "_blank");
             } else {
                 $scope.showToaster(response.data.message);
 
