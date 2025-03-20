@@ -357,6 +357,39 @@ $(document).ready(function() {
     }
 
 
+    //Acknowledge Payment Confirmation
+    function acknowledgePayment(paymentDetails) {
+    	var acknowledgeOrderAPI = {
+			  "url": "https://crisprtech.app/crispr-apis/user/checkout/acknowledge-purchase.php",
+			  "method": "POST",
+			  "timeout": 0,
+			  "headers": {
+			    "Authorization": getUserToken(),
+			    "Content-Type": "application/json"
+			  },
+			  "data": JSON.stringify({
+			    "cart": paymentDetails.,
+			    "discountCode": discountCode,
+			    "billingAddress": billingAddress
+			  })
+		};
+
+		$.ajax(createOrderAPI).done(function (response) {
+			if(response.status == "success") {
+				clearCheckoutData();
+				showToaster("Your payment is successful!")
+
+				setTimeout(() => {
+					window.location.href="https://candidate.crisprlearning.com/";
+				}, 2000);
+
+			} else {
+				showToaster(response.error || "Something went wrong, payment was not initiated");
+			}
+		});
+    }
+
+
 	/**** ORDER CREATION AND PAYMENT ****/
 	function initiatePayment() {
 
@@ -382,13 +415,6 @@ $(document).ready(function() {
 		    "state": state,
 		    "email": email
 		};
-
-
-		console.log(JSON.stringify(billingAddress))
-		console.log(discountCode)
-		//1. Call API to validate
-		//2. If failed, clear cache
-		//3. Else initiate payment
 
 		var createOrderAPI = {
 			  "url": "https://crisprtech.app/crispr-apis/user/checkout/process-purchase.php",
@@ -422,12 +448,7 @@ $(document).ready(function() {
 	                    data.razorpay_order_id = payment_response.razorpay_order_id;
 	                    data.razorpay_signature = payment_response.razorpay_signature;
 
-	                    processPayment(data);
-		    			function processPayment() {
-		    				console.log(JSON.stringify(data))
-		    				clearCheckoutData();
-		    				window.location.href="https://candidate.crisprlearning.com/"; //Redirect to Canidate Portal
-		    			}
+	                    acknowledgePayment(data);
 	            	},
 	                "prefill": {
 	                    "name": name,
@@ -445,7 +466,6 @@ $(document).ready(function() {
 	            var rzp1 = new Razorpay(options);
 	            rzp1.open();
 	            e.preventDefault();
-
             } else {
             	showToaster(response.error || "Something went wrong, payment was not initiated");
             }
