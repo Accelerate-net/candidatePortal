@@ -79,9 +79,43 @@ $(document).ready(function() {
 	}
 
 	function renderCartForUser() {
+        
         var myCart = retrieveCart();
+
+		//For logged in user - pass cart, discount to backend and validate
+		//For not-logged in - render based on local cart
         if (myCart.length > 0) {
-            renderCartItems(myCart)
+
+        	var isLoggedIn = getUserToken();
+        	if(isLoggedIn) {
+		        	var discountCode = localStorage.getItem("crisprCartDiscountCode") ? localStorage.getItem("crisprCartDiscountCode") : "";
+
+					var cartVerificationRequest = {
+			          "url": "https://crisprtech.app/crispr-apis/user/checkout/validate-user-cart.php",
+			          "method": "POST",
+			          "timeout": 0,
+			          "headers": {
+			            "Content-Type": "application/json",
+			            "Authorization": getUserToken()
+			          },
+			          "data" : JSON.stringify({
+			          	"cart": myCart,
+			          	"code": discountCode
+			          })
+			        };
+
+					$.ajax(cartVerificationRequest).done(function (cartResponse) {
+				        if(cartResponse.status == "success") {
+				        	renderCartItems(myCart, cartResponse.data); //TODO: What if validation failed?
+				        } else {
+				        	localStorage.setItem("crisprCart", JSON.stringify({}));
+				            showToaster(cartResponse.message);
+				        }
+				    });
+        	} else {
+        		renderCartItems(myCart);
+        	}
+
         } else {
             renderNoItemsInCartMessage();
         }
@@ -219,95 +253,7 @@ $(document).ready(function() {
 
 
 
-	function renderCartItems(cartItemsFromLocal) {
-
-		//For logged in user - pass cart, discount to backend and validate
-		//For not-logged in - render based on local cart
-
-		var discountCode = localStorage.getItem("crisprCartDiscountCode") ? localStorage.getItem("crisprCartDiscountCode") : "";
-
-		console.log("passing to backend")
-		console.log(JSON.stringify(cartItemsFromLocal))
-		console.log(discountCode)
-
-		var verifiedData = [null]; //From backend (Cart + Discount + Extras)
-
-		var verifiedData1 = {
-		    "cart": [
-		        {
-		            "itemId": "CR0002",
-		            "title": "Gear Up for IISER - Mock Test 2025",
-		            "type": "Test Series",
-		            "unitPrice": "49900",
-		            "number": 1,
-		            "displayImage": ""
-		        }
-		    ],
-		    "summary": {
-		        "subTotal": 49900,
-		        "totalPayable": 56600,
-		        "taxes": [
-		            {
-		                "label": "GST State (12%)",
-		                "value": 1450
-		            },
-		            {
-		                "label": "GST Central (12%)",
-		                "value": 1450
-		            }
-		        ],
-		        "extras": [
-		            {
-		                "label": "Platform Fee",
-		                "value": 500
-		            }
-		        ],
-		        "discount": {
-		            "code": "OK100",
-		            "amount": 10000
-		        }
-		    }
-		}
-
-		var verifiedData2 = {
-		    "cart": [
-		        {
-		            "itemId": "CR0002",
-		            "title": "Gear Up for IISER - Mock Test 2025",
-		            "type": "Test Series",
-		            "unitPrice": "49900",
-		            "number": 1,
-		            "displayImage": ""
-		        }
-		    ],
-		    "summary": {
-		        "subTotal": 49900,
-		        "totalPayable": 56600,
-		        "taxes": [
-		            {
-		                "label": "GST State (12%)",
-		                "value": 1450
-		            },
-		            {
-		                "label": "GST Central (12%)",
-		                "value": 1450
-		            }
-		        ],
-		        "extras": [
-		            {
-		                "label": "Platform Fee",
-		                "value": 500
-		            }
-		        ],
-		        "discount": {}
-		    }
-		}
-
-		if(discountCode)
-			verifiedData = verifiedData1;
-		else 
-			verifiedData = verifiedData2; //without discount
-
+	function renderCartItems(cartItemsFromLocal, verifiedData) {
 
 		var cartItems;
 		if(verifiedData){
