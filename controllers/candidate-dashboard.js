@@ -230,9 +230,20 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
     //Start the Exam
     $scope.attemptExam = function(examKey, seriesKey) {
 
+        let browserFingerprint = {
+            screenWidth: screen.width,
+            screenHeight: screen.height,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            language: navigator.language,
+            platform: navigator.platform,
+            cpuCores: navigator.hardwareConcurrency,
+            deviceMemory: navigator.deviceMemory || "unknown",
+        };
+
         var data = {
             "exam": examKey,
-            "series": seriesKey
+            "series": seriesKey,
+            "fingerprint": browserFingerprint 
         }
 
         $http({
