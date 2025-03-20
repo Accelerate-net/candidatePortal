@@ -417,7 +417,7 @@ $(document).ready(function() {
 	                "amount": paymentDetails.amount,
 	                "name": "Crispr Learning",
 	                "description": "Payment for Course Purchase",
-	                "image": "https://candidate.crisprlearning.com/assets/logo/crispr-logo-for-dark-bg.png",
+	                "image": "https://candidate.crisprlearning.com/assets/logo/crispr-logo-for-bright-bg.png",
 	                "handler": function (payment_response){
 	                    var data = {};
 	                    data.orderID = paymentDetails.order;
