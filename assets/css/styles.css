@@ -31559,3 +31559,15 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
     display: flex;
     justify-content: center;
 }
+
+.premiumContentIcon {
+    position: absolute;
+    border-radius: 100%;
+    width: 21px;
+    height: 21px;
+    background: #feb448;
+    color: #FFF;
+    right: 6px;
+    font-size: 12px;
+    line-height: 20px;
+}

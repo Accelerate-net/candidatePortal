@@ -163,6 +163,7 @@
 									            <div class="courseContentIcon" ng-class="getCourseIconImage(courseItem)"></div>
 									            <img ng-src="{{courseItem.photo}}" alt="">
 									            <div class="courseContentTileContent">
+									            	<div class="premiumContentIcon" ng-if="!courseItem.locked && courseItem.premium" title="Premium Content"><i class="ti ti-crown"></i></div>
 									                <h5>{{courseItem.title}}</h5>
 									                <p class="multiline-ellipsis">{{courseItem.brief}}</p>
 									                <span ng-if="!courseItem.locked">
@@ -183,7 +184,7 @@
 
 
 								<!-- Progress Graph -->
-								<div class="col-md-4" ng-show="courseListing.coursesList && courseListing.coursesList.length > 0">
+								<div class="col-md-4" ng-if="courseListing.coursesList && courseListing.coursesList.length > 2">
 										<div class="panel testSeriesProgressChartPanel">
 										    <div class="panel-body testSeriesProgressChartPanelBody" style="height: 320px; padding: 0 10px;">
 										        <!-- Scrollable wrapper for the chart -->
