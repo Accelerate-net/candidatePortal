@@ -270,6 +270,8 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
             "fingerprint": browserFingerprint 
         }
 
+
+        //By default it will go to Instruction page. If exam already started, will ask user ==> if continue = 1 is passed, then go to portal directly (backend handles the URL for that)
         $http({
           method  : 'POST',
           url     : 'https://crisprtech.app/crispr-apis/user/start-exam.php?termsAccepted=0' + (continueExam == 1 ? '&continue=1' : ''),
@@ -288,7 +290,7 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
                 
                 window.open(redirectUrl, "_blank");
             } else {
-                $scope.showToaster(response.data.message);
+                $scope.showToaster(response.data.message || response.data.error);
 
                 if(response.data.message == "Test already in progress") {
                     $scope.continueToActiveExamConfirmation(examKey, seriesKey)
