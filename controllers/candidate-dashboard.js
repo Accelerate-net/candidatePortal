@@ -226,9 +226,33 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
         }
     }
 
+    $scope.continueToActiveExamConfirmation = function(examKey, seriesKey) {
+        bootbox.confirm({
+                title: "<p style='color: #444; font-size: 24px; margin: 0; font-weight: bold;'>Exam In Progress</p>",
+                message: "<p style='color: #444; font-size: 18px; font-weight: 300; line-height: 28px;'>The you are trying to attempt is already in progress. If you want to continue, ensure you are on the same device / network, on which you initially started the exam. Otherwise, you may not be able to continue.</p>",
+                buttons: {
+                    cancel: {
+                        label: "Hide",
+                        className: "btn-default"
+                    },
+                    confirm: {
+                        label: "Continue Exam",
+                        className: "btn-success"
+                    }
+                },
+                callback: function (result) {
+                    if(result) {
+                        $scope.attemptExam(examKey, seriesKey, 1);
+                    }
+                }
+            });
+    }
+
 
     //Start the Exam
-    $scope.attemptExam = function(examKey, seriesKey) {
+    $scope.attemptExam = function(examKey, seriesKey, forced) {
+
+        var continueExam = forced && forced == 1 ? 1 : 0;
 
         let browserFingerprint = {
             screenWidth: screen.width,
@@ -248,7 +272,7 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
 
         $http({
           method  : 'POST',
-          url     : 'https://crisprtech.app/crispr-apis/user/start-exam.php',
+          url     : 'https://crisprtech.app/crispr-apis/user/start-exam.php' + (continueExam == 1 ? '&continue=1' : ''),
           headers : {
             'Content-Type': 'application/json',
             'Authorization': getUserToken()
@@ -260,7 +284,11 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
                 var redirectURL = response.data.data.url;
                 window.open(redirectURL, "_blank");
             } else {
-                $scope.showToaster(response.data.data.message);
+                $scope.showToaster(response.data.message);
+
+                if(response.data.message == "Test already in progress") {
+                    $scope.continueToActiveExamConfirmation(examKey, seriesKey)
+                }
             }
         });
     }
