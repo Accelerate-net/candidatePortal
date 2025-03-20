@@ -185,8 +185,7 @@
         }
 
         function getUserTokenForCart() {
-            return "Bearer PMhCPBXEpj6vbAD1P5ZoCr29chAj+YgKpiwO7VEJcn9NN9G+87gpzPaPiJTuKj+8r4xgRdOnmSWA3vuRjNE5fWqX+vRk0Q69ktbOxsm2gjr6sBt2AXPARlPkKuUWrrhLpyvydLN58qhKVb9b2wqOSy6THVfUMCbuWeMb6x4ckpU=";
-            //return "Bearer " + getCookieByNameForCart('crispriteUserToken');
+            return "Bearer " + getCookieByNameForCart('crispriteUserToken');
         }
 
         function logoutCurrentUser() {
@@ -231,6 +230,7 @@
                     document.getElementById('fullname').focus();
 
                     fillUpLoggedInDetails(billingResponse.data);
+                    checkPaymentButton();
                 }
 
                 hideOverallLoader();
@@ -563,11 +563,13 @@
                     }
                 });
 
+                if(!getCookieByNameForCart()) //Not logged in
+                    allFilled = false;
+
                 document.getElementById("payNowButton").disabled = !allFilled;
         }
 
         checkPaymentButton();
-
 
         function showToaster(message) {
             const toaster = document.getElementById('toaster');
