@@ -336,3 +336,16 @@ input, select, button {
 .continue-btn:hover {
     background-color: #034756;
 }   
+
+.pay-btn:disabled {
+    background-color: #ccc;  /* Grey background */
+    color: #666;  /* Dimmed text */
+    cursor: not-allowed;  /* Show "not allowed" cursor */
+    opacity: 0.6;  /* Reduce opacity */
+    border: 1px solid #aaa; /* Slightly darker border */
+}
+
+.superscript {
+    font-size: 0.7em;  /* Reduce font size */
+    vertical-align: super;  /* Move text up */
+}

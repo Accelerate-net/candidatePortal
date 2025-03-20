@@ -7,57 +7,39 @@ $(document).ready(function() {
 	        "title": "Dream IISER - IAT 2025 Crash Course",
 	        "type": "COURSE",
 	        "unitPrice": 599000,
-	        "number": 1,
-	        "displayImage": "",
-	        "applicableTotalTax": 1800
+	        "number": 1
 	    },
 	    {
 	        "itemId": "C000005",
 	        "title": "Gear Up for IISER - Mock Test 2025",
 	        "type": "TEST",
 	        "unitPrice": 99900,
-	        "number": 1,
-	        "displayImage": "",
-	        "applicableTotalTax": 500
+	        "number": 1
 	    }
 	]
 	*/
 
-	function getDiscountAmount() {
-		var crisprCartDiscount = retrieveDiscount();
-	    if (crisprCartDiscount && crisprCartDiscount.amount)
-	    	return crisprCartDiscount.amount;
 
-	    return 0;
+	const cookies = document.cookie;
+	function getCookieByName(name) {
+	    var match = cookies.match('(?:^|; )' + name + '=([^;]*)');
+	    return match ? decodeURIComponent(match[1]) : null;
 	}
 
-	function removeDiscount() {
-		localStorage.setItem("crisprCartDiscount", JSON.stringify({}))
+	function getUserToken() {
+		return "Bearer " + getCookieByName('crispriteUserToken');
 	}
 
-	function setDiscountCache(amount, code) {
-		var crisprCartDiscount = retrieveDiscount();
-		crisprCartDiscount.amount = amount;
-		crisprCartDiscount.code = code;
-		localStorage.setItem("crisprCartDiscount", JSON.stringify(crisprCartDiscount));
+	function rememberCouponCodeApplied(code) {
+		localStorage.setItem("crisprCartDiscountCode", code);
 	}
 
-	function retrieveDiscount() {
-	    var discountData = localStorage.getItem("crisprCartDiscount");
-	    if (discountData) {
-	        try {
-	            return JSON.parse(discountData);
-	        } catch (error) {
-	            console.log('Error parsing discount data:', error);
-	        }
-	    } else {
-	        console.log('No discount found in localStorage');
-	    }	
+	function forgetCouponCodeApplied() {
+		localStorage.setItem("crisprCartDiscountCode", "")
+	}
 
-	    return {
-	    	"amount": 0,
-	    	"code": ""
-	    }
+	function getCouponCodeApplied() {
+		return localStorage.getItem("crisprCartDiscountCode") ? localStorage.getItem("crisprCartDiscountCode") : "";
 	}
 
 	function retrieveCart() {
@@ -73,7 +55,7 @@ $(document).ready(function() {
 	            console.log('Error parsing cart data:', error);
 	        }
 	    } else {
-	        console.log('No cart found in localStorage');
+	  
 	    }		
 	}
 
@@ -82,7 +64,6 @@ $(document).ready(function() {
 		url.searchParams.delete(param);
 		history.replaceState(null, '', url.toString());
     }
-
 
 	function renderCheckoutPage() {
 		//1. Check for any new add request
@@ -106,21 +87,9 @@ $(document).ready(function() {
         }
 	}
 
-	function showPageRenderingLoader() {
-		console.log('started loader')
-	}
 
-	function hidePageRenderingLoader() {
-		console.log('ended loader')
-	}
-
-	function showToaster(message) {
-		console.log('Toaster: ' + message)
-	}
-
+	//Validate Course ID from backend, and add to local cart
 	function addToCart(courseId) {
-		console.log('adding item: ' + courseId)
-		showPageRenderingLoader();
 
 		var courseRequest = {
           "url": "https://crisprtech.app/crispr-apis/public/courses.php?code="+courseId,
@@ -133,21 +102,16 @@ $(document).ready(function() {
 
 		$.ajax(courseRequest).done(function (courseResponse) {
 	        if(courseResponse.status == "success" && courseResponse.data && courseResponse.data['code'] == courseId) {
-	        	hidePageRenderingLoader();
-
 	        	const courseData = courseResponse.data;
 
-			    removeDiscount();
+			    forgetCouponCodeApplied();
 
 				var itemData = {
 			        "itemId": courseData.code,
 			        "title": courseData.title,
 			        "type": courseData.type,
 			        "unitPrice": courseData.sellingPrice,
-			        "number": 1,
-			        "displayImage": courseData.photo,
-			        "extrasDetails": courseData.taxDetails,
-			        "applicableTotalTax": 0
+			        "number": 1
 			    }
 
 			    var myCart = retrieveCart();
@@ -164,17 +128,15 @@ $(document).ready(function() {
 		        	myCart.push(itemData);
 
 		        localStorage.setItem("crisprCart", JSON.stringify(myCart));
-		        //renderCartForUser(myCart);
 		        window.location.reload(true);
 	        } else {
-	        	hidePageRenderingLoader();
 	            showToaster("Course selected is invalid or no more available for purchase");
 	        }
 	    });
 	}
 
 	function removeFromCart(itemIdToRemove){
-		removeDiscount();
+		forgetCouponCodeApplied();
 
         var myCart = retrieveCart();;
         for (var i = 0; i < myCart.length; i++) {
@@ -186,9 +148,8 @@ $(document).ready(function() {
         }
 
         localStorage.setItem("crisprCart", JSON.stringify(myCart));
-        renderCartForUser(myCart);
+        renderCartForUser();
 	}
-
 
 	function renderNoItemsInCartMessage() {
 		document.getElementById("containerContent").innerHTML = '<h1 style=" font-size: 21px; font-weight: 300; text-align: center; width: 100%; margin: 50px 0; ">Oho! There is nothing here, something went wrong. <a href="https://crisprlearning.com" style=" display: block; font-size: 70%; margin-top: 20px; ">Take Me Home</a></h1>';
@@ -211,34 +172,150 @@ $(document).ready(function() {
 	}
 
 
-	function renderCartSummary(cartItems) {
-		var totalTax = 0;
-		var subTotal = 0;
-		var discounts = getDiscountAmount();
-		for(var i = 0; i < cartItems.length; i++) {
-			var cartItem = cartItems[i];
-			var rowPrice = cartItem.unitPrice * cartItem.number;
+	function renderCartSummary(cartItems, verifiedData) { //if isValidatedCart = false, render only item sum
+		var htmlContent = '';
+		if(verifiedData) {
 
-			totalTax +=  rowPrice * (cartItem.applicableTotalTax / 10000);
-			subTotal += rowPrice;
-		}
-		var grandTotal = subTotal + totalTax - discounts;
+			const summary = verifiedData.summary;
 
-		var htmlContent = '' +
-				'<div class="summary-item"> <span>Subtotal</span> <span>₹'+formatAmount(subTotal)+'</span> </div>'+
-                (discounts > 0 ? '<div class="summary-item"> <span>Discounts</span> <span>-₹'+formatAmount(discounts)+'</span> </div>' : '')+
-                '<div class="summary-item"> <span>Applicable Taxes</span> <span>₹'+formatAmount(totalTax)+'</span> </div>'+
-                '<div class="summary-item total"> <span>Total</span> <span class="price">₹'+formatAmount(grandTotal)+'</span> </div>';
+			var taxContent = '';
+			for (const taxItem of verifiedData.summary.taxes) {
+				taxContent = taxContent +
+					'<div class="summary-item"> <span>'+taxItem.label+'</span> <span>₹'+formatAmount(taxItem.value)+'</span> </div>';
+			}
+
+			var otherContent = '';
+			for (const otherItem of verifiedData.summary.extras) {
+				otherContent = otherContent +
+					'<div class="summary-item"> <span>'+otherItem.label+'</span> <span>₹'+formatAmount(otherItem.value)+'</span> </div>';
+			}
+
+			htmlContent = '' +
+					'<div class="summary-item"> <span>Subtotal</span> <span>₹'+formatAmount(summary.subTotal)+'</span> </div>'+
+	                (summary.discount.amount > 0 ? '<div class="summary-item"> <span>Discounts</span> <span>-₹'+formatAmount(summary.discount.amount)+'</span> </div>' : '')+
+	                taxContent + otherContent +
+	                '<div class="summary-item total"> <span>Total</span> <span class="price">₹'+formatAmount(summary.totalPayable)+'</span> </div>';
+		} else {
+
+			//For local rendering only
+			for(var i = 0; i < cartItems.length; i++) {
+				var cartItem = cartItems[i];
+				var rowPrice = cartItem.unitPrice * cartItem.number;
+
+				totalTax +=  rowPrice * (cartItem.applicableTotalTax / 10000);
+				subTotal += rowPrice;
+			}
+			var grandTotal = subTotal;
+
+
+			htmlContent = '' +
+					'<div class="summary-item"> <span>Subtotal</span> <span>₹'+formatAmount(subTotal)+'</span> </div>'+
+	                '<div class="summary-item total"> <span>Total</span> <span class="price">₹'+formatAmount(grandTotal)+'<span class="superscript" style="font-weight: 300">†</span></span> </div>' +
+	                '<div class="summary-item" style="font-size: 10px"> <span>Taxes and other charges if applicable, would be computed once user validates their mobile number. Please authenticate your mobile number to redeem Gift Codes<span class="superscript">†</span></span></div>';
+	    }
 
         document.getElementById("crisprCartSummary").innerHTML = htmlContent;
 	}
 
-	function applyCouponCode() {
-		var code = document.getElementById()
-	}
 
 
-	function renderCartItems(cartItems) {
+	function renderCartItems(cartItemsFromLocal) {
+
+		//For logged in user - pass cart, discount to backend and validate
+		//For not-logged in - render based on local cart
+
+		var discountCode = localStorage.getItem("crisprCartDiscountCode") ? localStorage.getItem("crisprCartDiscountCode") : "";
+
+		console.log("passing to backend")
+		console.log(JSON.stringify(cartItemsFromLocal))
+		console.log(discountCode)
+
+		var verifiedData = [null]; //From backend (Cart + Discount + Extras)
+
+		var verifiedData1 = {
+		    "cart": [
+		        {
+		            "itemId": "CR0002",
+		            "title": "Gear Up for IISER - Mock Test 2025",
+		            "type": "Test Series",
+		            "unitPrice": "49900",
+		            "number": 1,
+		            "displayImage": ""
+		        }
+		    ],
+		    "summary": {
+		        "subTotal": 49900,
+		        "totalPayable": 56600,
+		        "taxes": [
+		            {
+		                "label": "GST State (12%)",
+		                "value": 1450
+		            },
+		            {
+		                "label": "GST Central (12%)",
+		                "value": 1450
+		            }
+		        ],
+		        "extras": [
+		            {
+		                "label": "Platform Fee",
+		                "value": 500
+		            }
+		        ],
+		        "discount": {
+		            "code": "OK100",
+		            "amount": 10000
+		        }
+		    }
+		}
+
+		var verifiedData2 = {
+		    "cart": [
+		        {
+		            "itemId": "CR0002",
+		            "title": "Gear Up for IISER - Mock Test 2025",
+		            "type": "Test Series",
+		            "unitPrice": "49900",
+		            "number": 1,
+		            "displayImage": ""
+		        }
+		    ],
+		    "summary": {
+		        "subTotal": 49900,
+		        "totalPayable": 56600,
+		        "taxes": [
+		            {
+		                "label": "GST State (12%)",
+		                "value": 1450
+		            },
+		            {
+		                "label": "GST Central (12%)",
+		                "value": 1450
+		            }
+		        ],
+		        "extras": [
+		            {
+		                "label": "Platform Fee",
+		                "value": 500
+		            }
+		        ],
+		        "discount": {}
+		    }
+		}
+
+		if(discountCode)
+			verifiedData = verifiedData1;
+		else 
+			verifiedData = verifiedData2; //without discount
+
+
+		var cartItems;
+		if(verifiedData){
+			cartItems = verifiedData.cart;
+		} else {
+			cartItems = cartItemsFromLocal; //Render local cart by default
+		}
+
 		var htmlContent = '';
 		for(var i = 0; i < cartItems.length; i++) {
 			var cartItem = cartItems[i];
@@ -265,37 +342,10 @@ $(document).ready(function() {
 		    }
 		});
 
-		renderCouponSummary();
-		renderCartSummary(cartItems);
+		renderCouponSummary(verifiedData);
+		renderCartSummary(cartItems, verifiedData);
 	}
 
-	function clearCoupon() {
-		removeDiscount();
-		renderCartForUser();
-	}
-
-
-	const cookies = document.cookie;
-	function getCookieByName(name) {
-	    var match = cookies.match('(?:^|; )' + name + '=([^;]*)');
-	    return match ? decodeURIComponent(match[1]) : null;
-	}
-
-	function getUserToken() {
-		return "Bearer " + getCookieByName('crispriteUserToken');
-	}
-
-
-	function checkForDiscounts(giftCode) {
-		//Call API - pass cart
-		const userToken = getUserToken();
-		if(!userToken) {
-			showToaster("Please Login to apply discounts")
-		} else {
-			setDiscountCache(10000, giftCode);
-			renderCartForUser();
-		}
-	}
 
 	function getFormattedCouponCode(discountsData) {
 		if(discountsData && discountsData.code)
@@ -304,33 +354,45 @@ $(document).ready(function() {
 	}
 
 
-	function renderCouponSummary() {
-		var discountsData = retrieveDiscount();
-		console.log(discountsData)
+	function renderCouponSummary(verifiedData) {
+
+		if(!verifiedData) {
+			return;
+		}
+
+		var discountsData = verifiedData.summary.discount;
 		var isApplied = discountsData.amount > 0;
+		
 		var htmlContent = '';
 
 		if(isApplied) {
-			htmlContent += '<input type="text" placeholder="Gift card or discount code" id="giftCodeUsed" value="'+getFormattedCouponCode(discountsData)+'" disabled>';
+			htmlContent += '<input type="text" placeholder="Gift card or discount code" id="giftCodeUsed" value="'+discountsData.code+'" disabled>';
 			htmlContent += '<button class="apply-btn" id="removeCodeButton">Remove</button>';
 			document.getElementById("giftVoucherSection").innerHTML = htmlContent;
 
 			document.getElementById("removeCodeButton").addEventListener("click", function(event) {
-			    clearCoupon();
+			    forgetCouponCodeApplied();
+			    renderCartForUser();
 			});
 		} else {
-			htmlContent += '<input type="text" placeholder="Gift card or discount code" id="giftCodeUsed" value="'+getFormattedCouponCode(discountsData)+'">';
+			htmlContent += '<input type="text" placeholder="Gift card or discount code" id="giftCodeUsed" value="">';
 			htmlContent += '<button class="apply-btn" id="applyCodeButton">Apply</button>';
 			document.getElementById("giftVoucherSection").innerHTML = htmlContent;
 
 			document.getElementById("applyCodeButton").addEventListener("click", function(event) {
 			    var giftCode = document.getElementById("giftCodeUsed").value;
-			    checkForDiscounts(giftCode)
+			    if(!giftCode || giftCode == "")
+			    	return;
+
+			    giftCode = giftCode.trim();
+			    rememberCouponCodeApplied(giftCode);
+			    renderCartForUser();
 			});
 		}
 	}
 
 
+	//Default rendering
 	renderCheckoutPage();
 
 	/**** TOASTER *****/
@@ -345,13 +407,13 @@ $(document).ready(function() {
     }
 
 
-
-	/**** PAYMENT ****/
+	/**** ORDER CREATION AND PAYMENT ****/
 	function initiatePayment() {
-		var myCart = retrieveCart();
-		var discountsData = retrieveDiscount();
 
-		var mobile = document.getElementById("mobile").value;
+		var myCart = retrieveCart();
+		var discountCode = getCouponCodeApplied();
+
+		var mobile = document.getElementById("mobileRegistered").value;
 		var name = document.getElementById("fullname").value;
 		var address = document.getElementById("address").value;
 		var locality = document.getElementById("locality").value;
@@ -359,8 +421,6 @@ $(document).ready(function() {
 		var pincode = document.getElementById("pincode").value;
 		var state = document.getElementById("state").value;
 		var email = document.getElementById("email").value;
-
-		var payableAmount = 100;
 
 		var billingAddress = {
 		    "mobile": mobile,
@@ -375,6 +435,7 @@ $(document).ready(function() {
 
 
 		console.log(JSON.stringify(billingAddress))
+		console.log(discountCode)
 		//1. Call API to validate
 		//2. If failed, clear cache
 		//3. Else initiate payment
@@ -388,23 +449,8 @@ $(document).ready(function() {
 			    "Content-Type": "application/json"
 			  },
 			  "data": JSON.stringify({
-			    "cart": [
-			      {
-			        "courseId": "CR0001",
-			        "sellingPrice": 499000,
-			        "number": 1
-			      },
-			      {
-			        "courseId": "CR0002",
-			        "sellingPrice": 49900,
-			        "number": 1
-			      }
-			    ],
-			    "discount": {
-			      "code": "HELLO50",
-			      "amount": 10000
-			    },
-			    "totalPayable": payableAmount,
+			    "cart": myCart,
+			    "discountCode": discountCode,
 			    "billingAddress": billingAddress
 			  })
 		};
@@ -417,8 +463,8 @@ $(document).ready(function() {
 	                "order_id": paymentDetails.order,
 	                "amount": payableAmount,
 	                "name": "Crispr Learning",
-	                "description": "Payment for Online Order",
-	                "image": "https://accelerate.net.in/assets/logo/crispr-logo-for-bright-bg.png",
+	                "description": "Payment for Course Purchase",
+	                "image": "https://candidate.crisprlearning.com/assets/logo/crispr-logo-for-dark-bg.png",
 	                "handler": function (payment_response){
 	                    var data = {};
 	                    data.orderID = paymentDetails.order;
@@ -452,15 +498,10 @@ $(document).ready(function() {
             	showToaster(response.error || "Something went wrong, payment was not initiated");
             }
 		});
-
-
-
-
-
-		//showToaster("Please provide all the details");
 	}
 
 
+	//Razorpay Button
 	if(document.getElementById("payNowButton")) {
 		document.getElementById("payNowButton").addEventListener("click", function(event) {
 		    initiatePayment();

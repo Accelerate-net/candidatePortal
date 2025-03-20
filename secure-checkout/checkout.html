@@ -133,18 +133,18 @@
             <div class="addressSection" id="billingAddressView" style="display: none">
                 <h2>Billing Address</h2>
                 <div class="billing-group">
-                    <input type="text" placeholder="Full Name" id="fullname">
+                    <input type="text" placeholder="Full Name" id="fullname" onkeyup="checkPaymentButton()">
                 </div>
                 <div class="billing-group">
-                    <input type="text" placeholder="Address" id="address">
-                    <input type="text" placeholder="Locality or Landmark" id="locality">
+                    <input type="text" placeholder="Address" id="address" onkeyup="checkPaymentButton()">
+                    <input type="text" placeholder="Locality or Landmark" id="locality" onkeyup="checkPaymentButton()">
                 </div>
                 <div class="billing-group">
-                    <input type="text" placeholder="City" id="city">
-                    <input type="text" placeholder="State" id="state">
-                    <input type="tel" placeholder="Pincode" maxlength="6" id="pincode">
+                    <input type="text" placeholder="City" id="city" onkeyup="checkPaymentButton()">
+                    <input type="text" placeholder="State" id="state" onkeyup="checkPaymentButton()">
+                    <input type="tel" placeholder="Pincode" maxlength="6" id="pincode" onkeyup="checkPaymentButton()">
                 </div>
-                <input type="text" placeholder="Email for Communication" id="email">
+                <input type="text" placeholder="Email for Communication" id="email" onkeyup="checkPaymentButton()">
             </div>
             
             <section class="payment-section">
@@ -163,7 +163,7 @@
 
             <div id="crisprCartSummary"></div>
 
-            <button class="pay-btn" id="payNowButton" style="background: gray;">Pay Now</button>
+            <button class="pay-btn" id="payNowButton" disabled>Pay Now</button>
         </section>
     </div>
 
@@ -185,7 +185,8 @@
         }
 
         function getUserTokenForCart() {
-            return "Bearer " + getCookieByNameForCart('crispriteUserToken');
+            return "Bearer PMhCPBXEpj6vbAD1P5ZoCr29chAj+YgKpiwO7VEJcn9NN9G+87gpzPaPiJTuKj+8r4xgRdOnmSWA3vuRjNE5fWqX+vRk0Q69ktbOxsm2gjr6sBt2AXPARlPkKuUWrrhLpyvydLN58qhKVb9b2wqOSy6THVfUMCbuWeMb6x4ckpU=";
+            //return "Bearer " + getCookieByNameForCart('crispriteUserToken');
         }
 
         function logoutCurrentUser() {
@@ -534,6 +535,39 @@
                 document.getElementById('mobileError').innerHTML = '';
             }
         });
+
+
+        function checkPaymentButton() {
+            //Enable Payment button only if all details are filled
+            const fields = [
+                    "fullname",
+                    "mobileRegistered",
+                    "address",
+                    "locality",
+                    "city",
+                    "state",
+                    "pincode",
+                    "email"
+                ];
+
+                let allFilled = true;
+
+                fields.forEach(id => {
+                    const input = document.getElementById(id);
+                    if (input) {
+                        if (input.value.trim() === "") {
+                            allFilled = false;
+                        }
+                    } else {
+                        allFilled = false;
+                    }
+                });
+
+                document.getElementById("payNowButton").disabled = !allFilled;
+        }
+
+        checkPaymentButton();
+
 
         function showToaster(message) {
             const toaster = document.getElementById('toaster');
