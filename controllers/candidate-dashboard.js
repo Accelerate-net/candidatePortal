@@ -256,14 +256,11 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
           data    : data
          })
          .then(function(response) {
-            if(response.data.status == "success"){
-                var redirectURL = "https://portal2.crisprlearning.com/attempt.html?exam=" + encodeURIComponent(response.data.data.examToken) + "&user=" + encodeURIComponent(getUserTokenRaw());
-                if(response.data.data.uniqueExamURL)
-                    redirectURL = response.data.data.uniqueExamURL;
-
+            if(response.data.status == "success") {
+                var redirectURL = response.data.data.url;
                 window.open(redirectURL, "_blank");
             } else {
-                $scope.showToaster(response.data.message);
+                $scope.showToaster(response.data.data.message);
             }
         });
     }
