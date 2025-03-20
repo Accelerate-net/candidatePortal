@@ -31571,3 +31571,15 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
     font-size: 12px;
     line-height: 20px;
 }
+
+.premiumContentNudge {
+    border-radius: 100%;
+    width: 21px;
+    height: 21px;
+    background: #feb448;
+    color: #FFF;
+    right: 6px;
+    font-size: 12px;
+    line-height: 20px; 
+    margin: 0 3px;
+}

@@ -150,7 +150,7 @@
 										    <td>
 										    	<tag ng-if="courseItem.metadata">{{courseItem.metadata.commencement}} to {{courseItem.metadata.conclusion}}</tag>
 										    </td>
-										    <td>{{courseItem.accessLevel}}</td>
+										    <td><span class="premiumContentNudge" title="Paid Content" ng-if="courseItem.accessLevel == 'Premium'"><i class="ti ti-crown"></i></span>{{courseItem.accessLevel}}</td>
 										    <td>
 										    	<tag ng-if="courseItem.expiry != 'Unknown'">until {{courseItem.expiry}}</tag>
 										    	<tag ng-if="courseItem.expiry == 'Unknown'">Unlimited</tag>
