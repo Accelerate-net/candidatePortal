@@ -110,7 +110,7 @@ $(document).ready(function() {
 				        if(cartResponse.status == "success") {
 				        	renderCartItems(myCart, cartResponse.data); //TODO: What if validation failed?
 				        } else {
-				        	localStorage.setItem("crisprCart", JSON.stringify({}));
+				        	localStorage.setItem("crisprCart", JSON.stringify([]));
 				            showToaster(cartResponse.message);
 				        }
 				    });
