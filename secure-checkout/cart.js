@@ -339,6 +339,8 @@ $(document).ready(function() {
 			    rememberCouponCodeApplied(giftCode);
 			    renderCartForUser();
 			});
+
+			forgetCouponCodeApplied();
 		}
 	}
 
