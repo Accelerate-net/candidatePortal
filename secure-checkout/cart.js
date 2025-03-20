@@ -370,7 +370,7 @@ $(document).ready(function() {
 			  "data": JSON.stringify(paymentDetails)
 		};
 
-		$.ajax(createOrderAPI).done(function (response) {
+		$.ajax(acknowledgeOrderAPI).done(function (response) {
 			if(response.status == "success") {
 				clearCheckoutData();
 				showToaster("Your payment is successful!")
