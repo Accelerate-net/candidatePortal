@@ -38,6 +38,11 @@ $(document).ready(function() {
 		localStorage.setItem("crisprCartDiscountCode", "")
 	}
 
+	function clearCheckoutData() {
+		localStorage.removeItem("crisprCartDiscountCode");
+		localStorage.removeItem("crisprCart");
+	}
+
 	function getCouponCodeApplied() {
 		return localStorage.getItem("crisprCartDiscountCode") ? localStorage.getItem("crisprCartDiscountCode") : "";
 	}
@@ -421,6 +426,8 @@ $(document).ready(function() {
 	                    processPayment(data);
 		    			function processPayment() {
 		    				console.log(JSON.stringify(data))
+		    				clearCheckoutData();
+		    				window.location.href="https://candidate.crisprlearning.com/"; //Redirect to Canidate Portal
 		    			}
 	            	},
 	                "prefill": {
