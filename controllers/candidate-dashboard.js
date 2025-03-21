@@ -158,6 +158,8 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
     }
 
     $scope.dashboardSummaryData = {};
+    $scope.dashboardSummaryData.name = "";
+    $scope.dashboardSummaryData.aspiration = "";
     $scope.fetchDashboardSummaryData = function() {
         $http({
           method  : 'GET',
