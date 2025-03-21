@@ -359,9 +359,6 @@
                 $.ajax(loginData).done(function (loginResponse) {
                     var response = JSON.parse(loginResponse);
                     if(response.status == "success") {
-                        //Set token in cookies
-                        console.log(response.data);
-
                         //Set cookies
                         var now = new Date();
                         now.setDate(now.getDate() + 7); // Set expiration to 7 days from now
@@ -440,7 +437,6 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('start')
             if(document.getElementById('mobile'))
                 document.getElementById('mobile').focus();
         });
@@ -540,6 +536,7 @@
 
 
         function checkPaymentButton() {
+            console.log('keyup pressed')
             //Enable Payment button only if all details are filled
             const fields = [
                     "fullname",
