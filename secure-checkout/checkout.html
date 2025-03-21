@@ -176,6 +176,11 @@
             return match ? decodeURIComponent(match[1]) : null;
         }
 
+        function getCookieByNameForCartForced(name) {
+            var match = document.cookie.match('(?:^|; )' + name + '=([^;]*)');
+            return match ? decodeURIComponent(match[1]) : null;
+        }
+
         function hideOverallLoader() {
             document.getElementById('loaderScreen').style.display = 'none';
         }
@@ -552,7 +557,6 @@
 
                 fields.forEach(id => {
                     const input = document.getElementById(id);
-                    console.log(id + " : " + input)
                     if (input) {
                         if (input.value.trim() === "") {
                             allFilled = false;
@@ -562,9 +566,8 @@
                     }
                 });
 
-                if(!getCookieByNameForCart('crispriteUserToken')) { //Not logged in
+                if(!getCookieByNameForCartForced('crispriteUserToken')) { //Not logged in
                     allFilled = false;
-                    console.log("not logged in ")
                 }
 
                 document.getElementById("payNowButton").disabled = !allFilled;
