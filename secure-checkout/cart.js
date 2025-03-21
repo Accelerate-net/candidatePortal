@@ -19,10 +19,8 @@ $(document).ready(function() {
 	]
 	*/
 
-
-	const cookies = document.cookie;
 	function getCookieByName(name) {
-	    var match = cookies.match('(?:^|; )' + name + '=([^;]*)');
+	    var match = document.cookie.match('(?:^|; )' + name + '=([^;]*)');
 	    return match ? decodeURIComponent(match[1]) : null;
 	}
 
