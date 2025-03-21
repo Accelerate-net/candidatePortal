@@ -227,6 +227,11 @@
 
                     //Billing address mandatory to proceed (prefilled for regd user)
                     document.getElementById("billingAddressView").style.display = 'block';
+                    const inputs = document.querySelectorAll("#billingAddressView input");
+                    inputs.forEach(input => {
+                        input.addEventListener("keyup", checkPaymentButton);
+                    });
+
                     document.getElementById('fullname').focus();
 
                     fillUpLoggedInDetails(billingResponse.data);
