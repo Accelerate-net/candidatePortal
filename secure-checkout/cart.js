@@ -234,6 +234,7 @@ $(document).ready(function() {
 		} else {
 
 			//For local rendering only
+			var subTotal = 0;
 			for(var i = 0; i < cartItems.length; i++) {
 				var cartItem = cartItems[i];
 				var rowPrice = cartItem.unitPrice * cartItem.number;
