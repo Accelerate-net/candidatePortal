@@ -536,7 +536,6 @@
 
 
         function checkPaymentButton() {
-            console.log('keyup pressed')
             //Enable Payment button only if all details are filled
             const fields = [
                     "fullname",
@@ -553,6 +552,7 @@
 
                 fields.forEach(id => {
                     const input = document.getElementById(id);
+                    console.log(id + " : " + input)
                     if (input) {
                         if (input.value.trim() === "") {
                             allFilled = false;
@@ -562,8 +562,10 @@
                     }
                 });
 
-                if(!getCookieByNameForCart('crispriteUserToken')) //Not logged in
+                if(!getCookieByNameForCart('crispriteUserToken')) { //Not logged in
                     allFilled = false;
+                    console.log("not logged in ")
+                }
 
                 document.getElementById("payNowButton").disabled = !allFilled;
         }
