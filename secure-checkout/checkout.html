@@ -170,13 +170,7 @@
 
 <script>
 
-        const cookiesCart = document.cookie;
         function getCookieByNameForCart(name) {
-            var match = cookiesCart.match('(?:^|; )' + name + '=([^;]*)');
-            return match ? decodeURIComponent(match[1]) : null;
-        }
-
-        function getCookieByNameForCartForced(name) {
             var match = document.cookie.match('(?:^|; )' + name + '=([^;]*)');
             return match ? decodeURIComponent(match[1]) : null;
         }
@@ -566,7 +560,7 @@
                     }
                 });
 
-                if(!getCookieByNameForCartForced('crispriteUserToken')) { //Not logged in
+                if(!getCookieByNameForCart('crispriteUserToken')) { //Not logged in
                     allFilled = false;
                 }
 
