@@ -88,8 +88,8 @@ $(document).ready(function() {
 		//For not-logged in - render based on local cart
         if (myCart.length > 0) {
 
-        	var isLoggedIn = getUserToken();
-        	if(isLoggedIn) {
+        	var logginCookie = getCookieByName('crispriteUserToken'); //if cookie set, logged in
+        	if(logginCookie && logginCookie != null) {
 		        	var discountCode = localStorage.getItem("crisprCartDiscountCode") ? localStorage.getItem("crisprCartDiscountCode") : "";
 
 					var cartVerificationRequest = {
@@ -256,7 +256,6 @@ $(document).ready(function() {
 
 
 	function renderCartItems(cartItemsFromLocal, verifiedData) {
-
 		var cartItems;
 		if(verifiedData){
 			cartItems = verifiedData.cart;
