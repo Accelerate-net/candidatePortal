@@ -237,13 +237,10 @@ $(document).ready(function() {
 			for(var i = 0; i < cartItems.length; i++) {
 				var cartItem = cartItems[i];
 				var rowPrice = cartItem.unitPrice * cartItem.number;
-
-				totalTax +=  rowPrice * (cartItem.applicableTotalTax / 10000);
 				subTotal += rowPrice;
 			}
+
 			var grandTotal = subTotal;
-
-
 			htmlContent = '' +
 					'<div class="summary-item"> <span>Subtotal</span> <span>₹'+formatAmount(subTotal)+'</span> </div>'+
 	                '<div class="summary-item total"> <span>Total</span> <span class="price">₹'+formatAmount(grandTotal)+'<span class="superscript" style="font-weight: 300">†</span></span> </div>' +
