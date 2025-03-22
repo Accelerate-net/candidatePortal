@@ -46,7 +46,7 @@
 			<ul class="nav navbar-nav toolbar pull-right">
 				<li class="dropdown toolbar-icon-bg">
 					<a href="#" class="dropdown-toggle username" data-toggle="dropdown">
-						<img class="img-circle" src="https://abhijithcs.in/assets/images/avatar.jpg" alt="Abhijith C S"/>
+						<img class="img-circle" ng-src="{{profileData.photo || 'https://img.icons8.com/color/100/user.png'}}" alt=""/>
 					</a>
 					<ul class="dropdown-menu userinfo arrow">
 						<li><a href="candidate-profile.html"><i class="ti ti-user"></i><span>Profile</span></a></li>
@@ -73,16 +73,15 @@
 		<div class="resource-module-holder">
 	    <div class="resource-module">
 	        <div class="module-header">
-	            <h2 class="introHeader">Great Going Abhijith!</h2>
-	            <a href="#" class="view-all-btn">View Detailed Report</a>
+	            <h2 class="introHeader">Great Going {{profileData.name}}!</h2>
+	            <span ng-click="detailedReportView()" class="view-all-btn">View Detailed Report</span>
 	        </div>
 
 	        <p class="module-description">
+	        	{{reportData.customisedSummary}}
 	            Great job on completing your mock test! Every attempt brings you one step closer to mastering the exam. Keep practicing, analyze your performance, and strive for continuous improvement — success is built through consistency! 🚀
+	        	}
 	        </p>
-
-
-
 
 				<div class="reportSummaryContainer">
 					<div class="reportSummaryTileHolder">
@@ -156,45 +155,85 @@
 							</div>
 
 							</div>
-							<div class="tile-footer"></div>
+
 						</div>
 					</div>
 				</div>
 
 
-
-
-
-
-	        
 	        <div class="module-tiles responseSheetTopLine">
 	         
-				<div class="panel responseSheetContainer">
-					<h2 class="responseSheetHeader">Response Sheet</h2>
-					<div class="panel-body" style="padding: 0; background: none;">
+		        <div class="row">
+			        <div class="col-md-7">
+						<div class="panel responseSheetContainer">
+							<h2 class="responseSheetHeader">Response Sheet of <b>{{reportData.title}}</b></h2>
+							<div class="panel-body" style="padding: 0; background: none;">
 
-							<div class="alert alert-info mb-xl responseSheetHeaderLiner">
-								<div class="responseSheetContainer">
-								    <div class="responseSheet" ng-repeat="sectionResponse in reportData.sectionWiseResponse track by $index">
-								        <span class="responseSheetTitle">{{sectionResponse.sectionName}}</span>
-								        <span class="responseSheetNumbers">
-								        	<span class="responseSheetIcon" ng-repeat="questionItem in sectionResponse.questions track by $index" ng-class="{'wrongAnswer' : (questionItem.attempt != '' && questionItem.answer != questionItem.attempt), 'correctAnswer' : (questionItem.attempt != '' && questionItem.answer == questionItem.attempt)}" ng-click="viewQuestionAndAnswer(questionItem, sectionResponse.sectionName)">{{questionItem.order}}</span>
-								        </span>
-								        <span class="responseSheetSummary">{{sectionResponse.sectionSummary.correct}} Correct <i class="fa fa-circle"></i> {{sectionResponse.sectionSummary.attempted - sectionResponse.sectionSummary.correct}} Wrong <i class="fa fa-circle"></i> {{sectionResponse.sectionSummary.totalMarks}} Marks</span>
-								    </div>
-								</div>
-							</div>					
+									<div class="alert alert-info mb-xl responseSheetHeaderLiner">
+							            <div class="responseSheetContainer">
+							                <div class="responseSheet" ng-repeat="sectionResponse in reportData.sectionWiseResponse track by $index">
+							                    <!-- Section Title and Summary (Stacked Layout) -->
+							                    <div class="responseSheetTitle">
+							                        <span class="responseSheetName">{{sectionResponse.sectionName}}</span>
+							                        <span class="responseSheetSummary">{{sectionResponse.sectionSummary.correct}} Correct <i class="fa fa-circle"></i> {{sectionResponse.sectionSummary.attempted - sectionResponse.sectionSummary.correct}} Wrong <i class="fa fa-circle"></i> {{sectionResponse.sectionSummary.totalMarks}} Marks</span>
+							                    </div>
 
+							                    <!-- Icons (Second Row) -->
+							                    <div class="responseSheetNumbers">
+							                        <span class="responseSheetIcon" ng-repeat="questionItem in sectionResponse.questions track by $index" ng-class="{'wrongAnswer' : (questionItem.attempt != '' && questionItem.answer != questionItem.attempt), 'correctAnswer' : (questionItem.attempt != '' && questionItem.answer == questionItem.attempt)}" ng-click="viewQuestionAndAnswer(questionItem, sectionResponse.sectionName)">
+							                            {{questionItem.order}}
+							                        </span>
+							                    </div>
+							                </div>
+							            </div>
+									</div>					
+							</div>
+						</div>
+					</div>
 
+					<div class="col-md-5">
+						<div class="panel panel-default" id="subjectWiseAccuracy" style="color: #fff; background: none; margin: 40px 0 0 0; max-width: 450px;">
+			              	<div class="panel-body" style="background: none; border-radius: 8px;">
+			              		<div style="height: 270px">
+					              	<div ng-repeat="sectionResponse in reportData.sectionWiseResponse track by $index">
+							          	<p class="subjectLine">{{sectionResponse.sectionName}} <span class="markLabelResponse">{{sectionResponse.sectionSummary.totalMarks}} marks</span><i ng-if="sectionResponse.sectionName == reportData.mostScoredSection" class="fa fa-star subjectLineStar"></i></p>
+										<div class="progress" ng-init="coverage = getSubjectCoverage(sectionResponse.sectionSummary)">
+										    <div class="progress-bar progress-bar-success" ng-style="coverage.correct">{{ sectionResponse.sectionSummary.correct }}</div>
+										    <div class="progress-bar progress-bar-unattempted" ng-style="coverage.unattempted">{{ sectionResponse.sectionSummary.total - sectionResponse.sectionSummary.attempted }}</div>
+										    <div class="progress-bar progress-bar-danger" ng-style="coverage.wrong">{{ sectionResponse.sectionSummary.attempted - sectionResponse.sectionSummary.correct }}</div>
+										</div>
+							        </div>
+
+									<p class="subjectLine">Overall <span class="markLabelResponse">{{overallScore}} marks</span></p>
+									<div class="progress">
+									    <div class="progress-bar progress-bar-success" ng-style="getOverallCoverage('CORRECT', overallCorrect, overallUnattempted, overallIncorrect)">{{ overallCorrect }}</div>
+									    <div class="progress-bar progress-bar-unattempted" ng-style="getOverallCoverage('UNATTEMPTED', overallCorrect, overallUnattempted, overallIncorrect)">{{ overallUnattempted }}</div>
+									    <div class="progress-bar progress-bar-danger" ng-style="getOverallCoverage('WRONG', overallCorrect, overallUnattempted, overallIncorrect)">{{ overallIncorrect }}</div>
+									</div>
+
+									<p class="subjectLine" style="font-size: 9px !important">
+										<i class="fa fa-circle" style="color: #4caf50 !important"></i> <tag>Correct</tag>
+										<i class="fa fa-circle" style="color: #899fa9 !important"></i> <tag>Unattempted</tag>
+										<i class="fa fa-circle" style="color: #e51c23 !important"></i> <tag>Wrong</tag>
+									</p>
+
+						        </div>
+			            	</div>
+						</div>
 					</div>
 				</div>
+				<div class="row mobileOnlyReportFooter">
+					<span ng-click="detailedReportView()" class="view-all-btn-mobile">View Detailed Report</span>
+				</div>
 
-
-
-
-
-
+				
+	        
 	        </div>
+
+
+
+
+
 	    </div>
 	    </div>
 
@@ -223,42 +262,23 @@
 	<div class="row">
 		<div class="col-md-1"> </div>
 		<div class="col-md-3">
-            <div class="panel panel-default">
+            <div class="panel panel-bluegray">
               <div class="panel-heading">
                     <h2>Subject Strength</h2>
               </div>
               <div class="panel-body">
-                    <div id="subjectStrengthPieChart" style="width:100%; height: 240px" class="centered"></div>
+                    <div id="subjectStrengthPieChart" style="width:100%; height: 250px" class="centered"></div>
               </div>
             </div>
         </div>
-		<div class="col-md-3"> 
-			<div class="panel panel-default" id="subjectWiseAccuracy">
-              	<div class="panel-heading">
-                    <h2>Accuracy - Subject Wise</h2>
-              	</div>
-              	<div class="panel-body">
-              		<div style="height: 240px">
-		              	<div ng-repeat="sectionResponse in reportData.sectionWiseResponse track by $index">
-				          	<p class="subjectLine">{{sectionResponse.sectionName}}<i ng-if="sectionResponse.sectionName == reportData.mostScoredSection" class="fa fa-star subjectLineStar"></i></p>
-							<div class="progress" ng-init="coverage = getSubjectCoverage(sectionResponse.sectionSummary)">
-							    <div class="progress-bar progress-bar-success" ng-style="coverage.correct">{{ sectionResponse.sectionSummary.correct }}</div>
-							    <div class="progress-bar progress-bar-warning" ng-style="coverage.unattempted">{{ sectionResponse.sectionSummary.total - sectionResponse.sectionSummary.attempted }}</div>
-							    <div class="progress-bar progress-bar-danger" ng-style="coverage.wrong">{{ sectionResponse.sectionSummary.attempted - sectionResponse.sectionSummary.correct }}</div>
-							</div>
-				        </div>
-
-
-						<p class="subjectLine" style="font-size: 9px !important">
-							<i class="fa fa-circle" style="color: #4caf50 !important"></i> <tag>Correct</tag>
-							<i class="fa fa-circle" style="color: #ffc008 !important"></i> <tag>Unattempted</tag>
-							<i class="fa fa-circle" style="color: #e51c23 !important"></i> <tag>Wrong</tag>
-						</p>
-
-			        </div>
-
-
-            	</div>
+		<div class="col-md-3">
+			<div class="panel panel-bluegray">
+				<div class="panel-heading">
+					<h2>Section Wise Stats</h2>
+				</div>
+				<div class="panel-body">
+					<div id="earnings" style="height: 240px;" class="mt-sm mb-sm"></div>
+				</div>
 			</div>
 		</div>
 		<div class="col-md-4">
@@ -267,7 +287,7 @@
 					<h2>Topic Wise Accuracy</h2>
 				</div>
 				<div class="panel-body no-padding">
-					<div style="height: 240px;">
+					<div style="height: 260px;">
 						<table class="table browsers m-n">
 							<tbody>
 								<tr>
@@ -308,23 +328,13 @@
 
 	<div class="row">
 		<div class="col-md-1"> </div>
-		<div class="col-md-3">
-			<div class="panel panel-bluegray">
-				<div class="panel-heading">
-					<h2>Session Wise Stats</h2>
-				</div>
-				<div class="panel-body">
-					<div id="earnings" style="height: 272px;" class="mt-sm mb-sm"></div>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-7">
+		<div class="col-md-10">
 			<div class="panel panel-realtime">
                 <div class="panel-heading" id="timeDistributor">
                     <h2>Time Distribution</h2>
                     <p class="subjectLine" style="font-size: 9px !important; margin: 0; text-align: right;">
 						<i class="fa fa-square" style="color: #4caf50 !important"></i> <tag>Correct</tag>
-						<i class="fa fa-square" style="color: #ffc008 !important"></i> <tag>Spent time but not answered</tag>
+						<i class="fa fa-square" style="color: #899fa9 !important"></i> <tag>Spent time but not answered</tag>
 						<i class="fa fa-square" style="color: #e51c23 !important"></i> <tag>Wrongly answered</tag>
 					</p>
                 </div>
@@ -379,18 +389,22 @@
                                           <div class="panel-footer" style="background: #9e9e9e; padding: 10px;" ng-class="{'answerNotSetQuestion' : questionData.attempt != '' && questionData.attempt != questionData.answer, 'answerCorrectlySetQuestion' : questionData.attempt != '' && questionData.attempt == questionData.answer}">
                                              <div class="form-group">
                                                 <div class="col-sm-12" style="text-align: center;">
-                                                   <button class="btn" ng-class="{'btn-primary':questionData.attempt == 'A', 'btn-default':questionData.attempt != 'A'}">Option A
+                                                   <span class="btn" ng-class="{'submittedAnswerWrongButton':questionData.attempt == 'A' && questionData.answer != 'A',
+                                                   'submittedAnswerCorrectButton':questionData.attempt == 'A' && questionData.answer == 'A', 'otherOptionsButton':questionData.attempt != 'A'}">Option A
                                                    		<i class="fa fa-check-circle" style="color: #56e55a" ng-if="questionData.answer == 'A'"></i>
-                                                   </button>
-                                                   <button class="btn" ng-class="{'btn-primary':questionData.attempt == 'B', 'btn-default':questionData.attempt != 'B'}">Option B
+                                                   </span>
+                                                   <span class="btn" ng-class="{'submittedAnswerWrongButton':questionData.attempt == 'B' && questionData.answer != 'B',
+                                                   'submittedAnswerCorrectButton':questionData.attempt == 'B' && questionData.answer == 'B', 'otherOptionsButton':questionData.attempt != 'B'}">Option B
                                                    		<i class="fa fa-check-circle" style="color: #56e55a" ng-if="questionData.answer == 'B'"></i>
-                                               		</button>
-                                                   	<button class="btn" ng-class="{'btn-primary':questionData.attempt == 'C', 'btn-default':questionData.attempt != 'C'}">Option C
+                                                   </span>
+                                                   <span class="btn" ng-class="{'submittedAnswerWrongButton':questionData.attempt == 'C' && questionData.answer != 'C',
+                                                   'submittedAnswerCorrectButton':questionData.attempt == 'C' && questionData.answer == 'C', 'otherOptionsButton':questionData.attempt != 'C'}">Option C
                                                    		<i class="fa fa-check-circle" style="color: #56e55a" ng-if="questionData.answer == 'C'"></i>
-                                                   </button>
-                                                   <button class="btn" ng-class="{'btn-primary':questionData.attempt == 'D', 'btn-default':questionData.attempt != 'D'}">Option D
+                                                   </span>
+                                                   <span class="btn" ng-class="{'submittedAnswerWrongButton':questionData.attempt == 'D' && questionData.answer != 'D',
+                                                   'submittedAnswerCorrectButton':questionData.attempt == 'D' && questionData.answer == 'D', 'otherOptionsButton':questionData.attempt != 'D'}">Option D
                                                    		<i class="fa fa-check-circle" style="color: #56e55a" ng-if="questionData.answer == 'D'"></i>
-                                                   </button>
+                                                   </span>
                                                 </div>
                                              </div>
                                           </div>

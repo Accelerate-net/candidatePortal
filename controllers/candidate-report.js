@@ -34,6 +34,30 @@ angular.module('CandidateReportApp', ['ngCookies'])
     }
 
 
+    $scope.profileData = {};
+    $scope.fetchProfileData = function() {
+        $http({
+          method  : 'GET',
+          url     : 'https://crisprtech.app/crispr-apis/user/user-profile.php',
+          headers : {
+            'Content-Type': 'application/json',
+            'Authorization': getUserToken()
+          }
+         })
+         .then(function(response) {
+            if(response.data.status == "success"){
+                $scope.originaProfileData = response.data.data;
+                $scope.profileData = response.data.data;
+                $scope.profileFound = true;
+            } else {
+                $scope.profileFound = false;
+            }
+        });
+    }
+
+    $scope.fetchProfileData();
+
+
     function renderSectionWiseStatsBarChart(sectionWiseResponse) {
 			var d1 = sectionWiseResponse.map((section, index) => [index + 1, section.sectionSummary.total]);
 			var d2 = sectionWiseResponse.map((section, index) => [index + 1, section.sectionSummary.attempted]);
@@ -206,11 +230,9 @@ angular.module('CandidateReportApp', ['ngCookies'])
 
                 maxTimeSpent = Math.max(maxTimeSpent, timeSpent);
 
-                let color = attempt === "" ? "#ffc008" : attempt === answer ? "#4caf50" : "#e51c23";
+                let color = attempt === "" ? "#899fa9" : attempt === answer ? "#4caf50" : "#e51c23";
 
                 questionIdMap[sequentialOrder] = qi; // Store questionId for x position
-
-                console.log(`Mapping: X=${sequentialOrder}, questionId=${qi}`);
 
                 barData.push({
                     data: [[sequentialOrder, timeSpent]], // [x, y] pair
@@ -227,8 +249,6 @@ angular.module('CandidateReportApp', ['ngCookies'])
                 sequentialOrder++;
             });
         });
-
-        console.log("Final questionIdMap:", questionIdMap);
 
         angular.element(document).ready(function () {
             var plot = $.plot("#realtime-updates", barData, {
@@ -295,6 +315,7 @@ angular.module('CandidateReportApp', ['ngCookies'])
             });
         });
     };
+
 
     function getMinutes(seconds) {
     	if(seconds < 60)
@@ -363,12 +384,61 @@ angular.module('CandidateReportApp', ['ngCookies'])
 	};
 
 
+	$scope.getOverallCoverage = function(type, correct, unattempted, wrong) {
+	    var total = correct + unattempted + wrong;
+	    // Compute percentages
+	    var correctPercentage = (correct / total) * 100;
+	    var wrongPercentage = (wrong / total) * 100;
+	    var unattemptedPercentage = 100 - (correctPercentage + wrongPercentage); // Ensures total = 100%
+
+	    if(type == 'CORRECT') 
+	    	return { width: correctPercentage + '%' }
+	    else if(type == 'UNATTEMPTED') 
+	    	return { width: unattemptedPercentage + '%' }
+	    else if(type == 'WRONG') 
+	    	return { width: wrongPercentage + '%' }
+	};
+
+
+
+
     function renderGraphsAndCharts(reportData) {
     	renderSectionWiseStatsBarChart(reportData.sectionWiseResponse);
     	renderSubjectStrengthPieChart(reportData.sectionWiseResponse);
     	$scope.renderTimeDistributionBarChart(reportData.sectionWiseResponse);
     }
 
+
+	$scope.computeOverallStats = function(sectionResponse) {
+		
+		$scope.overallCorrect = 0;
+        $scope.overallIncorrect = 0;
+        $scope.overallUnattempted = 0;
+        $scope.overallScore = 0;
+
+	    if (!sectionResponse) {
+	        return;
+	    }
+
+	    var totalMarks = 0;
+	    var totalUnattempted = 0;
+	    var totalCorrect = 0;
+	    var totalIncorrect = 0;
+
+	    for (var i = 0; i < sectionResponse.length; i++) {
+	    	var summary = sectionResponse[i].sectionSummary;
+
+	    	totalMarks += summary.totalMarks;
+	    	totalCorrect += summary.correct;
+	    	totalUnattempted += (summary.total - summary.attempted);
+	    	totalIncorrect += (summary.attempted - summary.correct);
+	    }
+
+    	$scope.overallCorrect = totalCorrect;
+	    $scope.overallIncorrect = totalIncorrect;
+	    $scope.overallUnattempted = totalUnattempted;
+	    $scope.overallScore = totalMarks;
+	};
 
 
 
@@ -388,7 +458,7 @@ angular.module('CandidateReportApp', ['ngCookies'])
             if(response.data.status == "success"){
                 $scope.reportData = response.data.data;
                 $scope.reportDataFound = true;
-
+                $scope.computeOverallStats($scope.reportData.sectionWiseResponse);
 
             	renderGraphsAndCharts(response.data.data);
 
