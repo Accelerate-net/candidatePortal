@@ -25,7 +25,7 @@ angular.module('CandidateReportApp', ['ngCookies'])
     }
 
     function getUserToken() {
-        return "Bearer " + $cookies.get("crispriteUserToken");  
+    	return "Bearer " + $cookies.get("crispriteUserToken");  
     }
 
     function getReportIdPassed() {
@@ -203,7 +203,6 @@ angular.module('CandidateReportApp', ['ngCookies'])
 
 
     $scope.openQuestion = function (questionId) {
-    	console.log("openQuestion", $scope.reportData)
 		$scope.reportData.sectionWiseResponse.forEach(section => {
 		    section.questions.forEach(question => {
 
@@ -220,8 +219,6 @@ angular.module('CandidateReportApp', ['ngCookies'])
         let sequentialOrder = 1;
         let maxTimeSpent = 0;
         const questionIdMap = {}; // Map x-axis positions to questionIds
-
-        console.log("Processing Section Data...");
 
         // Process sectionWiseResponse to generate barData
         sectionWiseResponse.forEach((section, sectionIndex) => {
@@ -288,13 +285,8 @@ angular.module('CandidateReportApp', ['ngCookies'])
             $("#realtime-updates").bind("plotclick", function (event, pos, item) {
                 console.log("Plot clicked! Event detected.");
                 if (item) {
-                    console.log("Clicked on:", item);
                     const xValue = Math.round(item.datapoint[0]); // Ensure xValue is an integer
-                    console.log("Extracted X Value:", xValue);
-
                     const questionId = questionIdMap[xValue]; // Retrieve questionId
-                    console.log("Retrieved Question ID:", questionId);
-
                     if (questionId !== undefined) {
                         $scope.$apply(function () {
                             $scope.openQuestion(questionId);
@@ -310,7 +302,6 @@ angular.module('CandidateReportApp', ['ngCookies'])
             // Debugging: Highlight bars on hover
             $("#realtime-updates").bind("plothover", function (event, pos, item) {
                 if (item) {
-                    console.log("Hovering over bar:", item.datapoint);
                 }
             });
         });
@@ -442,6 +433,68 @@ angular.module('CandidateReportApp', ['ngCookies'])
 
 
 
+	$scope.topicLevelData = {};
+	$scope.computeTopicLevelAccuracy = function() {
+
+	    var topicStats = {};
+	    $scope.reportData.sectionWiseResponse.forEach(section => {
+	        section.questions.forEach(question => {
+	            const { topic, answer, attempt } = question;
+	            const attempted = attempt !== "";
+	            const correct = attempted && attempt === answer;
+
+	            if (!topicStats[topic]) {
+	                topicStats[topic] = { correct: 0, attempted: 0 };
+	            }
+
+	            if (attempted) {
+	                topicStats[topic].attempted++;
+	                if (correct) {
+	                    topicStats[topic].correct++;
+	                }
+	            }
+	        });
+	    });
+
+	    // Calculate accuracy
+	    const accuracyMap = {};
+	    for (const topic in topicStats) {
+	        accuracyMap[topic] = topicStats[topic].attempted > 0
+	            ? (topicStats[topic].correct / topicStats[topic].attempted) * 100
+	            : 0;
+	    }
+
+	    // Sort accuracyMap in descending order
+	   	$scope.topicLevelData = Object.entries(accuracyMap)
+	    .sort(([, a1], [, a2]) => a2 - a1) // Sort by accuracy in descending order
+	    .map(([topic, accuracy]) => ({ topic: parseInt(topic, 10), accuracy: Math.round(accuracy) })); // Convert topic to integer and round accuracy
+
+	}
+
+    $scope.getTopicAccuracyPercentageStyling = function (accuracy) {
+        return {
+            "width": accuracy + "px"
+        };
+    };
+
+
+    //This mapping to be aligned with backend config.
+	const uniqueTopicsMap = {
+		0: "Uncategorised",
+	    1: "Plus One - Physics",
+	    2: "Plus One - Chemistry",
+	    3: "Plus One - Mathematics",
+	    4: "Plus One - Biology",
+	    5: "Plus Two - Physics",
+	    6: "Plus Two - Chemistry",
+	    7: "Plus Two - Mathematics",
+	    8: "Plus Two - Biology"
+	};
+
+    $scope.getTopicNameFromCode = function(topic) {
+    	return uniqueTopicsMap[topic] ? uniqueTopicsMap[topic] : uniqueTopicsMap[0];
+    }
+
 
     $scope.reportDataFound = false;
     $scope.reportData = {};
@@ -460,6 +513,7 @@ angular.module('CandidateReportApp', ['ngCookies'])
                 $scope.reportDataFound = true;
                 $scope.computeOverallStats($scope.reportData.sectionWiseResponse);
 
+                $scope.computeTopicLevelAccuracy();
             	renderGraphsAndCharts(response.data.data);
 
             } else {
@@ -477,11 +531,50 @@ angular.module('CandidateReportApp', ['ngCookies'])
 
 
     $scope.viewQuestionAndAnswer = function(questionData, sectionName){
-    	console.log(questionData)
     	$('#questionPreviewModal').modal('show'); 
     	$scope.questionData = questionData; 
     	$scope.questionData.sectionName = sectionName;
     	$scope.questionData.url = "https://crisprtech.app/crispr-apis/user/render-question.php?id=" + questionData['qi'];    	
   	}
   	
+
+
+  	//Report Computations
+  	$scope.getTotalScoreIcon = function() {
+  		var currentScore = $scope.reportData.totalScore;
+  		var previousTestScore = parseInt($scope.reportData.previousScoreInSeries);
+  		if(currentScore >= previousTestScore)
+  			return "ti ti-stats-up greenTileIcon";
+  		else 
+  			return "ti ti-stats-down redTileIcon";
+  	}
+
+  	$scope.getTotalScoreDeviation = function() {
+  		return $scope.reportData.totalScore - parseInt($scope.reportData.previousScoreInSeries);
+  	}
+
+  	$scope.getStrikeRateIcon = function() {
+  		var currentStrikeRate = $scope.reportData.strikeRate;
+  		var previousStrikeRate = parseInt($scope.reportData.previousStrikeRateInSeries);
+  		if(currentStrikeRate >= previousStrikeRate)
+  			return "greenTileIcon";
+  		else 
+  			return "redTileIcon";
+  	}
+
+  	$scope.getStrikeRateDeviation = function() {
+  		return $scope.reportData.strikeRate - parseInt($scope.reportData.previousStrikeRateInSeries);
+  	}
+
+  	$scope.getPercentageWrapped = function(value) {
+  		return (value / 100).toFixed(0);
+  	}
+
+  	$scope.wrapGlobalAverage = function() {
+  		return (parseInt($scope.reportData.globalAverage) / 100).toFixed(0);
+  	}
+
+
+
+
 });

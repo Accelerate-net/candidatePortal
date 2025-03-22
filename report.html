@@ -86,30 +86,30 @@
 				<div class="reportSummaryContainer">
 					<div class="reportSummaryTileHolder">
 						<div class="info-tile tile-success reportSummaryTile">
-							<div class="tile-icon"><i class="ti ti-stats-up greenTileIcon"></i></div>
+							<div class="tile-icon"><i ng-class="getTotalScoreIcon()"></i></div>
 							<div class="tile-heading summaryTimesHeaderText"><span>Score</span></div>
-							<div class="tile-body"><span>{{reportData.totalScore}} / 240</span></div>
+							<div class="tile-body"><span>{{reportData.totalScore}} / {{reportData.scoreBase}}</span></div>
 							<div class="tile-footer">
-								<span class="text-success greenTileIcon" ng-if="reportData.totalScoreDeviation >= 0">
-									+{{reportData.totalScoreDeviation}} marks<i class="ti ti-arrow-up reportSummaryFooterIcon"></i>
+								<span class="text-success greenTileIcon" ng-if="getTotalScoreDeviation() >= 0">
+									+{{getTotalScoreDeviation()}} marks from last test<i class="ti ti-arrow-up reportSummaryFooterIcon"></i>
 								</span>
-								<span class="text-success redTileIcon" ng-if="reportData.totalScoreDeviation < 0">
-									{{reportData.totalScoreDeviation}} marks<i class="ti ti-arrow-down reportSummaryFooterIcon"></i>
+								<span class="text-success redTileIcon" ng-if="getTotalScoreDeviation() < 0">
+									{{getTotalScoreDeviation()}} marks from last test<i class="ti ti-arrow-down reportSummaryFooterIcon"></i>
 								</span>
 							</div>
 						</div>
 					</div>
 					<div class="reportSummaryTileHolder">
 						<div class="info-tile tile-success reportSummaryTile">
-							<div class="tile-icon"><i class="ti ti-bolt redTileIcon"></i></div>
+							<div class="tile-icon"><i class="ti ti-bolt" ng-class="getStrikeRateIcon()"></i></div>
 							<div class="tile-heading summaryTimesHeaderText"><span>Strike Rate</span></div>
-							<div class="tile-body"><span>{{(reportData.strikeRate).toFixed(1)}}%</span></div>
+							<div class="tile-body"><span>{{getPercentageWrapped(reportData.strikeRate)}}%</span></div>
 							<div class="tile-footer">
-								<span class="text-danger greenTileIcon" ng-if="reportData.strikeRateDeviation >= 0">
-								 +{{reportData.strikeRateDeviation}}% down<i class="ti ti-arrow-up reportSummaryFooterIcon"></i>
+								<span class="text-danger greenTileIcon" ng-if="getStrikeRateDeviation() >= 0">
+								 +{{getPercentageWrapped(getStrikeRateDeviation())}}% up from last test<i class="ti ti-arrow-up reportSummaryFooterIcon"></i>
 								</span>
-								<span class="text-danger redTileIcon" ng-if="reportData.strikeRateDeviation < 0">
-								 {{reportData.strikeRateDeviation}}% down<i class="ti ti-arrow-down reportSummaryFooterIcon"></i>
+								<span class="text-danger redTileIcon" ng-if="getStrikeRateDeviation() < 0">
+								 {{getPercentageWrapped(getStrikeRateDeviation())}}% down from last test<i class="ti ti-arrow-down reportSummaryFooterIcon"></i>
 								</span>
 							</div>
 						</div>
@@ -118,8 +118,8 @@
 						<div class="info-tile tile-info reportSummaryTile">
 							<div class="tile-icon"><i class="ti ti-medall blueTileIcon"></i></div>
 							<div class="tile-heading summaryTimesHeaderText"><span>Position</span></div>
-							<div class="tile-body"><span>{{reportData.globalAverage}} / {{reportData.scoreBase}}</span></div>
-							<div class="tile-footer"><span class="text-info" style="color: #616161"> global average<i class="ti ti-world reportSummaryFooterIcon"></i></span></div>
+							<div class="tile-body"><span>{{wrapGlobalAverage()}} / {{reportData.scoreBase}}</span></div>
+							<div class="tile-footer"><span class="text-info" style="color: #616161"> average of all candidates<i class="ti ti-world reportSummaryFooterIcon"></i></span></div>
 						</div>
 					</div>
 					<div class="reportSummaryTileHolder">
@@ -138,9 +138,9 @@
 									</div>
 									<div class="toughnessTileItem">
 									  <div class="toughnessTileCircle toughnessTileYellow">
-									    <div class="toughnessTileTop">{{reportData.questionLevel['3']['attempted']}}</div>
+									    <div class="toughnessTileTop">{{reportData.questionLevel['2']['attempted']}}</div>
 									    <div class="toughnessTileLine"></div>
-									    <div class="toughnessTileBottom">{{reportData.questionLevel['3']['total']}}</div>
+									    <div class="toughnessTileBottom">{{reportData.questionLevel['2']['total']}}</div>
 									  </div>
 									  <div class="toughnessTileLabel">Medium</div>
 									</div>
@@ -180,9 +180,14 @@
 
 							                    <!-- Icons (Second Row) -->
 							                    <div class="responseSheetNumbers">
-							                        <span class="responseSheetIcon" ng-repeat="questionItem in sectionResponse.questions track by $index" ng-class="{'wrongAnswer' : (questionItem.attempt != '' && questionItem.answer != questionItem.attempt), 'correctAnswer' : (questionItem.attempt != '' && questionItem.answer == questionItem.attempt)}" ng-click="viewQuestionAndAnswer(questionItem, sectionResponse.sectionName)">
-							                            {{questionItem.order}}
-							                        </span>
+							                        <span class="responseSheetIcon" 
+													      ng-repeat="questionItem in sectionResponse.questions | orderBy:'order' track by questionItem.order"
+													      ng-class="{'wrongAnswer' : (questionItem.attempt != '' && questionItem.answer != questionItem.attempt), 
+													                 'correctAnswer' : (questionItem.attempt != '' && questionItem.answer == questionItem.attempt)}"
+													      ng-click="viewQuestionAndAnswer(questionItem, sectionResponse.sectionName)">
+													    {{questionItem.order}}
+													</span>
+
 							                    </div>
 							                </div>
 							            </div>
@@ -262,16 +267,6 @@
 	<div class="row">
 		<div class="col-md-1"> </div>
 		<div class="col-md-3">
-            <div class="panel panel-bluegray">
-              <div class="panel-heading">
-                    <h2>Subject Strength</h2>
-              </div>
-              <div class="panel-body">
-                    <div id="subjectStrengthPieChart" style="width:100%; height: 250px" class="centered"></div>
-              </div>
-            </div>
-        </div>
-		<div class="col-md-3">
 			<div class="panel panel-bluegray">
 				<div class="panel-heading">
 					<h2>Section Wise Stats</h2>
@@ -281,39 +276,31 @@
 				</div>
 			</div>
 		</div>
+		<div class="col-md-3">
+            <div class="panel panel-bluegray">
+              <div class="panel-heading">
+                    <h2>Subject Strength</h2>
+              </div>
+              <div class="panel-body">
+                    <div id="subjectStrengthPieChart" style="width:100%; height: 250px" class="centered"></div>
+              </div>
+            </div>
+        </div>
 		<div class="col-md-4">
 			<div class="panel panel-teal">
 				<div class="panel-heading">
 					<h2>Topic Wise Accuracy</h2>
 				</div>
 				<div class="panel-body no-padding">
-					<div style="height: 260px;">
+					<div style="height: 280px; overflow: auto;">
 						<table class="table browsers m-n">
 							<tbody>
-								<tr>
-									<td>Organic Chemistry</td>
-									<td class="text-right">0%</td>
-									<td class="vam" style="width: 56px;">
+								<tr ng-repeat="(topic, accuracy) in topicLevelData">
+									<td>{{getTopicNameFromCode(accuracy.topic)}}</td>
+									<td class="text-right">{{accuracy.accuracy}}%</td>
+									<td class="vam" style="width: 120px;">
 										<div class="progress m-n">
-		                                  <div class="progress-bar progress-bar-teal" style="width: 100%"></div>
-		                                </div>
-		                            </td>
-								</tr>
-								<tr>
-									<td>Inorganic Chemistry</td>
-									<td class="text-right">0%</td>
-									<td class="vam" style="width: 56px;">
-										<div class="progress m-n">
-		                                  <div class="progress-bar progress-bar-teal" style="width: 100%"></div>
-		                                </div>
-		                            </td>
-								</tr>
-								<tr>
-									<td>Physical Chemistry</td>
-									<td class="text-right">0%</td>
-									<td class="vam" style="width: 56px;">
-										<div class="progress m-n">
-		                                  <div class="progress-bar progress-bar-teal" style="width: 100%"></div>
+		                                  <div class="progress-bar progress-bar-teal" ng-style="getTopicAccuracyPercentageStyling(accuracy.accuracy)"></div>
 		                                </div>
 		                            </td>
 								</tr>
@@ -381,12 +368,15 @@
                                           <div class="panel-body" style="position: relative; padding: 0;">
                                              <span class="label label-primary subjectLabel">{{questionData.sectionName}} <tag ng-class="{'redLevelIcon' : questionData.level == 'Hard', 'greenLevelIcon' : questionData.level == 'Easy', 'yellowLevelIcon' : questionData.level == 'Medium'}"><i class="fa  fa-angle-double-right"></i> {{questionData.level}}</tag></span>
                                              <span class="label label-primary" style="margin: 0; position: absolute; left: 10px; top: 10px; font-size: 16px; z-index: 10;" ng-class="{'modalNegativeMarks' : questionData.marks < 0, 'modalZeroMarks': questionData.marks == 0, 'modalPositiveMarks' : questionData.marks > 0}">{{questionData.marks}} Marks</span>
-                                             <div class="scrollable-content" style="height: 400px; overflow-y: auto; padding-top: 20px;">
+                                             <div class="scrollable-content" style="height: 400px; overflow-y: auto; margin-top: 40px;">
                                                 <img ng-src="{{questionData.url}}" width="100%">
                                              </div>
                                           </div>
 
                                           <div class="panel-footer" style="background: #9e9e9e; padding: 10px;" ng-class="{'answerNotSetQuestion' : questionData.attempt != '' && questionData.attempt != questionData.answer, 'answerCorrectlySetQuestion' : questionData.attempt != '' && questionData.attempt == questionData.answer}">
+                                          	 <p ng-if="questionData.attempt != '' && questionData.attempt != questionData.answer" style=" margin: 0 0 10px 0; text-align: center; color: #cc2d33; font-size: 16px; ">Oho, you marked it wrong.</p>
+                                          	 <p ng-if="questionData.attempt != '' && questionData.attempt == questionData.answer" style=" margin: 0 0 10px 0; text-align: center; color: #39733b; font-size: 16px; ">Great! That's the right answer.</p>
+                                          	 <p ng-if="questionData.attempt == ''" style="margin: 0 0 10px 0;text-align: center;color: #636363;font-size: 16px;">Hmm, you did not attempt this question.</p>
                                              <div class="form-group">
                                                 <div class="col-sm-12" style="text-align: center;">
                                                    <span class="btn" ng-class="{'submittedAnswerWrongButton':questionData.attempt == 'A' && questionData.answer != 'A',
