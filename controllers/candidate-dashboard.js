@@ -184,6 +184,7 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
     $scope.courseIdOpen;
     $scope.courseNameOpen;
     $scope.courseListing = {};
+    $scope.courseListingFound = false;
     $scope.getCourseListingData = function(id) {
         $scope.courseIdOpen = id;
         $http({
@@ -205,7 +206,7 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
                 }
 
                 //Render progress chart if applicable
-                if($scope.courseListing && $scope.courseListing.coursesList && $scope.courseListing.coursesList.length > 0) {
+                if($scope.showProgressChart()) {
                     renderProgressBarChart($scope.courseListing.coursesList);
                 }
             } else {
@@ -299,6 +300,13 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
                 }
             }
         });
+    }
+
+    //To show or hide progress chart = min 1 attempt
+    $scope.showProgressChart = function() {
+        if($scope.courseListingFound)
+            return $scope.courseListing.coursesList.filter(course => course.previousAttemptId).length > 1;
+        return false;
     }
 
     //view last attempt report
