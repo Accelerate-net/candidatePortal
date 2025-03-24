@@ -81,7 +81,6 @@
 	        <p class="module-description">
 	        	{{reportData.customisedSummary}}
 	            Great job on completing your mock test! Every attempt brings you one step closer to mastering the exam. Keep practicing, analyze your performance, and strive for continuous improvement — success is built through consistency! 🚀
-	        	}
 	        </p>
 
 				<div class="reportSummaryContainer">
@@ -91,7 +90,7 @@
 							<div class="tile-heading summaryTimesHeaderText"><span>Score</span></div>
 							<div class="tile-body"><span>{{reportData.totalScore}} / {{reportData.scoreBase}}</span></div>
 							<div class="tile-footer">
-								<span class="text-success greenTileIcon" ng-if="getTotalScoreDeviation() >= 0">
+								<span class="text-success greenTileIcon" ng-if="getTotalScoreDeviation() > 0">
 									+{{getTotalScoreDeviation()}} marks from last test<i class="ti ti-arrow-up reportSummaryFooterIcon"></i>
 								</span>
 								<span class="text-success redTileIcon" ng-if="getTotalScoreDeviation() < 0">
@@ -106,7 +105,7 @@
 							<div class="tile-heading summaryTimesHeaderText"><span>Strike Rate</span></div>
 							<div class="tile-body"><span>{{getPercentageWrapped(reportData.strikeRate)}}%</span></div>
 							<div class="tile-footer">
-								<span class="text-danger greenTileIcon" ng-if="getStrikeRateDeviation() >= 0">
+								<span class="text-danger greenTileIcon" ng-if="getStrikeRateDeviation() > 0">
 								 +{{getPercentageWrapped(getStrikeRateDeviation())}}% up from last test<i class="ti ti-arrow-up reportSummaryFooterIcon"></i>
 								</span>
 								<span class="text-danger redTileIcon" ng-if="getStrikeRateDeviation() < 0">
@@ -119,7 +118,7 @@
 						<div class="info-tile tile-info reportSummaryTile">
 							<div class="tile-icon"><i class="ti ti-medall blueTileIcon"></i></div>
 							<div class="tile-heading summaryTimesHeaderText"><span>Position</span></div>
-							<div class="tile-body"><span>{{wrapGlobalAverage()}} / {{reportData.scoreBase}}</span></div>
+							<div class="tile-body"><span>{{reportData.globalAverage}} / {{reportData.scoreBase}}</span></div>
 							<div class="tile-footer"><span class="text-info" style="color: #616161"> average of all candidates<i class="ti ti-world reportSummaryFooterIcon"></i></span></div>
 						</div>
 					</div>
