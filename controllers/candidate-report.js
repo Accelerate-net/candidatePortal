@@ -156,50 +156,53 @@ angular.module('CandidateReportApp', ['ngCookies'])
     }
 
 
-    function renderSubjectStrengthPieChart(sectionWiseResponse) {
+	function renderSubjectStrengthPieChart(sectionWiseResponse) {
+	    // Calculate total score
+	    var totalCorrect = sectionWiseResponse.reduce((sum, section) => sum + section.sectionSummary.correct, 0);
+	    // Compute section-wise percentage contribution, setting negative values to 0
+	    var datax2 = sectionWiseResponse.map(section => {
+	        let percentage = totalCorrect > 1 ? (section.sectionSummary.correct / totalCorrect) * 100 : 0;
+	        percentage = Math.max(0, percentage).toFixed(2); // If negative, set to 0
+	        return {
+	            label: section.sectionName,
+	            data: percentage,
+	            color: Utility.getBrandColor(
+	                section.sectionName === "Physics" ? "danger" :
+	                section.sectionName === "Chemistry" ? "warning" :
+	                section.sectionName === "Mathematics" ? "midnightblue" : "info"
+	            )
+	        };
+	    });
 
+	    // Check if all values are 0
+	    var allZero = datax2.every(section => section.data < 1);
 
-    	// Calculate total score
-		var totalCorrect = sectionWiseResponse.reduce((sum, section) => sum + section.sectionSummary.correct, 0);
+	    if (totalCorrect == 0 || allZero) {
+	        $("#subjectStrengthPieChart").html("<p style='font-size: 14px; font-weight: 400; color: #c2c2c2; text-align: center;'>You have not scored in any of the Subjects.</p>");
+	        return;
+	    }
 
-		// Compute section-wise percentage contribution, setting negative values to 0
-		var datax2 = sectionWiseResponse.map(section => {
-		    let percentage = (section.sectionSummary.correct / totalCorrect) * 100;
-		    percentage = Math.max(0, percentage).toFixed(2); // If negative, set to 0
+	    // Render DONUT chart
+	    $.plot($("#subjectStrengthPieChart"), datax2, {
+	        series: {
+	            pie: {
+	                innerRadius: 0.5,
+	                show: true
+	            }
+	        },
+	        legend: {
+	            show: false
+	        },
+	        grid: {
+	            hoverable: true
+	        },
+	        tooltip: true,
+	        tooltipOpts: {
+	            content: "%p.0%, %s"
+	        }
+	    });
+	}
 
-		    return {
-		        label: section.sectionName,
-		        data: percentage,
-		        color: Utility.getBrandColor(
-		            section.sectionName === "Physics" ? "danger" :
-		            section.sectionName === "Chemistry" ? "warning" :
-		            section.sectionName === "Mathematics" ? "midnightblue" : "info"
-		        )
-		    };
-		});
-
-	        // DONUT
-	        $.plot($("#subjectStrengthPieChart"), datax2,
-	            {
-	                series: {
-	                        pie: {
-	                                innerRadius: 0.5,
-	                                show: true
-	                        }
-	                },
-	                legend: {
-	                    show: false
-	                },
-	                grid: {
-	                    hoverable: true
-	                },
-	                tooltip: true,
-	                tooltipOpts: {
-	                    content: "%p.0%, %s"
-	                }
-
-	            });
-    }
 
 
     $scope.openQuestion = function (questionId) {
