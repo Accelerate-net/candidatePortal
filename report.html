@@ -89,7 +89,7 @@
 							<div class="tile-icon"><i ng-class="getTotalScoreIcon()"></i></div>
 							<div class="tile-heading summaryTimesHeaderText"><span>Score</span></div>
 							<div class="tile-body"><span>{{reportData.totalScore}} / {{reportData.scoreBase}}</span></div>
-							<div class="tile-footer">
+							<div class="tile-footer" ng-if="reportData.hasOtherAttempts">
 								<span class="text-success greenTileIcon" ng-if="getTotalScoreDeviation() > 0">
 									+{{getTotalScoreDeviation()}} marks from last test<i class="ti ti-arrow-up reportSummaryFooterIcon"></i>
 								</span>
@@ -104,7 +104,7 @@
 							<div class="tile-icon"><i class="ti ti-bolt" ng-class="getStrikeRateIcon()"></i></div>
 							<div class="tile-heading summaryTimesHeaderText"><span>Strike Rate</span></div>
 							<div class="tile-body"><span>{{getPercentageWrapped(reportData.strikeRate)}}%</span></div>
-							<div class="tile-footer">
+							<div class="tile-footer" ng-if="reportData.hasOtherAttempts">
 								<span class="text-danger greenTileIcon" ng-if="getStrikeRateDeviation() > 0">
 								 +{{getPercentageWrapped(getStrikeRateDeviation())}}% up from last test<i class="ti ti-arrow-up reportSummaryFooterIcon"></i>
 								</span>
@@ -166,7 +166,7 @@
 		        <div class="row">
 			        <div class="col-md-7">
 						<div class="panel responseSheetContainer">
-							<h2 class="responseSheetHeader">Response Sheet of <b>{{reportData.title}}</b></h2>
+							<h2 class="responseSheetHeader">Response Sheet of <b>{{reportData.title}}</b> taken at {{reportData.startedAt}}</h2>
 							<div class="panel-body" style="padding: 0; background: none;">
 
 									<div class="alert alert-info mb-xl responseSheetHeaderLiner">
