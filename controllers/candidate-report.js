@@ -214,98 +214,139 @@ angular.module('CandidateReportApp', ['ngCookies'])
 		});    		
     };
 
+
     $scope.renderTimeDistributionBarChart = function (sectionWiseResponse) {
-        const barData = [];
-        let sequentialOrder = 1;
-        let maxTimeSpent = 0;
-        const questionIdMap = {}; // Map x-axis positions to questionIds
+	    const barData = [];
+	    let sequentialOrder = 1;
+	    let maxTimeSpent = 0;
+	    const questionIdMap = {}; // Map x-axis positions to questionIds
 
-        // Process sectionWiseResponse to generate barData
-        sectionWiseResponse.forEach((section, sectionIndex) => {
-            section.questions.forEach((question, questionIndex) => {
-                const { qi, timeSpent, answer, attempt } = question;
+	    // Process sectionWiseResponse to generate barData
+	    sectionWiseResponse.forEach((section, sectionIndex) => {
+	        section.questions.forEach((question, questionIndex) => {
+	            const { qi, timeSpent, answer, attempt } = question;
 
-                maxTimeSpent = Math.max(maxTimeSpent, timeSpent);
+	            maxTimeSpent = Math.max(maxTimeSpent, timeSpent);
 
-                let color = attempt === "" ? "#899fa9" : attempt === answer ? "#4caf50" : "#e51c23";
+	            let color = attempt === "" ? "#899fa9" : attempt === answer ? "#4caf50" : "#e51c23";
 
-                questionIdMap[sequentialOrder] = qi; // Store questionId for x position
+	            questionIdMap[sequentialOrder] = qi; // Store questionId for x position
 
-                barData.push({
-                    data: [[sequentialOrder, timeSpent]], // [x, y] pair
-                    color: color,
-                    bars: {
-                        show: true,
-                        lineWidth: 0,
-                        barWidth: 0.75,
-                        fill: 0.4,
-                        fillColor: color
-                    }
-                });
+	            barData.push({
+	                data: [[sequentialOrder, timeSpent]], // [x, y] pair
+	                color: color,
+	                bars: {
+	                    show: true,
+	                    lineWidth: 0,
+	                    barWidth: 0.75,
+	                    fill: 0.4,
+	                    fillColor: color
+	                }
+	            });
 
-                sequentialOrder++;
-            });
-        });
+	            sequentialOrder++;
+	        });
+	    });
 
-        angular.element(document).ready(function () {
-            var plot = $.plot("#realtime-updates", barData, {
-                series: {
-                    bars: { show: true, lineWidth: 0, barWidth: 0.75, fill: 0.4 },
-                    shadowSize: 0
-                },
-                grid: {
-                    labelMargin: 8,
-                    hoverable: true,
-                    clickable: true, // Enable clicking
-                    borderWidth: 0,
-                    borderColor: '#f5f5f5'
-                },
-                yaxis: {
-                    min: 0,
-                    max: maxTimeSpent + 10,
-                    ticks: generateTicks(maxTimeSpent),
-                    tickColor: '#f5f5f5',
-                    font: { color: '#bdbdbd', size: 12 }
-                },
-                xaxis: {
-                    show: true,
-                    ticks: generateXTicks(sequentialOrder - 1)
-                },
-                tooltip: true,
-                tooltipOpts: {
-				    content: function(label, x, y, item) {
-				        const xValue = Math.round(x); // Ensure xValue is an integer
-				        const questionId = questionIdMap[xValue]; // Retrieve question ID
-				        return formatTooltipContent(questionId, xValue, y);
-				    }
-				}
-            });
+	    angular.element(document).ready(function () {
+	        var plot = $.plot("#realtime-updates", barData, {
+	            series: {
+	                bars: { show: true, lineWidth: 0, barWidth: 0.75, fill: 0.4 },
+	                shadowSize: 0
+	            },
+	            grid: {
+	                labelMargin: 8,
+	                hoverable: true,
+	                clickable: true, // Enable clicking
+	                borderWidth: 0,
+	                borderColor: '#f5f5f5'
+	            },
+	            yaxis: {
+	                min: 0,
+	                max: maxTimeSpent + 10,
+	                ticks: generateTicks(maxTimeSpent),
+	                tickColor: '#f5f5f5',
+	                font: { color: '#bdbdbd', size: 12 }
+	            },
+	            xaxis: {
+	                show: true,
+	                ticks: generateXTicks(sequentialOrder - 1)
+	            },
+	            tooltip: true,
+	            tooltipOpts: {
+	                content: function(label, x, y, item) {
+	                    const xValue = Math.round(x); // Ensure xValue is an integer
+	                    const questionId = questionIdMap[xValue]; // Retrieve question ID
+	                    return formatTooltipContent(questionId, xValue, y);
+	                }
+	            }
+	        });
 
-            // Handle bar click event
-            $("#realtime-updates").bind("plotclick", function (event, pos, item) {
-                console.log("Plot clicked! Event detected.");
-                if (item) {
-                    const xValue = Math.round(item.datapoint[0]); // Ensure xValue is an integer
-                    const questionId = questionIdMap[xValue]; // Retrieve questionId
-                    if (questionId !== undefined) {
-                        $scope.$apply(function () {
-                            $scope.openQuestion(questionId);
-                        });
-                    } else {
-                        console.error(`No questionId found for xValue: ${xValue}`);
-                    }
-                } else {
-                    console.log("No item detected on click.");
-                }
-            });
+	        // Handle bar click event
+	        $("#realtime-updates").bind("plotclick", function (event, pos, item) {
+	            console.log("Plot clicked! Event detected.");
+	            if (item) {
+	                const xValue = Math.round(item.datapoint[0]); // Ensure xValue is an integer
+	                const questionId = questionIdMap[xValue]; // Retrieve questionId
+	                if (questionId !== undefined) {
+	                    $scope.$apply(function () {
+	                        $scope.openQuestion(questionId);
+	                    });
+	                } else {
+	                    console.error(`No questionId found for xValue: ${xValue}`);
+	                }
+	            } else {
+	                console.log("No item detected on click.");
+	            }
+	        });
 
-            // Debugging: Highlight bars on hover
-            $("#realtime-updates").bind("plothover", function (event, pos, item) {
-                if (item) {
-                }
-            });
-        });
-    };
+	        // Debugging: Highlight bars on hover
+	        $("#realtime-updates").bind("plothover", function (event, pos, item) {
+	            if (item) {
+	            }
+	        });
+	    });
+
+	    // Generate ticks for y-axis with max 10 values
+	    function generateTicks(maxValue) {
+	        const tickCount = 10; // Limit to 10 ticks
+	        const step = Math.ceil(maxValue / tickCount); // Step size for ticks
+	        const ticks = [];
+
+	        for (let i = 0; i <= tickCount; i++) {
+	            ticks.push([i * step, getMinutes(i * step)]);
+	        }
+
+	        // Ensure that the last tick is exactly maxValue
+	        if (ticks[ticks.length - 1] !== maxValue) {
+	            ticks[ticks.length - 1] = [maxValue, getMinutes(maxValue)];
+	        }
+
+	        return ticks;
+	    }
+
+	    // Generate x-axis ticks with first, last, and every 5th item
+	    function generateXTicks(totalQuestions) {
+	        const ticks = [];
+	        const step = 5; // Show every 5th item
+
+	        // Add the first item
+	        ticks.push([1, 'Q1']); // Assuming questions are labeled like 'Q1', 'Q2', ...
+	        
+	        // Add every 5th item
+	        for (let i = step; i <= totalQuestions; i += step) {
+	            ticks.push([i, 'Q' + i]);
+	        }
+
+	        // Add the last item
+	        if (totalQuestions !== 1 && ticks[ticks.length - 1][0] !== totalQuestions) {
+	            ticks.push([totalQuestions, 'Q' + totalQuestions]);
+	        }
+
+	        return ticks;
+	    }
+	};
+
 
 
     function getMinutes(seconds) {
