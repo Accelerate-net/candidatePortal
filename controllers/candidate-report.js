@@ -537,7 +537,7 @@ angular.module('CandidateReportApp', ['ngCookies'])
     }
 
 
-    $scope.reportDataFound = false;
+    $scope.reportDataFound = true;
     $scope.reportData = {};
     $scope.fetchReportData = function() {
         $http({
