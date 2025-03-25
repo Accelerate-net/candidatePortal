@@ -34,8 +34,12 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
 
         if(action == "ATTEMPT" && courseCode != "" && examCode != "") {
             var buttonId = "attempt_" + courseCode + "_" + examCode;
-            if(document.getElementById(buttonId))
+            if(document.getElementById(buttonId)) {
                 document.getElementById(buttonId).click();
+
+                //Clear URL Params
+                window.history.replaceState(null, "", window.location.pathname);
+            }
         }
     }
 

@@ -91,9 +91,7 @@
             const childMetadata = urlParams.get('childMetadata'); //Exam ID
 
             var path = "/";
-            if(action == "CHECKOUT" && parentMetadata != null) {
-                path = "/secure-checkout/checkout.html?addItem=" + parentMetadata;
-            } else if(action == "ATTEMPT" && parentMetadata != null && parentMetadata != null) {
+            if(action == "ATTEMPT" && parentMetadata != null && parentMetadata != null) {
                 path = "/dashboard.html?action=ATTEMPT&courseCode=" + parentMetadata + "&examCode=" + childMetadata;
             } else {
                 path = "/dashboard.html"; //Default show dashboard
