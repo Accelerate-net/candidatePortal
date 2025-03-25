@@ -153,7 +153,10 @@ $(document).ready(function() {
 		        for (var i = 0; i < myCart.length; i++) {
 		            var cartItem = myCart[i];
 		            if (cartItem.itemId == courseId) {
-		                cartItem.number++;
+
+		            	if(cartItem.type != "Course" && cartItem.type != "Test Series") //Course and Test Series Only 1 number at a time.
+		                	cartItem.number++;
+
 		                isFound = true;
 		            }
 		        }
