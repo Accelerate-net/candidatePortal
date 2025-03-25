@@ -166,7 +166,7 @@
 									                <h5>{{courseItem.title}}</h5>
 									                <p class="multiline-ellipsis">{{courseItem.brief}}</p>
 									                <span ng-if="!courseItem.locked">
-									                	<a ng-click="attemptExam(courseItem.key, courseListing.currentTestSeriesInfo.series)" ng-if="courseItem.availableForAttempt">
+									                	<a ng-click="attemptExam(courseItem.key, courseListing.currentTestSeriesInfo.series)" ng-if="courseItem.availableForAttempt" id="{{ 'attempt_' + courseListing.currentTestSeriesInfo.code + '_' + courseItem.key }}">
 									                		<tag ng-if="courseItem.previousAttemptId">Attempt Again</tag>
 									                		<tag ng-if="!courseItem.previousAttemptId">Attempt Now</tag>
 									                	</a>

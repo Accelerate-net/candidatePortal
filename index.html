@@ -114,8 +114,8 @@
 
         function checkIfLoggedIn() {
             if(getCookieByNameForLogin('crispriteUserToken')) {
-                //directly go to dashboard
-                window.location.href = "../dashboard.html";
+                //directly go to dashboard (or attempt exam or purchase)
+                redirectPostSuccessfulLogin();
             }
         }
 
