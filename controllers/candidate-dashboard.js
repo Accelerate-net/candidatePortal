@@ -24,6 +24,22 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
       }
     }
 
+
+    //By default click on a given "Attempt Exam" button if coming from Login page
+    function defaultButtonClick() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const action = urlParams.get('action');
+        const courseCode = urlParams.get('courseCode');
+        const examCode = urlParams.get('examCode');  
+
+        if(action == "ATTEMPT" && courseCode != "" && examCode != "") {
+            var buttonId = "attempt_" + courseCode + "_" + examCode;
+            if(document.getElementById(buttonId))
+                document.getElementById(buttonId).click();
+        }
+    }
+
+
     function getUserToken() {
         return "Bearer " + $cookies.get("crispriteUserToken");  
     }
@@ -209,6 +225,11 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
                 if($scope.showProgressChart()) {
                     renderProgressBarChart($scope.courseListing.coursesList);
                 }
+
+                setTimeout(() => {
+                    defaultButtonClick();
+                }, 500);
+
             } else {
                 $scope.courseListingFound = false;
             }

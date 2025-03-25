@@ -83,6 +83,29 @@
 
     <script>
 
+        function getRedirectURL() {
+            const baseURL = window.location.origin;
+            const urlParams = new URLSearchParams(window.location.search);
+            const action = urlParams.get('action');
+            const parentMetadata = urlParams.get('parentMetadata'); //Course Code
+            const childMetadata = urlParams.get('childMetadata'); //Exam ID
+
+            var path = "/";
+            if(action == "CHECKOUT" && parentMetadata != null) {
+                path = "/secure-checkout/checkout.html?addItem=" + parentMetadata;
+            } else if(action == "ATTEMPT" && parentMetadata != null && parentMetadata != null) {
+                path = "/dashboard.html?action=ATTEMPT&courseCode=" + parentMetadata + "&examCode=" + childMetadata;
+            } else {
+                path = "/dashboard.html"; //Default show dashboard
+            }
+
+            return baseURL + path; 
+        }
+
+        function redirectPostSuccessfulLogin() {
+            window.location.replace(getRedirectURL());
+        }
+
         const cookiesCart = document.cookie;
         function getCookieByNameForLogin(name) {
             var match = cookiesCart.match('(?:^|; )' + name + '=([^;]*)');
@@ -223,7 +246,7 @@
                         //Loader end:
                         document.getElementById("loginLoader2").style.display = 'none';
 
-                        window.location.href = "../dashboard.html";
+                        redirectPostSuccessfulLogin();
                     } else {
                         showToaster(response.error ?? "Something went wrong");
                         
