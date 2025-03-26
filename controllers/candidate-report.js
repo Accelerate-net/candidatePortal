@@ -226,6 +226,7 @@ angular.module('CandidateReportApp', ['ngCookies'])
 
 	    // Process sectionWiseResponse to generate barData
 	    sectionWiseResponse.forEach((section, sectionIndex) => {
+	    	section.questions.sort((a, b) => a.order - b.order); //Sort by order first
 	        section.questions.forEach((question, questionIndex) => {
 	            const { qi, timeSpent, answer, attempt } = question;
 
