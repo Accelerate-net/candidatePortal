@@ -161,7 +161,7 @@ angular.module('CandidateReportApp', ['ngCookies'])
 	    var totalCorrect = sectionWiseResponse.reduce((sum, section) => sum + section.sectionSummary.correct, 0);
 	    // Compute section-wise percentage contribution, setting negative values to 0
 	    var datax2 = sectionWiseResponse.map(section => {
-	        let percentage = totalCorrect > 1 ? (section.sectionSummary.correct / totalCorrect) * 100 : 0;
+	        let percentage = totalCorrect >= 1 ? (section.sectionSummary.correct / totalCorrect) * 100 : 0;
 	        percentage = Math.max(0, percentage).toFixed(2); // If negative, set to 0
 	        return {
 	            label: section.sectionName,
