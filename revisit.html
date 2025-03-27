@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <title>Revisit Exam</title>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+      <meta name="apple-mobile-web-app-capable" content="yes">
+      <meta name="apple-touch-fullscreen" content="yes">
+      <meta name="description" content="Avenxo Admin Theme">
+      <meta name="author" content="KaijuThemes">
+      <link type='text/css' href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600' rel='stylesheet'>
+      <link type="text/css" href="assets/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+      <!-- Font Awesome -->
+      <link type="text/css" href="assets/fonts/themify-icons/themify-icons.css" rel="stylesheet">
+      <!-- Themify Icons -->
+      <link type="text/css" href="assets/css/styles.css" rel="stylesheet">
+      <!-- Core CSS with all styles -->
+      <link type="text/css" href="assets/plugins/codeprettifier/prettify.css" rel="stylesheet">
+      <!-- Code Prettifier -->
+      <link type="text/css" href="assets/plugins/iCheck/skins/minimal/blue.css" rel="stylesheet">
+      <!-- iCheck -->
+      <link type="text/css" href="assets/plugins/gridforms/gridforms/gridforms.css" rel="stylesheet">
+      <!-- Gridforms -->
+      <link type="text/css" href="assets/plugins/clockface/css/clockface.css" rel="stylesheet">
+      <!--[if lt IE 10]>
+      <script type="text/javascript" src="assets/js/media.match.min.js"></script>
+      <script type="text/javascript" src="assets/js/respond.min.js"></script>
+      <script type="text/javascript" src="assets/js/placeholder.min.js"></script>
+      <![endif]-->
+      <!-- The following CSS are included as plugins and can be removed if unused-->
+      <link type="text/css" href="assets/plugins/form-fseditor/fseditor.css" rel="stylesheet">
+<link type="text/css" href="assets/plugins/bootstrap-tokenfield/css/bootstrap-tokenfield.css" rel="stylesheet">   <!-- Tokenfield -->
+
+      <link type="text/css" href="assets/plugins/fullcalendar/fullcalendar.css" rel="stylesheet">   <!-- Calendar Plugin -->
+      <link type="text/css" href="assets/plugins/form-select2/select2.css" rel="stylesheet">                        <!-- Select2 -->
+
+      <!-- FullScreen Editor -->
+      <style type="text/css">
+         .studentRow:hover{
+         cursor: pointer;
+         }
+      </style>
+
+      <!-- Controller -->
+      <script src="assets/js/jquery.js"></script>
+      <script src="assets/js/angular.min.js"></script>
+      <script src="assets/js/angular-cookies.min.js"></script>
+      <script src="controllers/candidate-revisit.js"></script>
+
+   </head>
+
+
+   <body class="animated-content" ng-app="CandidateRevisitApp" ng-controller="candidateRevisitController" ng-cloak> 
+
+        <header id="topnav" class="navbar navbar-midnish navbar-fixed-top" role="banner" style="background: linear-gradient(135deg, #083e58, #015f73)">
+         <div class="logo-area">
+            <span class="navbar-brand"></span>
+         </div><!-- logo-area -->
+
+         <ul class="nav navbar-nav toolbar pull-right">
+            <li class="dropdown toolbar-icon-bg">
+               <a href="#" class="dropdown-toggle username" data-toggle="dropdown">
+                  <img class="img-circle" ng-src="{{profileData.photo || 'https://img.icons8.com/color/100/user.png'}}" alt=""/>
+               </a>
+               <ul class="dropdown-menu userinfo arrow">
+                  <li><a href="dashboard.html"><i class="ti ti-home"></i><span>Dashboard</span></a></li>
+                  <li><a href="profile.html"><i class="ti ti-user"></i><span>My Profile</span></a></li>
+                  <li><a href="" ng-click="logoutNow()"><i class="ti ti-shift-right"></i><span>Sign Out</span></a></li>
+               </ul>
+            </li>
+         </ul>
+      </header>
+     
+      <div id="wrapper">
+
+         <div id="layout-static">
+
+            <div class="static-content-wrapper">
+               <div class="static-content">
+                  <div class="page-content">
+
+
+                     <div class="container-fluid" style="padding-top: 4%;">
+
+                        <div data-widget-group="question-window">
+
+                           <!-- REVIEWING QUESTION -->
+                           <div style="margin-top: -25px;">
+                              <!-- Question Details -->
+                              <div class="panel panel-default">
+                                 <div class="panel-heading">
+
+
+                                             <div class="sectionSeekerContainer pull-left">
+                                                  <button class="btn btn-lg btn-default" ng-click="moveSectionLeft()"><i class="ti ti-angle-left"></i></button>
+                                                  <div class="btn-group">
+                                                          <button class="btn btn-lg btn-default-alt questionSectionButton" ng-click="loadSection($index + 1)" ng-class="{'questionSectionButtonActive' : isActiveSection($index + 1)}">
+                                                            <span class="sectionTitleExam">Section</span>
+                                                            <span class="questionSectionInfo"><i class="fa fa-info"></i></span>
+                                                          </button>
+                                                      </div>
+                                                      <button class="btn btn-lg btn-default" ng-click="moveSectionRight()" style="margin-left: 5px;"><i class="ti ti-angle-right"></i></button>
+                                              </div>
+
+
+                                    <h2>Reviewing Question  #<b style="font-size: 150%">{{questionDetails.questionType}}</b></h2>
+                                    
+
+                                    <span style="float: right;">
+                                       <div class="btn-group" style="position: relative; margin-left: 10px;">
+                                           <button ng-click="seekPreviousQuestion()" type="button" class="btn btn-default"><i style="margin: 0;" class="ti ti-angle-left"></i></button>
+                                           <button type="button" class="btn btn-default" style="text-transform: none;"> {{currentQuestionSequence}} of {{grandTotalQuestions}} </button>
+                                           <button ng-click="seekNextQuestion()" type="button" class="btn btn-default"><i style="margin: 0;" class="ti ti-angle-right"></i></button>
+                                       </div>
+                                    </span>
+
+                                 </div>
+
+
+                                 <div class="panel-body">
+
+                                    <p ng-show="!questionDetailsFound" style="margin: 80px; text-align: center; font-size: 18px; color: #c6c6c6;">Unable to render</p>
+
+                                    <!-- Preview -->
+                                    <div class="row" ng-show="questionDetailsFound">
+                                       <div class="col-md-7">
+                                          <div class="panel panel-info">
+                                             <div class="panel-editbox" data-widget-controls=""></div>
+                                             <div class="panel-body" style="position: relative; padding: 0">
+                                                <span class="label label-primary" style="margin: 0; position: absolute; right: 5px; top: 5px; font-size: 16px; z-index: 10;">{{questionDetails.chapter}}</span>
+                                                <div class="scrollable-content" style="height: 400px; overflow-y: auto;">
+                                                   <img ng-src="{{questionDetails.questionURL}}" width="100%" ng-if="questionDetails.questionURL">
+                                                   <p ng-if="!questionDetails.questionURL" style="padding: 50px 15px; text-align: center;">Unable to render the question.</p>
+                                                </div>
+                                             </div>
+
+                                             <div class="panel-footer" style="background: #e1ffbe; padding: 10px;" ng-class="{'answerNotSetQuestion' : !modifyQuestionData.answer}">
+                                                <div class="form-group">
+                                                   <div class="col-sm-12" style="text-align: center;">
+                                                      <button class="btn" ng-class="{'btn-primary':modifyQuestionData.answer == 'A', 'btn-default':modifyQuestionData.answer != 'A'}" ng-click="setQuestionAnswer(modifyQuestionData, 'A')">Option A</button>
+                                                      <button class="btn" ng-class="{'btn-primary':modifyQuestionData.answer == 'B', 'btn-default':modifyQuestionData.primary != 'B'}" ng-click="setQuestionAnswer(modifyQuestionData, 'B')">Option B</button>
+                                                      <button class="btn" ng-class="{'btn-primary':modifyQuestionData.answer == 'C', 'btn-default':modifyQuestionData.answer != 'C'}" ng-click="setQuestionAnswer(modifyQuestionData, 'C')">Option C</button>
+                                                      <button class="btn" ng-class="{'btn-primary':modifyQuestionData.answer == 'D', 'btn-default':modifyQuestionData.answer != 'D'}" ng-click="setQuestionAnswer(modifyQuestionData, 'D')">Option D</button>
+                                                   </div>
+                                                </div>
+                                             </div>
+
+                                          </div>
+                                       </div>
+
+                                       <div class="col-md-5">
+                                          <div class="panel panel-info">
+                                             <div class="panel-heading">
+                                                <h2>Solution</h2>
+                                             </div>
+                                             <div class="panel-body" style="padding: 0">
+                                                <img ng-src="{{questionDetails.solutionURL}}" width="100%" ng-if="questionDetails.solutionURL">
+
+                                                <div ng-if="!questionDetails.solutionURL && questionDetails.solutionPath && questionDetails.solutionPath != ''">
+                                                   <iframe ng-src="{{getTrustedUrl(questionDetails.solutionPath)}}" 
+                                                           style="width: 100%; height: 320px; border: none;">
+                                                   </iframe>
+                                                </div>
+                                                
+                                                <p ng-if="!questionDetails.solutionURL && !questionDetails.solutionPath" style="padding: 50px 15px; text-align: center;">No Solution available for this Question</p>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+
+
+                                    
+                                 </div>
+
+                              </div>
+
+
+                              </div>
+                           </div>
+
+                     </div>
+
+
+                     </div>
+                     <!-- .container-fluid -->
+                  </div>
+                  <!-- #page-content -->
+               </div>
+            </div>
+
+
+         </div>
+      </div>
+
+
+
+
+<div ng-show="toasterVisible" class="appToaster" ng-class="{'toaster-fade-in': toasterVisible, 'toaster-fade-out': !toasterVisible}" ng-bind-html="toasterMessage"></div>
+
+<!-- Load site level scripts -->
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script> -->
+<script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>                      <!-- Load jQuery -->
+<script type="text/javascript" src="assets/js/jqueryui-1.10.3.min.js"></script>                    <!-- Load jQueryUI -->
+<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>                       <!-- Load Bootstrap -->
+<script type="text/javascript" src="assets/js/enquire.min.js"></script>                            <!-- Load Enquire -->
+<script type="text/javascript" src="assets/plugins/velocityjs/velocity.min.js"></script>              <!-- Load Velocity for Animated Content -->
+<script type="text/javascript" src="assets/plugins/velocityjs/velocity.ui.min.js"></script>
+<script type="text/javascript" src="assets/plugins/wijets/wijets.js"></script>                     <!-- Wijet -->
+<script type="text/javascript" src="assets/plugins/codeprettifier/prettify.js"></script>           <!-- Code Prettifier  -->
+<script type="text/javascript" src="assets/plugins/bootstrap-switch/bootstrap-switch.js"></script>       <!-- Swith/Toggle Button -->
+<script type="text/javascript" src="assets/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js"></script>  <!-- Bootstrap Tabdrop -->
+<script type="text/javascript" src="assets/plugins/iCheck/icheck.min.js"></script>                    <!-- iCheck -->
+
+<script type="text/javascript" src="assets/plugins/nanoScroller/js/jquery.nanoscroller.min.js"></script> <!-- nano scroller -->
+
+<script type="text/javascript" src="assets/plugins/form-select2/select2.min.js"></script>  <!-- Advanced Select Boxes -->
+<script type="text/javascript" src="assets/js/application.js"></script>
+<script type="text/javascript" src="assets/demo/demo.js"></script>
+
+<script type="text/javascript" src="assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script> <!-- DateTime Picker -->
+<!-- End loading site level scripts -->
+<!-- Load page level scripts-->
+<script type="text/javascript" src="assets/plugins/form-fseditor/jquery.fseditor-min.js"></script>                   <!-- Fullscreen Editor -->
+<script type="text/javascript" src="assets/plugins/bootbox/bootbox.js"></script>    <!-- Bootbox -->
+<script type="text/javascript" src="assets/demo/demo-profile.js"></script>
+<!-- End loading page level scripts-->
+
+
+<!-- Quicksearch to go with Multisearch Plugin -->
+<script type="text/javascript" src="assets/plugins/form-typeahead/typeahead.bundle.min.js"></script>   
+
+<script type="text/javascript" src="assets/plugins/datatables/jquery.dataTables.js"></script>
+<script type="text/javascript" src="assets/plugins/datatables/dataTables.bootstrap.js"></script>
+<script type="text/javascript" src="assets/plugins/form-stepy/jquery.stepy.js"></script>                          <!-- Stepy Plugin -->
+
+<script type="text/javascript" src="assets/plugins/bootstrap-tokenfield/bootstrap-tokenfield.min.js"></script>          <!-- Tokenfield -->
+<script type="text/javascript" src="assets/plugins/fullcalendar/moment.min.js"></script>   <!-- Moment.js Dependency -->
+<script type="text/javascript" src="assets/plugins/fullcalendar/fullcalendar.min.js"></script>   <!-- Calendar Plugin -->
+
+
+   </body>
+</html>

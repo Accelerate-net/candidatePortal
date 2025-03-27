@@ -31523,3 +31523,46 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
     display: inline-block;
     text-align: center;
 }
+
+
+
+
+.sectionSeekerContainer {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    overflow-x: auto; /* Enables horizontal scrolling */
+    white-space: nowrap; /* Prevents wrapping */
+    padding: 5px;
+    max-width: calc(100% - 110px); /* Sets width as 100% minus 80px */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling for mobile */
+}
+
+.sectionSeekerContainer::-webkit-scrollbar {
+    height: 5px; /* Adjust scrollbar height */
+    background: transparent; /* Makes the scrollbar track transparent */
+}
+
+.sectionSeekerContainer::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1); /* Almost transparent scrollbar thumb */
+    border-radius: 5px;
+}
+
+.sectionSeekerContainer::-webkit-scrollbar-track {
+    background: transparent; /* Fully transparent scrollbar track */
+}
+
+.sectionSeekerContainer .btn-group {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 5px;
+    overflow-x: auto; /* Enables horizontal scrolling */
+    scrollbar-width: none; /* Hides scrollbar in Firefox */
+    -ms-overflow-style: none; /* Hides scrollbar in IE/Edge */
+}
+
+/* Hide scrollbar for Webkit-based browsers (Chrome, Safari) */
+.sectionSeekerContainer .btn-group::-webkit-scrollbar {
+    display: none; /* Hides scrollbar */
+}
+
