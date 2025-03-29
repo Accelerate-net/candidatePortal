@@ -2,7 +2,7 @@
 <html lang="en">
    <head>
       <meta charset="utf-8">
-      <title>Revisit Exam</title>
+      <title>Revisit</title>
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
       <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
       <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,6 +15,7 @@
       <link type="text/css" href="assets/fonts/themify-icons/themify-icons.css" rel="stylesheet">
       <!-- Themify Icons -->
       <link type="text/css" href="assets/css/styles.css" rel="stylesheet">
+      <link type="text/css" href="assets/css/report.css" rel="stylesheet">
       <!-- Core CSS with all styles -->
       <link type="text/css" href="assets/plugins/codeprettifier/prettify.css" rel="stylesheet">
       <!-- Code Prettifier -->
@@ -89,60 +90,81 @@
                            <div style="margin-top: -25px;">
                               <!-- Question Details -->
                               <div class="panel panel-default">
-                                 <div class="panel-heading">
+                                 <div class="panel-heading questionReviewWindow" ng-if="questionDetailsFound"> 
 
-
-                                             <div class="sectionSeekerContainer pull-left">
-                                                  <button class="btn btn-lg btn-default" ng-click="moveSectionLeft()"><i class="ti ti-angle-left"></i></button>
-                                                  <div class="btn-group">
-                                                          <button class="btn btn-lg btn-default-alt questionSectionButton" ng-click="loadSection($index + 1)" ng-class="{'questionSectionButtonActive' : isActiveSection($index + 1)}">
-                                                            <span class="sectionTitleExam">Section</span>
-                                                            <span class="questionSectionInfo"><i class="fa fa-info"></i></span>
-                                                          </button>
-                                                      </div>
-                                                      <button class="btn btn-lg btn-default" ng-click="moveSectionRight()" style="margin-left: 5px;"><i class="ti ti-angle-right"></i></button>
-                                              </div>
-
-
-                                    <h2>Reviewing Question  #<b style="font-size: 150%">{{questionDetails.questionType}}</b></h2>
-                                    
-
-                                    <span style="float: right;">
-                                       <div class="btn-group" style="position: relative; margin-left: 10px;">
-                                           <button ng-click="seekPreviousQuestion()" type="button" class="btn btn-default"><i style="margin: 0;" class="ti ti-angle-left"></i></button>
-                                           <button type="button" class="btn btn-default" style="text-transform: none;"> {{currentQuestionSequence}} of {{grandTotalQuestions}} </button>
-                                           <button ng-click="seekNextQuestion()" type="button" class="btn btn-default"><i style="margin: 0;" class="ti ti-angle-right"></i></button>
+                                    <div class="sectionSeekerContainer pull-left">
+                                       <button class="btn btn-lg btn-default" ng-click="moveSectionLeft()"><i class="ti ti-angle-left"></i></button>
+                                       <div class="btn-group">
+                                              <button class="btn btn-lg btn-default-alt questionSectionButton" ng-click="loadSection(key)" ng-class="{'questionSectionButtonActive' : isActiveSection(key)}" ng-repeat="(key, section) in questionDetails.sectionData track by key">
+                                                <span class="sectionTitleExam">{{section[0]}}</span>
+                                                <span class="questionSectionInfo"><i class="fa fa-info"></i></span>
+                                              </button>
                                        </div>
-                                    </span>
+                                       <button class="btn btn-lg btn-default" ng-click="moveSectionRight()" style="margin-left: 5px;"><i class="ti ti-angle-right"></i></button>
+                                    </div>
 
                                  </div>
 
 
                                  <div class="panel-body">
 
-                                    <p ng-show="!questionDetailsFound" style="margin: 80px; text-align: center; font-size: 18px; color: #c6c6c6;">Unable to render</p>
+                                    <p ng-show="!questionDetailsFound" style="margin: 80px; text-align: center; font-size: 18px; color: #c6c6c6; font-weight: 300">Something is wrong.</p>
 
                                     <!-- Preview -->
                                     <div class="row" ng-show="questionDetailsFound">
                                        <div class="col-md-7">
                                           <div class="panel panel-info">
-                                             <div class="panel-editbox" data-widget-controls=""></div>
+                                             <div class="panel-heading" style="background: #b4e0f5; border-bottom: 1px solid #196e97 !important;">
+                                                <h2 style="text-transform: none; font-size: 16px; color: #494949; font-weight: 400"><b>Question #{{currentQuestionSequence()}}</b> of {{getCurrentSectionName()}}</h2>
+
+                                                <span style="float: right;">
+                                                   <div class="btn-group" style="position: relative; margin-left: 10px;">
+                                                       <button ng-click="seekPreviousQuestion()" type="button" class="btn btn-default"><i style="margin: 0;" class="ti ti-angle-left"></i></button>
+                                                       <button type="button" class="btn btn-default" style="text-transform: none;"> {{currentQuestionSequence()}} of {{grandTotalQuestions()}} </button>
+                                                       <button ng-click="seekNextQuestion()" type="button" class="btn btn-default"><i style="margin: 0;" class="ti ti-angle-right"></i></button>
+                                                   </div>
+                                                </span>
+
+                                             </div>
                                              <div class="panel-body" style="position: relative; padding: 0">
-                                                <span class="label label-primary" style="margin: 0; position: absolute; right: 5px; top: 5px; font-size: 16px; z-index: 10;">{{questionDetails.chapter}}</span>
-                                                <div class="scrollable-content" style="height: 400px; overflow-y: auto;">
+                                                <span class="label label-primary previewSubjectSummary">
+                                                   <span>{{questionDetails.topic}}</span>
+                                                   <i class="fa fa-circle" style="font-size: 60%; margin: 0 4px; position: relative; top: -1px;" ng-if="questionDetails.topic != ''"></i>
+                                                   <span>{{questionDetails.chapter}}</span>
+                                                   <i class="fa fa-circle" style="font-size: 60%; margin: 0 4px; position: relative; top: -1px;" ng-if="questionDetails.chapter != ''"></i>
+                                                   <span style="background: #1a6e97; padding: 1px 4px; color: #FFF !important; border-radius: 2px; text-transform: uppercase; font-size: 11px; font-weight: bold;">{{questionDetails.level}}</span>
+                                                </span>
+
+
+                                                <div class="scrollable-content" style="max-height: 400px; overflow-y: auto;">
                                                    <img ng-src="{{questionDetails.questionURL}}" width="100%" ng-if="questionDetails.questionURL">
                                                    <p ng-if="!questionDetails.questionURL" style="padding: 50px 15px; text-align: center;">Unable to render the question.</p>
                                                 </div>
                                              </div>
 
-                                             <div class="panel-footer" style="background: #e1ffbe; padding: 10px;" ng-class="{'answerNotSetQuestion' : !modifyQuestionData.answer}">
+                                             <div class="panel-footer questionReviewOptionButtons" style="background: #9e9e9e; padding: 10px;" ng-class="{'answerNotSetQuestion' : questionDetails.attempt != '' && questionDetails.attempt != questionDetails.answer, 'answerCorrectlySetQuestion' : questionDetails.attempt != '' && questionDetails.attempt == questionDetails.answer}">
+                                                <p ng-if="questionDetails.attempt != '' && questionDetails.attempt != questionDetails.answer" style=" margin: 0 0 10px 0; text-align: center; color: #cc2d33; font-size: 16px; ">Oho, you marked it wrong.</p>
+                                                <p ng-if="questionDetails.attempt != '' && questionDetails.attempt == questionDetails.answer" style=" margin: 0 0 10px 0; text-align: center; color: #39733b; font-size: 16px; ">Great! That's the right answer.</p>
+                                                <p ng-if="questionDetails.attempt == ''" style="margin: 0 0 10px 0;text-align: center;color: #636363;font-size: 16px;">Hmm, you did not attempt this question.</p>
                                                 <div class="form-group">
-                                                   <div class="col-sm-12" style="text-align: center;">
-                                                      <button class="btn" ng-class="{'btn-primary':modifyQuestionData.answer == 'A', 'btn-default':modifyQuestionData.answer != 'A'}" ng-click="setQuestionAnswer(modifyQuestionData, 'A')">Option A</button>
-                                                      <button class="btn" ng-class="{'btn-primary':modifyQuestionData.answer == 'B', 'btn-default':modifyQuestionData.primary != 'B'}" ng-click="setQuestionAnswer(modifyQuestionData, 'B')">Option B</button>
-                                                      <button class="btn" ng-class="{'btn-primary':modifyQuestionData.answer == 'C', 'btn-default':modifyQuestionData.answer != 'C'}" ng-click="setQuestionAnswer(modifyQuestionData, 'C')">Option C</button>
-                                                      <button class="btn" ng-class="{'btn-primary':modifyQuestionData.answer == 'D', 'btn-default':modifyQuestionData.answer != 'D'}" ng-click="setQuestionAnswer(modifyQuestionData, 'D')">Option D</button>
-                                                   </div>
+                                                <div class="col-sm-12" style="text-align: center;">
+                                                   <span class="btn" ng-class="{'submittedAnswerWrongButton':questionDetails.attempt == 'A' && questionDetails.answer != 'A',
+                                                   'submittedAnswerCorrectButton':questionDetails.attempt == 'A' && questionDetails.answer == 'A', 'otherOptionsButton':questionDetails.attempt != 'A'}">Option A
+                                                         <i class="fa fa-check-circle" style="color: #56e55a" ng-if="questionDetails.answer == 'A'"></i>
+                                                   </span>
+                                                   <span class="btn" ng-class="{'submittedAnswerWrongButton':questionDetails.attempt == 'B' && questionDetails.answer != 'B',
+                                                   'submittedAnswerCorrectButton':questionDetails.attempt == 'B' && questionDetails.answer == 'B', 'otherOptionsButton':questionDetails.attempt != 'B'}">Option B
+                                                         <i class="fa fa-check-circle" style="color: #56e55a" ng-if="questionDetails.answer == 'B'"></i>
+                                                   </span>
+                                                   <span class="btn" ng-class="{'submittedAnswerWrongButton':questionDetails.attempt == 'C' && questionDetails.answer != 'C',
+                                                   'submittedAnswerCorrectButton':questionDetails.attempt == 'C' && questionDetails.answer == 'C', 'otherOptionsButton':questionDetails.attempt != 'C'}">Option C
+                                                         <i class="fa fa-check-circle" style="color: #56e55a" ng-if="questionDetails.answer == 'C'"></i>
+                                                   </span>
+                                                   <span class="btn" ng-class="{'submittedAnswerWrongButton':questionDetails.attempt == 'D' && questionDetails.answer != 'D',
+                                                   'submittedAnswerCorrectButton':questionDetails.attempt == 'D' && questionDetails.answer == 'D', 'otherOptionsButton':questionDetails.attempt != 'D'}">Option D
+                                                         <i class="fa fa-check-circle" style="color: #56e55a" ng-if="questionDetails.answer == 'D'"></i>
+                                                   </span>
+                                                </div>
                                                 </div>
                                              </div>
 
@@ -152,18 +174,33 @@
                                        <div class="col-md-5">
                                           <div class="panel panel-info">
                                              <div class="panel-heading">
-                                                <h2>Solution</h2>
+                                                <h2 style="text-transform: none; font-size: 16px;">Solution</h2>
                                              </div>
-                                             <div class="panel-body" style="padding: 0">
-                                                <img ng-src="{{questionDetails.solutionURL}}" width="100%" ng-if="questionDetails.solutionURL">
 
-                                                <div ng-if="!questionDetails.solutionURL && questionDetails.solutionPath && questionDetails.solutionPath != ''">
-                                                   <iframe ng-src="{{getTrustedUrl(questionDetails.solutionPath)}}" 
-                                                           style="width: 100%; height: 320px; border: none;">
-                                                   </iframe>
+                                             <div class="panel-body" style="position: relative; padding: 0">
+                                                <div class="scrollable-content" style="max-height: 500px; overflow-y: auto;">
+                                                   
+                                                   <div ng-if="questionDetails.solutionURL">
+                                                      <img ng-src="{{questionDetails.solutionURL}}" width="100%">
+                                                   </div>
+
+                                                   <div ng-if="!questionDetails.solutionURL && questionDetails.solutionPath && questionDetails.solutionPath != ''">
+                                                      <iframe ng-src="{{getTrustedUrl(questionDetails.solutionPath)}}" 
+                                                              style="width: 100%; height: 320px; border: none;">
+                                                      </iframe>
+                                                   </div>
+
+                                                   <p ng-if="!questionDetails.solutionURL && !questionDetails.solutionPath" style="padding: 50px 15px; text-align: center;">No Solution available for this Question</p>
                                                 </div>
+                                             </div>
+
+
+                                             <div class="panel-body" style="padding: 0">
                                                 
-                                                <p ng-if="!questionDetails.solutionURL && !questionDetails.solutionPath" style="padding: 50px 15px; text-align: center;">No Solution available for this Question</p>
+
+                                                
+                                                
+                                                <p ng-if="" style="padding: 50px 15px; text-align: center;">No Solution available for this Question</p>
                                              </div>
                                           </div>
                                        </div>

@@ -31538,6 +31538,31 @@ body.sidebar-collapsed .smartViewIconTop .smartViewIconTopColor:hover {
     -webkit-overflow-scrolling: touch; /* Smooth scrolling for mobile */
 }
 
+.questionReviewWindow .sectionSeekerContainer {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    overflow-x: auto; /* Enables horizontal scrolling */
+    white-space: nowrap; /* Prevents wrapping */
+    padding: 5px;
+    max-width: 100% !important;  /* Sets width as 100% minus 80px */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling for mobile */
+}
+
+@media (max-width: 991px) {
+    .questionReviewWindow {
+      padding: 0 !important;
+    }
+
+    .questionReviewWindow .sectionSeekerContainer {
+      gap: 0 !important;
+    }
+
+    .questionReviewWindow .sectionSeekerContainer .btn-group {
+      gap: 0 !important;
+    }
+}
+
 .sectionSeekerContainer::-webkit-scrollbar {
     height: 5px; /* Adjust scrollbar height */
     background: transparent; /* Makes the scrollbar track transparent */

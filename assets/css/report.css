@@ -402,3 +402,23 @@ h2 {
     opacity: 0.8;
 }
 
+.questionReviewOptionButtons .btn {
+    margin-bottom: 5px !important;
+    min-width: 100px;
+}
+
+
+.previewSubjectSummary {
+    margin: 0;
+    font-size: 12px;
+    border-radius: 0;
+    width: 100%;
+    padding: 8px;
+    text-align: left;
+    text-transform: none;
+    background: #daf3ff;
+    color: #0f6d9a;
+    font-weight: 400;
+    display: inline-block;
+    text-wrap: auto;
+}

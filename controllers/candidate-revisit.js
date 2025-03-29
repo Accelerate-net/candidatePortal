@@ -8,13 +8,13 @@ angular.module('CandidateRevisitApp', ['ngCookies'])
 .controller('candidateRevisitController', function($scope, $http, $interval, $cookies) {
 
     //Check if logged in
-    // if($cookies.get("crispriteUserToken")){
-    //   $scope.isLoggedIn = true;
-    // }
-    // else{
-    //   $scope.isLoggedIn = false;
-    //   window.location = "index.html";
-    // }
+    if($cookies.get("crispriteUserToken")){
+      $scope.isLoggedIn = true;
+    }
+    else{
+      $scope.isLoggedIn = false;
+      window.location = "index.html";
+    }
 
     //Logout function
     $scope.logoutNow = function(){
@@ -25,14 +25,50 @@ angular.module('CandidateRevisitApp', ['ngCookies'])
     }
 
     function getUserToken() {
-    	return "Bearer JXsrcfa+d2hlz/lJM53V/nxM5GZEj89YZSMejY/nfKsWjUStud28qwihqQkY7ErMuqGzVQmO4y7rxhbZ6SfyU4w7/2ve1nSP6W4bk2x7d4eOZ7onpv6xFBL2e1boTr4tAVfo8SYJrdIi0LLeJfUk5QOdMDwRdvGrqeUyySro8F4=";
-    	//return "Bearer " + $cookies.get("crispriteUserToken");  
+    	return "Bearer " + $cookies.get("crispriteUserToken");  
     }
 
-    function getReportIdPassed() {
+    function getAttemptId() {
         const urlParams = new URLSearchParams(window.location.search);
-        return decodeURIComponent(urlParams.get('attemptId'));
+        return parseInt(urlParams.get('attemptId'), 10);
     }
+
+    function updateSectionNumber(sectionNumber) {
+        const url = new URL(window.location);
+        url.searchParams.set("section", sectionNumber);
+        window.history.replaceState({}, '', url);
+    }
+
+    function updateQuestionNumber(questionNumber) {
+        const url = new URL(window.location);
+        url.searchParams.set("question", questionNumber);
+        window.history.replaceState({}, '', url);
+    }
+
+    function getCurrentSection() {
+        const urlParams = new URLSearchParams(window.location.search);
+        let currentSection = parseInt(urlParams.get('section'), 10);
+
+        if (isNaN(currentSection) || currentSection < 1) {
+            currentSection = 1;
+            updateSectionNumber(1);
+        }
+
+        return currentSection;
+    }
+
+    function getCurrentQuestion() {
+        const urlParams = new URLSearchParams(window.location.search);
+        let currentQuestion = parseInt(urlParams.get('question'), 10);
+
+        if (isNaN(currentQuestion) || currentQuestion < 1) {
+            currentQuestion = 1;
+            updateQuestionNumber(1);
+        }
+
+        return currentQuestion;
+    }
+
 
 
     $scope.profileData = {};
@@ -68,8 +104,11 @@ angular.module('CandidateRevisitApp', ['ngCookies'])
     $scope.questionDetails = {};
     $scope.openQuestion = function(sectionId, questionId) {
 
+        updateSectionNumber(sectionId);
+        updateQuestionNumber(questionId);
+
     	var data = {
-		    "id": 200003,
+		    "id": getAttemptId(),
 		    "section": sectionId,
 		    "question": questionId
 		}
@@ -99,18 +138,115 @@ angular.module('CandidateRevisitApp', ['ngCookies'])
         });
     }
 
+    $scope.loadSection = function(currentSection) {
+        $scope.openQuestion(currentSection, 1);
+    }
 
-    $scope.currentQuestion = 1;
-    $scope.currentSection = 1;
-    $scope.openQuestion($scope.currentSection, $scope.currentQuestion); //Open first question of first section by default
+    $scope.currentQuestionSequence = function() {
+        return getCurrentQuestion();
+    } 
+
+    $scope.grandTotalQuestions = function() {
+        return $scope.questionDetails.sectionData[getCurrentSection()][1];;
+    }
+
+    $scope.getCurrentSectionName = function() {
+        return $scope.questionDetails.sectionData[getCurrentSection()][0];;
+    }
+
+    $scope.openQuestion(getCurrentSection(), getCurrentQuestion()); //Open first question of first section by default
 
 
     $scope.seekPreviousQuestion = function() {
-    	$scope.openQuestion($scope.currentSection, $scope.currentQuestion - 1);
+        var currentSection = getCurrentSection();
+        var currentQuestion = getCurrentQuestion();
+
+        var nextQuestion = currentQuestion - 1;
+        var nextSection = currentSection;
+        if(nextQuestion < 1 && currentSection != 1) { //not the first section
+            nextQuestion = $scope.questionDetails.sectionData[currentSection - 1][1]; //total questions in prev sec.
+            nextSection--;
+        } else if (nextQuestion < 1 && currentSection == 1) {
+            nextQuestion = 1;
+        }
+
+    	$scope.openQuestion(nextSection, nextQuestion);
     }
 
     $scope.seekNextQuestion = function() {
-    	$scope.openQuestion($scope.currentSection, $scope.currentQuestion + 1);
+        var currentSection = getCurrentSection();
+        var currentQuestion = getCurrentQuestion();
+
+        var nextQuestion = currentQuestion + 1;
+        var nextSection = currentSection;
+        if(nextQuestion > $scope.questionDetails.sectionData[currentSection][1]) { //greater than last question in current section, move sec.
+            nextQuestion = 1;
+            nextSection++;
+
+            if (nextSection > Object.keys($scope.questionDetails.sectionData).length) { //set back to last question of last sec.
+                nextSection = Object.keys($scope.questionDetails.sectionData).length;
+                nextQuestion = $scope.questionDetails.sectionData[currentSection][1]; 
+            }
+        }
+
+
+    	$scope.openQuestion(nextSection, nextQuestion);
+    }
+
+
+    $scope.moveSectionLeft = function() {
+        var currentSection = getCurrentSection();
+        currentSection--;
+
+        if (currentSection < 1) {
+            currentSection = 1;
+        }
+
+        $scope.loadSection(currentSection);
+
+        // Auto-scroll without Y-axis movement
+        setTimeout(() => {
+            let container = document.querySelector(".sectionSeekerContainer");
+            let activeButton = container?.querySelector(".questionSectionButtonActive");
+
+            if (activeButton) {
+                activeButton.scrollIntoView({ 
+                    behavior: "smooth", 
+                    inline: "center",  
+                    block: "nearest"  
+                });
+            }
+        }, 100);
+    };
+
+
+    $scope.moveSectionRight = function() {
+        var currentSection = getCurrentSection();
+        currentSection++;
+
+        if (currentSection > Object.keys($scope.questionDetails.sectionData).length) {
+            currentSection = Object.keys($scope.questionDetails.sectionData).length;
+        }
+
+        $scope.loadSection(currentSection);
+
+        // Auto-scroll without Y-axis movement
+        setTimeout(() => {
+            let container = document.querySelector(".sectionSeekerContainer");
+            let activeButton = container?.querySelector(".questionSectionButtonActive");
+
+            if (activeButton) {
+                activeButton.scrollIntoView({ 
+                    behavior: "smooth", 
+                    inline: "center",  // Ensures horizontal centering
+                    block: "nearest"   // Prevents unnecessary vertical scrolling
+                });
+            }
+        }, 100);
+    };
+
+    $scope.isActiveSection = function(sectionId) {
+        return getCurrentSection() == sectionId;
     }
 
 

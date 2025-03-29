@@ -619,7 +619,10 @@ angular.module('CandidateReportApp', ['ngCookies'])
   		return (parseInt($scope.reportData.globalAverage) / 100).toFixed(0);
   	}
 
-
-
+  	$scope.openSolutionsView = function() {
+  		var reportId = getReportIdPassed();
+  		if(reportId && reportId > 1)
+  			window.location.href = "https://candidate.crisprlearning.com/revisit.html?attemptId="+reportId+"&question=1&section=1";
+  	}
 
 });
