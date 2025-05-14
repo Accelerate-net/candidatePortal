@@ -130,7 +130,6 @@ angular.module('CandidateRevisitApp', ['ngCookies'])
                 $scope.currentQuestion = questionId;
     			$scope.currentSection = sectionId;
 
-                console.log($scope.questionDetails)
                 $scope.questionDetailsFound = true;
             } else {
                 $scope.questionDetailsFound = false;
