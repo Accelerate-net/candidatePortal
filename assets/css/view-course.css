@@ -1,0 +1,268 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Helvetica Neue", sans-serif;
+}
+
+body {
+  background-color: #f9f9f9;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 350px;
+  background-color: #fff;
+  padding: 30px;
+  border-right: 1px solid #e0e0e0;
+  overflow-y: auto;
+}
+
+.sidebar h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.rating {
+  font-size: 14px;
+  color: #ffa500;
+  margin-bottom: 20px;
+}
+
+.rating span {
+  color: #666;
+  font-weight: 500;
+}
+
+.mentor {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.mentor img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.mentor-info p {
+  font-size: 13px;
+  color: #555;
+}
+
+/* Chapter List */
+.chapter-list {
+  list-style: none;
+}
+
+.chapter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  margin-bottom: 10px;
+  background-color: #f7f7f7;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.chapter.active {
+  background-color: #e9f1ff;
+}
+
+.chapter:hover {
+  background-color: #ececec;
+}
+
+.chapter-number {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.chapter div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chapter p {
+  font-size: 12px;
+  color: #888;
+}
+
+/* Score Badge */
+.score {
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+
+.score.green {
+  background-color: #daf5dc;
+  color: #2e8b57;
+}
+
+.score.red {
+  background-color: #ffe6e6;
+  color: #cc0000;
+}
+
+/* Loader */
+.loader {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ccc;
+  border-top: 2px solid #4a90e2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Content Area */
+.content {
+  flex: 1;
+  padding: 40px;
+}
+
+.content h3 {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.subtext {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 20px;
+}
+
+
+.video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Base CSS stays same — this is ADDITIONAL/UPDATED code */
+
+.toggle-sidebar {
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 999;
+  background-color: #ffffff;
+  border: none;
+  font-size: 24px;
+  padding: 8px 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+}
+
+/* Sidebar responsive toggle behavior */
+.sidebar {
+  transition: transform 0.3s ease-in-out;
+}
+
+@media (max-width: 768px) {
+  .toggle-sidebar {
+    display: block;
+  }
+
+  .container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 998;
+    transform: translateX(-100%);
+    width: 80%;
+    max-width: 300px;
+    background-color: white;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .content {
+    padding: 80px 20px 20px 20px;
+  }
+
+  .video-wrapper video {
+    height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 100%;
+  }
+
+  .content h3 {
+    font-size: 18px;
+  }
+
+  .mentor-info p {
+    font-size: 12px;
+  }
+
+  .chapter div strong {
+    font-size: 14px;
+  }
+
+  .chapter p {
+    font-size: 11px;
+  }
+}
+
+@media (min-width: 769px) {
+  .container {
+    flex-direction: row;
+  }
+
+  .sidebar {
+    position: relative;
+    transform: translateX(0) !important;
+    width: 350px;
+    height: auto;
+    box-shadow: none;
+    z-index: 1;
+  }
+
+  .content {
+    padding: 40px;
+  }
+
+  .toggle-sidebar {
+    display: none;
+  }
+}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crispr Learning</title>
+  <link rel="stylesheet" href="assets/css/view-course.css" />
+
+  <!-- Controller -->
+  <script src="assets/js/jquery.js"></script>
+  <script src="assets/js/angular.min.js"></script>
+  <script src="assets/js/angular-cookies.min.js"></script>
+  <script src="controllers/view-course.js"></script>
+
+</head>
+<body ng-app="ViewCourseApp" ng-controller="viewCourseController" ng-cloak>
+  <!-- Mobile Toggle Button -->
+  <button class="toggle-sidebar" onclick="toggleSidebar()">☰</button>
+
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <h3 style="color: red">{{moduleData.name}}: {{chapterData.code}}</h3>
+      <h2>{{chapterData.title}}</h2>
+      <div class="rating">
+        <!-- ★ ★ ★ ★ ★ <span>9.9 / 10 (2 reviews)</span> -->
+      </div>
+      <div class="mentor">
+        <img ng-if="chapterData.teacher.photo" ng-src="{{chapterData.teacher.photo}}" alt="Teacher" onerror="this.src='default-teacher.png'" />
+        <div class="mentor-info">
+          <strong>{{chapterData.teacher.name}}</strong>
+          <p>{{chapterData.teacher.brief}}</p>
+        </div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter" ng-repeat="partData in chapterData.parts track by $index">
+          <div ng-click="openContent(partData)">
+            <span class="chapter-number">{{$index + 1}}</span>
+            <div>
+              <strong>{{partData.title}}</strong>
+              <p>{{getPartsDuration(partData.duration)}}</p>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content">
+      <h3>{{selectedPartData.title}}</h3>
+      <p class="subtext">{{chapterData.code}} - {{chapterData.title}} from <b>{{moduleData.name}}</b> · {{getPartsDuration(selectedPartData.duration)}}</p>
+      <div class="video-wrapper">
+        <div style="position: relative; padding-top: 56.25%;" ng-if="contentSource">
+          <iframe ng-src="{{contentSource}}"
+                  loading="lazy"
+                  style="border: none; position: absolute; top: 0; height: 100%; width: 100%;"
+                  allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+                  allowfullscreen="true">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+  </script>
+</body>
+</html>
