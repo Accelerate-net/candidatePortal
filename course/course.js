@@ -131,7 +131,7 @@ $(document).ready(function() {
         userProgress = !userProgress ? 0 : parseInt(userProgress);
         player = null; //Remove older video
         document.getElementById("videoRenderSpace").innerHTML = '' +
-            '<iframe id="bunny-stream-embed" src="https://iframe.mediadelivery.net/embed/475938/'+contentSource+'" width="720" height="400" frameborder="0" '+ userProgress == -1 ? 'allow="autoplay"' : '' +'></iframe>';
+            '<iframe id="bunny-stream-embed" src="https://iframe.mediadelivery.net/embed/475938/'+contentSource+'" width="720" height="400" frameborder="0" allow="autoplay"></iframe>';
 
         
         if(userProgress > 10)
