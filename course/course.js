@@ -134,6 +134,12 @@ $(document).ready(function() {
             '<iframe id="bunny-stream-embed" src="https://iframe.mediadelivery.net/embed/475938/'+contentSource+'?autoplay=true" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> </iframe>';
 
         
+        document.getElementById("bunny-stream-embed").onload = () => {
+            console.log("Iframe loaded, initializing player...");
+            player = new playerjs.Player(iframe);
+        };
+
+
         if(userProgress > 10)
             trackProgressWithSeek(true, userProgress);
 
