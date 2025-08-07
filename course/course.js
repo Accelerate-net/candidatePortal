@@ -11,6 +11,7 @@ $(document).ready(function() {
 
 
     function reRenderSidePanelProgress(progressPercentage) {
+        console.log('reRenderSidePanelProgress', progressPercentage)
       const chapterList = document.querySelector('#partsList');
       const activeItem = chapterList.querySelector('li.chapter.active');
       if (activeItem)
