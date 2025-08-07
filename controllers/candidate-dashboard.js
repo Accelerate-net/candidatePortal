@@ -263,6 +263,8 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
         });    
     }
 
+    $scope.getCourseBundlesList();
+
 
 
     $scope.getCourseIconImage = function(courseData) {
