@@ -1,31 +1,8 @@
-angular.module('ViewCourseApp', ['ngCookies'])
-
-.config(['$qProvider', function ($qProvider) {
-    $qProvider.errorOnUnhandledRejections(false);
-}])
+$(document).ready(function() {
 
 
-.controller('viewCourseController', function($scope, $http, $interval, $cookies, $sce) {
-
-    // //Check if logged in
-    // if($cookies.get("crispriteUserToken")){
-    //   $scope.isLoggedIn = true;
-    // }
-    // else{
-    //   $scope.isLoggedIn = false;
-    //   window.location = "index.html";
-    // }
-
-    // //Logout function
-    // $scope.logoutNow = function(){
-    //   if($cookies.get("crispriteUserToken")){
-    //     $cookies.remove("crispriteUserToken");
-    //     window.location = "index.html";
-    //   }
-    // }
-
-    function getUserToken() {
-      return "Bearer " + $cookies.get("crispriteUserToken");  
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
     }
 
     //Default Tab
@@ -33,49 +10,58 @@ angular.module('ViewCourseApp', ['ngCookies'])
     const courseId = urlParams.get('course');
     const moduleId = urlParams.get('module');
     const chapterId = urlParams.get('chapter');
+    var selectedPartId = urlParams.get('view');
+    selectedPartId = selectedPartId && selectedPartId >= 0 ? selectedPartId : 0;
 
 
 
 
 
-    $scope.originaProfileData = {};
+
+    function renderSideBarAndVideo(moduleData, chapterData, selectedPartData) {
+        document.getElementById("sidebarHeader").innerHTML = moduleData.name + ": " + chapterData.code;
+        document.getElementById("sidebarTitle").innerHTML = chapterData.title;
+
+        document.getElementById("mentorTile").innerHTML = '' +
+                '<img src="'+chapterData.teacher.photo+'"/>' +
+                '<div class="mentor-info">' +
+                  '<strong>'+chapterData.teacher.name+'</strong>' +
+                  '<p>'+chapterData.teacher.brief+'</p>' +
+                '</div> ';
+
+        var partsRenderContent = '';
+        for(var i = 0; i < chapterData.parts.length; i++) {
+            var partData = chapterData.parts[i];
+            partsRenderContent += '' +
+            '<li class="chapter" class="'+isPartSelectedActive(partData)+'">' +
+              '<div on-click="'+openContent(partData)+'">' +
+                '<span class="chapter-number">'+(i + 1)+'</span>' +
+                '<div class="chapter-details"><strong>'+partData.title+'</strong></div>' +
+                '<p class="chapter-duration">'+beatifyDuration(partData.duration)+'</p>' +
+              '</div>' +
+            '</li>';
+        }
+
+        document.getElementById("partsList").innerHTML = partsRenderContent;
+
+
+        document.getElementById("contentTitle").innerHTML = selectedPartData.title;
+        document.getElementById("contentTitleSub").innerHTML = chapterData.code + " - " +chapterData.title+ " from <b>"+moduleData.name+"</b> · "+beatifyDuration(selectedPartData.duration);
+        
 
 
 
-    $scope.renderContentVideo = function(videoId) {
-      var baseUrl = "https://iframe.mediadelivery.net/embed/475938/";
-      var params = "?autoplay=true";
-      $scope.contentSource = $sce.trustAsResourceUrl(baseUrl + videoId + params);
-    };
+        // renderContentVideo(selectedPartData.source);
+    }
 
 
 
+    var chapterData = {};
+    var selectedPartData = {};
+    var contentSource = {}; //Current Video URL
 
-    $scope.chapterData = {};
-    $scope.selectedPartData = {};
-    $scope.contentSource = {}; //Current Video URL
+    function fetchChapterData() {
 
-    $scope.fetchChapterData = function() {
-
-
-        // $http({
-        //   method  : 'GET',
-        //   url     : 'https://crisprtech.app/crispr-apis/course/fetch-module-chapter-data.php',
-        //   headers : {
-        //     'Content-Type': 'application/json',
-        //     'Authorization': getUserToken()
-        //   }
-        //  })
-        //  .then(function(response) {
-        //     if(response.data.status == "success"){
-        //         $scope.originaProfileData = response.data.data;
-        //         $scope.profileData = response.data.data;
-        //         $scope.profileFound = true;
-        //     } else {
-        //         $scope.profileFound = false;
-        //     }
-        //     console.log("HI")
-        // });
 
         var responseData = {
             "courseId": "CR0003",
@@ -122,24 +108,26 @@ angular.module('ViewCourseApp', ['ngCookies'])
         };
 
         var moduleData = responseData.modules.find(module => module.id === moduleId);
-        $scope.moduleData = moduleData;
-        $scope.chapterData = moduleData.chapters.find(chapter => chapter.id === chapterId);
+        var chapterData = moduleData.chapters.find(chapter => chapter.id === chapterId);
+        var selectedPartData = chapterData.parts[0];
 
-        $scope.selectedPartData = $scope.chapterData.parts[0];
-        $scope.renderContentVideo($scope.selectedPartData.source);
+        renderSideBarAndVideo(moduleData, chapterData, selectedPartData);
     }
 
-    $scope.fetchChapterData();
+    fetchChapterData();
 
 
+    function isPartSelectedActive(partData) {
+      return partData.id == selectedPartId ? "active" : "";
+    }
 
-    $scope.openContent = function(partData) {
-      $scope.selectedPartData = partData;
-      $scope.renderContentVideo($scope.selectedPartData.source);
+    function openContent(partData) {
+      var selectedPartData = partData;
+      //renderContentVideo(partData.source);
     }
 
 
-    $scope.getPartsDuration = function(duration) {
+    function beatifyDuration(duration) {
       if (!duration || isNaN(duration)) return '';
 
       const seconds = parseInt(duration, 10);
@@ -159,7 +147,9 @@ angular.module('ViewCourseApp', ['ngCookies'])
       }
     };
 
-    $scope.showToaster = function(message) {
+
+    /**** TOASTER *****/
+    function showToaster(message) {
         const toaster = document.getElementById('toaster');
         toaster.textContent = message;
         toaster.classList.add('show');
@@ -168,5 +158,5 @@ angular.module('ViewCourseApp', ['ngCookies'])
             toaster.classList.remove('show');
         }, 3000);
     }
-
 });
+

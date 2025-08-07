@@ -50,11 +50,16 @@ body {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  margin-top: 5px;
+}
+
+.mentor-info {
+  color: #8f8f8f;
 }
 
 .mentor-info p {
   font-size: 13px;
-  color: #555;
+  color: #afafaf;
 }
 
 /* Chapter List */
@@ -75,7 +80,8 @@ body {
 }
 
 .chapter.active {
-  background-color: #e9f1ff;
+  background-color: #e5faff;
+  color: #006073;
 }
 
 .chapter:hover {
@@ -97,6 +103,31 @@ body {
   font-size: 12px;
   color: #888;
 }
+
+.chapter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chapter-number {
+  margin-right: 10px;
+  min-width: 20px;
+}
+
+.chapter-details {
+  flex-grow: 1;
+}
+
+.chapter-duration {
+  margin-left: auto;
+  white-space: nowrap;
+  text-align: right;
+  min-width: 60px; /* optional for consistency */
+}
+
+
+
 
 /* Score Badge */
 .score {
@@ -265,4 +296,47 @@ body {
   .toggle-sidebar {
     display: none;
   }
+}
+
+
+    iframe {
+      display: block;
+      margin: 20px auto;
+    }
+
+.player-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px; /* Adjust the width as needed */
+    margin: 0 auto;
+}
+
+
+.progress-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ccc;
+    height: 20px; /* Increase the height of the progress container */
+    display: flex;
+    align-items: center;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 100%;
+    background-color: #00a0e3; /* Adjust the color of the progress bar */
+    transition: width 0.1s linear; /* Add a smooth transition effect */
+}
+
+.progress-text {
+    padding: 5px;
+    font-size: 14px; /* Adjust the font size of the progress text */
+}
+
+.progress {
+    height: 100%; /* or a fixed height */
+    background-color: blue; /* or any color */
+    width: 0%; /* initial width */
 }
