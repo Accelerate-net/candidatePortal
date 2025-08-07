@@ -11,7 +11,6 @@ $(document).ready(function() {
 
 
     function reRenderSidePanelProgress(progressPercentage) {
-        console.log('reRenderSidePanelProgress', progressPercentage)
       const chapterList = document.querySelector('#partsList');
       const activeItem = chapterList.querySelector('li.chapter.active');
       if (activeItem)
@@ -60,6 +59,7 @@ $(document).ready(function() {
 
     var player;
     function trackProgressWithSeek(seekVideoFlag, userProgress) {
+        console.log(seekVideoFlag, userProgress);
         if(!player)
             player = new playerjs.Player('bunny-stream-embed');
 
@@ -72,7 +72,8 @@ $(document).ready(function() {
 
         player.on('play', () => {
             console.log('Video is playing');
-            player.currentTime = userProgress;
+            player.setCurrentTime(userProgress);
+            
         });
 
         player.getDuration((duration) => {
