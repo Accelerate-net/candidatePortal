@@ -242,6 +242,29 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
 
     $scope.getCourseListingData();
 
+
+    //Course Bundles = Enrolled Video Courses
+    $scope.getCourseBundlesList = function() {
+        $http({
+          method  : 'GET',
+          url     : 'https://crisprtech.app/crispr-apis/user/course-bundle-progress.php'),
+          headers : {
+            'Content-Type': 'application/json',
+            'Authorization': getUserToken()
+          }
+         })
+         .then(function(response) {
+            if(response.data.status == "success"){
+                $scope.courseBundlesListing = response.data.data;
+                $scope.courseBundlesListingFound = true;
+            } else {
+                $scope.courseBundlesListingFound = false;
+            }
+        });    
+    }
+
+
+
     $scope.getCourseIconImage = function(courseData) {
         if(courseData.locked) {
             return "lockedIcon";

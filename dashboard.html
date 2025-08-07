@@ -133,6 +133,8 @@
 							<div class="row dashboardViewContainer">
 
 								<div class="col-md-8">
+
+										<!-- EXAM SERIES -->
 										<div class="selectCourseBar-container">
 									        <div class="selectCourseBar-header">
 									            <div class="selectCourseBar-icon">
@@ -149,6 +151,25 @@
 									            </div>
 									        </div>
 									    </div>
+
+
+									    <!-- COURSE BUNDLES -->
+									    <div class="selectCourseBar-container">
+									        <div class="selectCourseBar-header">
+									            <div class="selectCourseBar-icon">
+									                <img src="https://img.icons8.com/color/96/book.png" width="28px">
+									            </div>
+									            <h2 class="selectCourseBar-title">Course Bundles</h2>
+									        </div>
+									        <div class="selectCourseBar-scroll-container">
+									            <div class="selectCourseBar-options">
+									                <span href="" ng-href="{{courseBundleItem.url}}" class="selectCourseBar-option" ng-repeat="courseBundleItem in courseBundlesListing track by $index" ng-class="{'selectCourseBar-optionActive' : 1 == 1}">{{courseBundleItem.title}}</span>
+									                <p style="font-size: 16px;" ng-if="!courseBundlesListingFound">You are not added to any courses yet.
+									                </p>
+									            </div>
+									        </div>
+									    </div>
+
 								</div>
 							</div>
 
