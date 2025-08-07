@@ -20,7 +20,7 @@ $(document).ready(function() {
     }
 
     var saveProgressClaimed = -1;
-    function saveProgress(courseId, moduleId, chapterId, partId, progressInSeconds, progressPercentage) {
+    function saveProgress(courseId, moduleId, chapterId, partId, progressInSeconds, totalDurationRounded, progressPercentage) {
 
         //Prevent same progress getting called
         if(saveProgressClaimed === progressInSeconds)
@@ -41,7 +41,8 @@ $(document).ready(function() {
                 "moduleId": moduleId,
                 "chapterId": chapterId,
                 "partId": partId,
-                "progressInSeconds": progressInSeconds
+                "progressInSeconds": progressInSeconds,
+                "duration": totalDurationRounded
               })
         };
 
@@ -76,7 +77,7 @@ $(document).ready(function() {
             if ((currentTimeRounded !== lastSavedSecond) &&
                 (currentTimeRounded === totalDurationRounded || currentTimeRounded % 11 === 0)) {
                 lastSavedSecond = currentTimeRounded;
-                saveProgress(courseId, moduleId, chapterId, selectedPartId, currentTimeRounded, progressPercentage);
+                saveProgress(courseId, moduleId, chapterId, selectedPartId, currentTimeRounded, totalDurationRounded, progressPercentage);
             }
         });
     }
