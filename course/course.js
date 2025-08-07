@@ -1,10 +1,5 @@
 $(document).ready(function() {
 
-
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('open');
-    }
-
     //Default Tab
     const urlParams = new URLSearchParams(window.location.search);
     const courseId = urlParams.get('course');
@@ -52,7 +47,7 @@ $(document).ready(function() {
 
         // Log the progress percentage
         console.log('Progress Percentage: ' + Math.floor(progressPercentage) + "%");
-        
+
         // Check if progress reached a new 25% milestone and update the progress bar
         if (progressRounded > lastProgress) {
             console.log(`Video progress: ${progressRounded}%`);
@@ -72,6 +67,8 @@ $(document).ready(function() {
         setTimeout(function () {
           trackProgress();
         }, 3000);
+
+        updateChapterProgressRings();
     }
 
 
@@ -92,9 +89,15 @@ $(document).ready(function() {
         for (let i = 0; i < chapterData.parts.length; i++) {
           const partData = chapterData.parts[i];
           partsRenderContent += `
-            <li class="chapter ${isPartSelectedActive(partData)}" data-part-id="${partData.id}" data-source="${partData.source}">
+            <li class="chapter ${isPartSelectedActive(partData)}" data-part-id="${partData.id}" data-source="${partData.source}" data-progress="${getUserProgress(partData.progress, partData.duration)}">
               <div>
-                <span class="chapter-number">${i + 1}</span>
+                <div class="chapter-number-wrapper"> 
+                    <svg class="progress-ring" width="40" height="40"> 
+                        <circle class="progress-ring__circle-bg" cx="20" cy="20" r="18" /> 
+                        <circle class="progress-ring__circle" cx="20" cy="20" r="18" /> 
+                    </svg> 
+                    <span class="chapter-number">${i + 1}</span>
+                </div>
                 <div class="chapter-details"><strong>${partData.title}</strong></div>
                 <p class="chapter-duration">${beatifyDuration(partData.duration)}</p>
               </div>
@@ -123,6 +126,32 @@ $(document).ready(function() {
         renderContentVideo(selectedPartData.source);
     }
 
+    function getUserProgress(progress, duration) {
+          if (!duration || duration <= 0) return 0;
+          const percentage = (progress / duration) * 100;
+          return Math.max(0, Math.min(100, Math.round(percentage)));
+    }
+
+
+    function updateChapterProgressRings() {
+        document.querySelectorAll('.chapter').forEach((chapterEl) => {
+          const progress = parseFloat(chapterEl.dataset.progress) || 0;
+
+          const circle = chapterEl.querySelector('.progress-ring__circle');
+          const radius = circle.r.baseVal.value;
+          const circumference = 2 * Math.PI * radius;
+
+          circle.style.strokeDasharray = `${circumference}`;
+          circle.style.strokeDashoffset = `${circumference - (progress / 100) * circumference}`;
+
+
+            if (progress > 60) {
+                const numberEl = chapterEl.querySelector('.chapter-number');
+              numberEl.innerHTML = '<p style="font-size: 20px; color: #4caf50;">✓</p>';
+            }
+        });
+    }
+
 
 
     var chapterData = {};
@@ -149,6 +178,7 @@ $(document).ready(function() {
                                     "id": "1",
                                     "title": "Part 1: Introduction",
                                     "duration": "530",
+                                    "progress": "240",
                                     "source": "a5a65236-8356-449b-80fe-4c0857ac43ec",
                                     "type": "VIDEO"
                                 },
@@ -156,6 +186,7 @@ $(document).ready(function() {
                                     "id": "2",
                                     "title": "Part 2: Principles of Animals and Birds",
                                     "duration": "1229",
+                                    "progress": "1229",
                                     "source": "656a4f83-e567-4a34-ba21-236ffc54b6f3",
                                     "type": "VIDEO"
                                 }
@@ -183,6 +214,7 @@ $(document).ready(function() {
         renderSideBarAndVideo(moduleData, chapterData, selectedPartData);
     }
 
+    //With default values from URL
     fetchChapterData();
 
 
@@ -197,7 +229,7 @@ $(document).ready(function() {
 
         selectedPartId = partId;
 
-        renderContentVideo(contentSource);
+        fetchChapterData();
     }
 
 

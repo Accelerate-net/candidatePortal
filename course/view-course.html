@@ -10,13 +10,11 @@
   <script src="../assets/js/jquery.js"></script>
   <script src="../assets/js/player.min.js"></script>
   <script src="course.js"></script>
-
-
-
 </head>
+
 <body>
   <!-- Mobile Toggle Button -->
-  <button class="toggle-sidebar" onclick="toggleSidebar()">☰</button>
+  <button class="toggle-sidebar" id="toggleButton" onclick="toggleSidebar()">☰</button>
 
   <div class="container">
     
@@ -41,6 +39,17 @@
   
   </div>
 
+  <script type="text/javascript">
+    function toggleSidebar() {
+      var toggleElement = document.getElementById('sidebar');
+      toggleElement.classList.toggle('open');
+      if(!toggleElement.classList.contains("open")) {
+        document.getElementById("toggleButton").innerText = "☰";
+      } else {
+        document.getElementById("toggleButton").innerText = "X";
+      }
+    }
+  </script>
 
 
 </body>

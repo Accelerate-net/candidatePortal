@@ -91,6 +91,7 @@ body {
 .chapter-number {
   font-weight: bold;
   margin-right: 10px;
+  text-align: center;
 }
 
 .chapter div {
@@ -340,3 +341,41 @@ body {
     background-color: blue; /* or any color */
     width: 0%; /* initial width */
 }
+
+
+.chapter-number-wrapper {
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+
+.chapter-number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  z-index: 2;
+  color: black;
+}
+
+.progress-ring {
+  transform: rotate(-90deg);
+}
+
+.progress-ring__circle-bg {
+  fill: none;
+  stroke: #ddd;
+  stroke-width: 4;
+}
+
+.progress-ring__circle {
+  fill: none;
+  stroke: #4caf50;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 113;
+  stroke-dashoffset: 113;
+  transition: stroke-dashoffset 0.35s;
+}
+
