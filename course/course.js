@@ -9,6 +9,33 @@ $(document).ready(function() {
     selectedPartId = selectedPartId && selectedPartId >= 0 ? selectedPartId : 0;
 
 
+    function saveProgress(courseId, moduleId, chapterId, partId, progressInSeconds) {
+        var saveProgressAPI = {
+              "url": "https://crisprtech.app/crispr-apis/user/courses/save-course-progress.php",
+              "method": "POST",
+              "timeout": 0,
+              "headers": {
+                "Authorization": getUserToken(),
+                "Content-Type": "application/json"
+              },
+              "data": JSON.stringify({
+                "courseId": courseId,
+                "moduleId": moduleId,
+                "chapterId": chapterId,
+                "partId": partId,
+                "progressInSeconds": progressInSeconds
+              })
+        };
+
+        $.ajax(saveProgressAPI).done(function (response) {
+            if(response.status == "success") {
+            } else {
+                console.warn('Unable to save course progress.')
+            }
+        });
+    }
+
+
     var player;
     function trackProgressWithSeek(seekVideoFlag, userProgress) {
         if(!player)
@@ -35,6 +62,12 @@ $(document).ready(function() {
             const currentTime = timingData.seconds;
             const progressPercentage = Math.floor((currentTime / timingData.duration) * 100);
             console.log('Progress Percentage: ' +progressPercentage+ "%");
+
+            if(currentTime == totalDuration || currentTime % 11 == 0) {
+                //Save progress
+                saveProgress(courseId, moduleId, chapterId, selectedPartId, currentTime);
+            }
+
                 
         });
     }
@@ -155,7 +188,7 @@ $(document).ready(function() {
 
         var userProgressRequest = {
           "url": "https://crisprtech.app/crispr-apis/user/courses/get-course-progress.php",
-          "method": "POST",
+          "method": "GET",
           "timeout": 0,
           "headers": {
             "Content-Type": "application/json",
@@ -167,7 +200,7 @@ $(document).ready(function() {
             if(userProgressResponse.status == "success") {
 
                 var responseData = userProgressResponse.data;
-                
+
                 var moduleData = responseData.modules.find(module => module.id === moduleId);
                 var chapterData = moduleData.chapters.find(chapter => chapter.id === chapterId);
                 var selectedPartData = chapterData.parts[0];
