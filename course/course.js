@@ -64,9 +64,11 @@ $(document).ready(function() {
             const progressPercentage = Math.floor((currentTime / timingData.duration) * 100);
             console.log('Progress Percentage: ' +progressPercentage+ "%");
             console.log(currentTime, totalDuration)
-            if(currentTime == totalDuration || currentTime % 11 == 0) {
+            const currentTimeRounded = Math.floor(currentTime);
+            const totalDurationRounded = Math.floor(totalDuration)
+            if(currentTimeRounded == totalDurationRounded || currentTimeRounded % 11 == 0) {
                 //Save progress
-                saveProgress(courseId, moduleId, chapterId, selectedPartId, currentTime);
+                saveProgress(courseId, moduleId, chapterId, selectedPartId, currentTimeRounded);
             }
 
                 
