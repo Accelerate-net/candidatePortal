@@ -329,6 +329,8 @@ $(document).ready(function() {
 
         //Reset last open vide seek cache
         hasSeekedToLastProgress = false;
+        player = new playerjs.Player('bunny-stream-embed');
+        
 
         const url = new URL(window.location);
         url.searchParams.set('view', partId);
