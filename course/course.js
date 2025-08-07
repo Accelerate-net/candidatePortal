@@ -259,7 +259,7 @@ $(document).ready(function() {
 
                 var moduleData = responseData.modules.find(module => module.id === moduleId);
                 var chapterData = moduleData.chapters.find(chapter => chapter.id === chapterId);
-                var selectedPartData = chapterData.parts[0];
+                var selectedPartData = chapterData.parts.find(part => part.id === selectedPartId);
 
                 renderSideBarAndVideo(moduleData, chapterData, selectedPartData);
 
@@ -330,7 +330,7 @@ $(document).ready(function() {
         //Reset last open vide seek cache
         hasSeekedToLastProgress = false;
         player = new playerjs.Player('bunny-stream-embed');
-        
+
 
         const url = new URL(window.location);
         url.searchParams.set('view', partId);
