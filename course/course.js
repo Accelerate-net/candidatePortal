@@ -146,60 +146,86 @@ $(document).ready(function() {
     var selectedPartData = {};
     var contentSource = {}; //Current Video URL
 
+    function getUserToken() {
+        return "";
+    }
+
     function fetchChapterData() {
 
 
-        var responseData = {
-            "courseId": "CR0003",
-            "courseName": "1 Year Program 2025",
-            "modules": [
-                {
-                    "id": "1",
-                    "name": "Biology",
-                    "chapters": [
-                        {
-                            "id": "1",
-                            "code": "Chapter 1",
-                            "title": "Animal Kingdom",
-                            "parts": [
-                                {
-                                    "id": "1",
-                                    "title": "Part 1: Introduction",
-                                    "duration": "530",
-                                    "progress": "240",
-                                    "source": "a5a65236-8356-449b-80fe-4c0857ac43ec",
-                                    "type": "VIDEO"
-                                },
-                                {
-                                    "id": "2",
-                                    "title": "Part 2: Principles of Animals and Birds",
-                                    "duration": "1229",
-                                    "progress": "1229",
-                                    "source": "656a4f83-e567-4a34-ba21-236ffc54b6f3",
-                                    "type": "VIDEO"
-                                }
-                            ],
-                            "rating": {
-                                "value": 49,
-                                "total": 154
-                            },
-                            "teacher": {
-                                "name": "Amith C S",
-                                "brief": "Having graduated from IISER Trivandrum, Amith Sir has been having 5+ years of teaching experience",
-                                "rating": 46,
-                                "photo": "https://amithcs.in/assets/images/avatar.jpg"
-                            }
-                        }
-                    ]
-                }
-            ]
+        var userProgressRequest = {
+          "url": "https://crisprtech.app/crispr-apis/user/courses/get-course-progress.php",
+          "method": "POST",
+          "timeout": 0,
+          "headers": {
+            "Content-Type": "application/json",
+            "Authorization": getUserToken()
+          }
         };
 
-        var moduleData = responseData.modules.find(module => module.id === moduleId);
-        var chapterData = moduleData.chapters.find(chapter => chapter.id === chapterId);
-        var selectedPartData = chapterData.parts[0];
+        $.ajax(userProgressRequest).done(function (userProgressResponse) {
+            if(userProgressResponse.status == "success") {
 
-        renderSideBarAndVideo(moduleData, chapterData, selectedPartData);
+                var responseData = userProgressResponse.data;
+                
+                var moduleData = responseData.modules.find(module => module.id === moduleId);
+                var chapterData = moduleData.chapters.find(chapter => chapter.id === chapterId);
+                var selectedPartData = chapterData.parts[0];
+
+                renderSideBarAndVideo(moduleData, chapterData, selectedPartData);
+
+            } else {
+                showToaster(userProgressResponse.message);
+            }
+        });
+
+
+
+        // var responseData = {
+        //     "courseId": "CR0003",
+        //     "courseName": "1 Year Program 2025",
+        //     "modules": [
+        //         {
+        //             "id": "1",
+        //             "name": "Biology",
+        //             "chapters": [
+        //                 {
+        //                     "id": "1",
+        //                     "code": "Chapter 1",
+        //                     "title": "Animal Kingdom",
+        //                     "parts": [
+        //                         {
+        //                             "id": "1",
+        //                             "title": "Part 1: Introduction",
+        //                             "duration": "530",
+        //                             "progress": "240",
+        //                             "source": "a5a65236-8356-449b-80fe-4c0857ac43ec",
+        //                             "type": "VIDEO"
+        //                         },
+        //                         {
+        //                             "id": "2",
+        //                             "title": "Part 2: Principles of Animals and Birds",
+        //                             "duration": "1229",
+        //                             "progress": "1229",
+        //                             "source": "656a4f83-e567-4a34-ba21-236ffc54b6f3",
+        //                             "type": "VIDEO"
+        //                         }
+        //                     ],
+        //                     "rating": {
+        //                         "value": 49,
+        //                         "total": 154
+        //                     },
+        //                     "teacher": {
+        //                         "name": "Amith C S",
+        //                         "brief": "Having graduated from IISER Trivandrum, Amith Sir has been having 5+ years of teaching experience",
+        //                         "rating": 46,
+        //                         "photo": "https://amithcs.in/assets/images/avatar.jpg"
+        //                     }
+        //                 }
+        //             ]
+        //         }
+        //     ]
+        // };
     }
 
     //With default values from URL
