@@ -15,10 +15,9 @@ $(document).ready(function() {
       const activeItem = chapterList.querySelector('li.chapter.active');
       if (activeItem)
         activeItem.setAttribute('data-progress', progressPercentage);
+
+       updateChapterProgressRings(); 
     }
-
-
-
 
     var saveProgressClaimed = -1;
     function saveProgress(courseId, moduleId, chapterId, partId, progressInSeconds, progressPercentage) {
