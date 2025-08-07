@@ -15,7 +15,10 @@ $(document).ready(function() {
 
 
 
-
+    function renderContentVideo(contentSource) {
+        document.getElementById("videoRenderSpace").innerHTML = '' +
+            '<iframe id="bunny-stream-embed" src="https://iframe.mediadelivery.net/embed/475938/'+contentSource+'" width="720" height="400" frameborder="0" allow="autoplay"></iframe>';
+    }
 
 
     function renderSideBarAndVideo(moduleData, chapterData, selectedPartData) {
@@ -29,20 +32,31 @@ $(document).ready(function() {
                   '<p>'+chapterData.teacher.brief+'</p>' +
                 '</div> ';
 
-        var partsRenderContent = '';
-        for(var i = 0; i < chapterData.parts.length; i++) {
-            var partData = chapterData.parts[i];
-            partsRenderContent += '' +
-            '<li class="chapter" class="'+isPartSelectedActive(partData)+'">' +
-              '<div on-click="'+openContent(partData)+'">' +
-                '<span class="chapter-number">'+(i + 1)+'</span>' +
-                '<div class="chapter-details"><strong>'+partData.title+'</strong></div>' +
-                '<p class="chapter-duration">'+beatifyDuration(partData.duration)+'</p>' +
-              '</div>' +
-            '</li>';
+        let partsRenderContent = '';
+
+        for (let i = 0; i < chapterData.parts.length; i++) {
+          const partData = chapterData.parts[i];
+          partsRenderContent += `
+            <li class="chapter ${isPartSelectedActive(partData)}" data-part-id="${partData.id}" data-source="${partData.source}">
+              <div>
+                <span class="chapter-number">${i + 1}</span>
+                <div class="chapter-details"><strong>${partData.title}</strong></div>
+                <p class="chapter-duration">${beatifyDuration(partData.duration)}</p>
+              </div>
+            </li>
+          `;
         }
 
         document.getElementById("partsList").innerHTML = partsRenderContent;
+
+        document.querySelectorAll('#partsList .chapter').forEach(function (el) {
+          el.addEventListener('click', function () {
+            const partId = el.getAttribute('data-part-id');
+            const source = el.getAttribute('data-source');
+            openContent(partId, source);
+          });
+        });
+
 
 
         document.getElementById("contentTitle").innerHTML = selectedPartData.title;
@@ -51,7 +65,7 @@ $(document).ready(function() {
 
 
 
-        // renderContentVideo(selectedPartData.source);
+        renderContentVideo(selectedPartData.source);
     }
 
 
@@ -121,9 +135,14 @@ $(document).ready(function() {
       return partData.id == selectedPartId ? "active" : "";
     }
 
-    function openContent(partData) {
-      var selectedPartData = partData;
-      //renderContentVideo(partData.source);
+    function openContent(partId, contentSource) {
+        const url = new URL(window.location);
+        url.searchParams.set('view', partId);
+        window.history.pushState({}, '', url);
+
+        selectedPartId = partId;
+
+        renderContentVideo(contentSource);
     }
 
 
