@@ -328,8 +328,8 @@ $(document).ready(function() {
     function openContent(partId, contentSource) {
         const url = new URL(window.location);
         url.searchParams.set('view', partId);
-        window.location.href = url; // Actually navigates to the new URL
-        window.location.reload();
+        url.searchParams.set('t', new Date().getTime());
+        window.location.href = url;
     }
 
 
