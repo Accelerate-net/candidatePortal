@@ -163,7 +163,7 @@
 									        </div>
 									        <div class="selectCourseBar-scroll-container">
 									            <div class="selectCourseBar-options">
-									                <span href="" ng-href="{{courseBundleItem.url}}" class="selectCourseBar-option" ng-repeat="courseBundleItem in courseBundlesListing track by $index" ng-class="{'selectCourseBar-optionActive' : 1 == 1}">{{courseBundleItem.title}}</span>
+									                <a ng-href="{{courseBundleItem.url}}" target="_self" class="selectCourseBar-option" ng-repeat="courseBundleItem in courseBundlesListing track by $index" ng-class="{'selectCourseBar-optionActive' : 1 == 1}">{{courseBundleItem.title}}</a>
 									                <p style="font-size: 16px;" ng-if="!courseBundlesListingFound">You are not added to any courses yet.
 									                </p>
 									            </div>
