@@ -214,7 +214,7 @@ $(document).ready(function() {
           circle.style.strokeDashoffset = `${circumference - (progress / 100) * circumference}`;
 
             const numberEl = chapterEl.querySelector('.chapter-number');
-            if (progress > 99) {
+            if (progress > 98) {
                 numberEl.innerHTML = '<p style="font-size: 20px; color: #4caf50;">✓</p>';
             } else {
                 numberEl.innerHTML = index;
