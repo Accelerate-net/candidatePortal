@@ -185,7 +185,7 @@ body {
   position: relative;
   padding-bottom: 56.25%; /* 16:9 aspect ratio */
   height: 0;
-  overflow: hidden;
+/*  overflow: hidden;*/
 }
 
 .video-wrapper iframe {

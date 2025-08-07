@@ -57,47 +57,6 @@ $(document).ready(function() {
 
     var player;
     var hasSeekedToLastProgress = false;
-    function trackProgressWithSeek(seekVideoFlag, userProgress) {
-        console.log(seekVideoFlag, userProgress);
-        if(!player)
-            player = new playerjs.Player('bunny-stream-embed');
-
-        let totalDuration = 0;
-        let lastProgress = 0;
-
-        player.on('ready', () => {
-            console.log('Ready');
-        });
-
-        player.on('play', () => {
-            console.log('Video is playing');
-
-            if(!hasSeekedToLastProgress) {
-                hasSeekedToLastProgress = true;
-                player.setCurrentTime(userProgress);
-            }
-
-        });
-
-        player.getDuration((duration) => {
-            totalDuration = duration;
-        });
-
-
-        let lastSavedSecond = -1;
-        player.on('timeupdate', (timingData) => {
-            const currentTime = timingData.seconds;
-            const progressPercentage = Math.floor((currentTime / timingData.duration) * 100);
-            const currentTimeRounded = Math.floor(currentTime);
-            const totalDurationRounded = Math.floor(timingData.duration);
-
-            if ((currentTimeRounded !== lastSavedSecond) && (currentTimeRounded === totalDurationRounded || currentTimeRounded % 11 === 0)) {
-                lastSavedSecond = currentTimeRounded;
-                saveProgress(courseId, moduleId, chapterId, selectedPartId, currentTimeRounded, progressPercentage);
-            }
-        });
-    }
-
 
     function bindPlayerTrackingEvents() {
         let lastSavedSecond = -1;
@@ -129,8 +88,11 @@ $(document).ready(function() {
         userProgress = !userProgress ? 0 : parseInt(userProgress);
         player = null; //Remove older video
         document.getElementById("videoRenderSpace").innerHTML = '' +
-            '<iframe id="bunny-stream-embed" src="https://iframe.mediadelivery.net/embed/475938/'+contentSource+'?autoplay=true" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> </iframe>';
-
+          '<iframe id="bunny-stream-embed" ' +
+          'src="https://iframe.mediadelivery.net/embed/475938/' + contentSource + '?autoplay=true" ' +
+          'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" ' +
+          'allowfullscreen>' +
+          '</iframe>';
 
         const iframe = document.getElementById("bunny-stream-embed");
 
