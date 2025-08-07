@@ -58,6 +58,7 @@ $(document).ready(function() {
 
 
     var player;
+    var hasSeekedToLastProgress = false;
     function trackProgressWithSeek(seekVideoFlag, userProgress) {
         console.log(seekVideoFlag, userProgress);
         if(!player)
@@ -72,8 +73,10 @@ $(document).ready(function() {
 
         player.on('play', () => {
             console.log('Video is playing');
-            player.setCurrentTime(userProgress);
-            
+            if(!hasSeekedToLastProgress) {
+                hasSeekedToLastProgress = true;
+                player.setCurrentTime(userProgress);
+            }
         });
 
         player.getDuration((duration) => {
