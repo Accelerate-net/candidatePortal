@@ -58,21 +58,43 @@ $(document).ready(function() {
             totalDuration = duration;
         });
 
-        player.on('timeupdate', (timingData) => {
 
+        let lastSavedSecond = -1;
+        player.on('timeupdate', (timingData) => {
             const currentTime = timingData.seconds;
             const progressPercentage = Math.floor((currentTime / timingData.duration) * 100);
-            console.log('Progress Percentage: ' +progressPercentage+ "%");
-            console.log(currentTime, totalDuration)
+            console.log('Progress Percentage: ' + progressPercentage + "%");
+
             const currentTimeRounded = Math.floor(currentTime);
-            const totalDurationRounded = Math.floor(totalDuration)
-            if(currentTimeRounded == totalDurationRounded || currentTimeRounded % 11 == 0) {
-                //Save progress
+            const totalDurationRounded = Math.floor(timingData.duration);
+
+            if (
+                (currentTimeRounded !== lastSavedSecond) &&
+                (currentTimeRounded === totalDurationRounded || currentTimeRounded % 11 === 0)
+            ) {
+                lastSavedSecond = currentTimeRounded;
                 saveProgress(courseId, moduleId, chapterId, selectedPartId, currentTimeRounded);
             }
+        });
+
+
+
+
+        // player.on('timeupdate', (timingData) => {
+
+        //     const currentTime = timingData.seconds;
+        //     const progressPercentage = Math.floor((currentTime / timingData.duration) * 100);
+        //     console.log('Progress Percentage: ' +progressPercentage+ "%");
+        //     console.log(currentTime, totalDuration)
+        //     const currentTimeRounded = Math.floor(currentTime);
+        //     const totalDurationRounded = Math.floor(totalDuration)
+        //     if(currentTimeRounded == totalDurationRounded || currentTimeRounded % 11 == 0) {
+        //         //Save progress
+        //         saveProgress(courseId, moduleId, chapterId, selectedPartId, currentTimeRounded);
+        //     }
 
                 
-        });
+        // });
     }
 
 
