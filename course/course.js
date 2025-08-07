@@ -326,6 +326,10 @@ $(document).ready(function() {
     }
 
     function openContent(partId, contentSource) {
+
+        //Reset last open vide seek cache
+        hasSeekedToLastProgress = false;
+
         const url = new URL(window.location);
         url.searchParams.set('view', partId);
         window.history.pushState({}, '', url);
