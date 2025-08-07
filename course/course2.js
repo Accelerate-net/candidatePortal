@@ -99,6 +99,30 @@ $(document).ready(function() {
     }
 
 
+    function bindPlayerTrackingEvents() {
+        let lastSavedSecond = -1;
+
+        if (!player) return;
+
+        player.on('play', () => {
+            console.log('Video is playing');
+        });
+
+        player.on('timeupdate', (timingData) => {
+            const currentTime = timingData.seconds;
+            const progressPercentage = Math.floor((currentTime / timingData.duration) * 100);
+            const currentTimeRounded = Math.floor(currentTime);
+            const totalDurationRounded = Math.floor(timingData.duration);
+
+            if ((currentTimeRounded !== lastSavedSecond) &&
+                (currentTimeRounded === totalDurationRounded || currentTimeRounded % 11 === 0)) {
+                lastSavedSecond = currentTimeRounded;
+                saveProgress(courseId, moduleId, chapterId, selectedPartId, currentTimeRounded, progressPercentage);
+            }
+        });
+    }
+
+
 
 
     function renderContentVideo(contentSource, userProgress) {
@@ -107,12 +131,36 @@ $(document).ready(function() {
         document.getElementById("videoRenderSpace").innerHTML = '' +
             '<iframe id="bunny-stream-embed" src="https://iframe.mediadelivery.net/embed/475938/'+contentSource+'?autoplay=true" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> </iframe>';
 
-        if(userProgress > 10)
-            trackProgressWithSeek(true, userProgress);
 
-        setTimeout(function () {
-          trackProgressWithSeek(false, -1);
-        }, 10000);
+        const iframe = document.getElementById("bunny-stream-embed");
+
+        // Wait for iframe to fully load
+        iframe.onload = () => {
+            console.log("Iframe loaded");
+
+            player = new playerjs.Player(iframe);
+
+            player.on('ready', () => {
+                console.log("Player ready");
+
+                if (userProgress > 10 && !hasSeekedToLastProgress) {
+                    hasSeekedToLastProgress = true;
+                    console.log("Seeking to", userProgress);
+                    player.setCurrentTime(userProgress);
+                }
+            });
+
+            bindPlayerTrackingEvents();
+        };
+
+
+
+        // if(userProgress > 10)
+        //     trackProgressWithSeek(true, userProgress);
+
+        // setTimeout(function () {
+        //   trackProgressWithSeek(false, -1);
+        // }, 10000);
 
         updateChapterProgressRings();
     }
