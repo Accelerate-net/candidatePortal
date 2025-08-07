@@ -10,6 +10,7 @@ $(document).ready(function() {
 
 
     function saveProgress(courseId, moduleId, chapterId, partId, progressInSeconds) {
+        console.log('saving now',courseId, moduleId, chapterId, partId, progressInSeconds)
         var saveProgressAPI = {
               "url": "https://crisprtech.app/crispr-apis/user/courses/save-course-progress.php",
               "method": "POST",
@@ -62,7 +63,7 @@ $(document).ready(function() {
             const currentTime = timingData.seconds;
             const progressPercentage = Math.floor((currentTime / timingData.duration) * 100);
             console.log('Progress Percentage: ' +progressPercentage+ "%");
-
+            console.log(currentTime, totalDuration)
             if(currentTime == totalDuration || currentTime % 11 == 0) {
                 //Save progress
                 saveProgress(courseId, moduleId, chapterId, selectedPartId, currentTime);
