@@ -403,3 +403,36 @@ body {
     opacity: 0;
     visibility: hidden;
 }
+
+.error-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #036073;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  text-align: center;
+}
+
+.error-content h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #ffb706;
+  text-align: center;
+}
+
+.error-content a {
+  color: #036073;
+  background-color: #fff;
+  padding: 20px 15px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  display: inline-block;
+  margin-top: 30px;
+}

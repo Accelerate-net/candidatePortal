@@ -8,7 +8,19 @@ $(document).ready(function() {
     var selectedPartId = urlParams.get('view');
     selectedPartId = selectedPartId && selectedPartId >= 0 ? selectedPartId : 0;
 
+    function getCookieByName(name) {
+        var match = document.cookie.match('(?:^|; )' + name + '=([^;]*)');
+        return match ? decodeURIComponent(match[1]) : null;
+    }
 
+    function getUserToken() {
+        return "Bearer " + getCookieByName('crispriteUserToken');
+    }
+
+    //Not logged in
+    if(!getCookieByName()) {
+        showNotAuthorisedScreen();
+    }
 
     function reRenderSidePanelProgress(progressPercentage) {
       const chapterList = document.querySelector('#partsList');
@@ -83,7 +95,9 @@ $(document).ready(function() {
     }
 
 
-
+    function showNotAuthorisedScreen() {
+      document.getElementById('errorOverlay').style.display = 'flex';
+    }
 
     function renderContentVideo(contentDirectory, contentSource, userProgress) {
         userProgress = !userProgress ? 0 : parseInt(userProgress);
@@ -105,7 +119,6 @@ $(document).ready(function() {
 
             player.on('ready', () => {
                 console.log("Player ready");
-
                 if (userProgress > 10 && !hasSeekedToLastProgress) {
                     hasSeekedToLastProgress = true;
                     console.log("Seeking to", userProgress);
@@ -115,15 +128,6 @@ $(document).ready(function() {
 
             bindPlayerTrackingEvents();
         };
-
-
-
-        // if(userProgress > 10)
-        //     trackProgressWithSeek(true, userProgress);
-
-        // setTimeout(function () {
-        //   trackProgressWithSeek(false, -1);
-        // }, 10000);
 
         updateChapterProgressRings();
     }
@@ -219,15 +223,11 @@ $(document).ready(function() {
     var selectedPartData = {};
     var contentSource = {}; //Current Video URL
 
-    function getUserToken() {
-        return "";
-    }
-
     function fetchChapterData() {
 
 
         var userProgressRequest = {
-          "url": "https://crisprtech.app/crispr-apis/user/courses/get-course-progress.php",
+          "url": "https://crisprtech.app/crispr-apis/user/courses/get-course-progress.php?courseId="+courseId+"&moduleId="+moduleId+"&chapterId="+chapterId+"&partId="+selectedPartId,
           "method": "GET",
           "timeout": 0,
           "headers": {
@@ -252,6 +252,7 @@ $(document).ready(function() {
             }
         });
     }
+
 
     //With default values from URL
     fetchChapterData();
