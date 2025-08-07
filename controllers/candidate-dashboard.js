@@ -247,7 +247,7 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
     $scope.getCourseBundlesList = function() {
         $http({
           method  : 'GET',
-          url     : 'https://crisprtech.app/crispr-apis/user/course-bundle-progress.php'),
+          url     : 'https://crisprtech.app/crispr-apis/user/course-bundle-progress.php',
           headers : {
             'Content-Type': 'application/json',
             'Authorization': getUserToken()
