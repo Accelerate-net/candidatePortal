@@ -9,8 +9,17 @@ $(document).ready(function() {
     selectedPartId = selectedPartId && selectedPartId >= 0 ? selectedPartId : 0;
 
 
+    var saveProgressClaimed = -1;
     function saveProgress(courseId, moduleId, chapterId, partId, progressInSeconds) {
-        console.log('saving now',courseId, moduleId, chapterId, partId, progressInSeconds)
+
+        //Prevent same progress getting called
+        if(saveProgressClaimed === progressInSeconds)
+            return;
+        else 
+            saveProgressClaimed = progressInSeconds;
+
+
+        
         var saveProgressAPI = {
               "url": "https://crisprtech.app/crispr-apis/user/courses/save-course-progress.php",
               "method": "POST",
