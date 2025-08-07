@@ -201,6 +201,7 @@ $(document).ready(function() {
 
 
     function updateChapterProgressRings() {
+        var index = 1;
         document.querySelectorAll('.chapter').forEach((chapterEl) => {
           const progress = parseFloat(chapterEl.dataset.progress) || 0;
 
@@ -211,11 +212,14 @@ $(document).ready(function() {
           circle.style.strokeDasharray = `${circumference}`;
           circle.style.strokeDashoffset = `${circumference - (progress / 100) * circumference}`;
 
-
-            if (progress > 60) {
-                const numberEl = chapterEl.querySelector('.chapter-number');
-              numberEl.innerHTML = '<p style="font-size: 20px; color: #4caf50;">✓</p>';
+            const numberEl = chapterEl.querySelector('.chapter-number');
+            if (progress > 99) {
+                numberEl.innerHTML = '<p style="font-size: 20px; color: #4caf50;">✓</p>';
+            } else {
+                numberEl.innerHTML = index;
             }
+
+            index++;
         });
     }
 
