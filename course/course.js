@@ -52,10 +52,7 @@ $(document).ready(function() {
 
         // Log the progress percentage
         console.log('Progress Percentage: ' + Math.floor(progressPercentage) + "%");
-
-        // Update the progress text on the page
-        progressText.textContent = `${Math.floor(progressPercentage)}%`;
-
+        
         // Check if progress reached a new 25% milestone and update the progress bar
         if (progressRounded > lastProgress) {
             console.log(`Video progress: ${progressRounded}%`);
