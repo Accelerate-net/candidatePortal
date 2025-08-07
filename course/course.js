@@ -18,7 +18,7 @@ $(document).ready(function() {
     }
 
     //Not logged in
-    if(!getCookieByName()) {
+    if(getCookieByName('crispriteUserToken') == null) {
         showNotAuthorisedScreen();
     }
 
