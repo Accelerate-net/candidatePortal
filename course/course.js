@@ -20,7 +20,7 @@ $(document).ready(function() {
     }
 
     var saveProgressClaimed = -1;
-    function saveProgress(courseId, moduleId, chapterId, partId, progressInSeconds, progressPercentage) {
+    function saveProgress(courseId, moduleId, chapterId, partId, progressInSeconds, totalDurationRounded, progressPercentage) {
 
         //Prevent same progress getting called
         if(saveProgressClaimed === progressInSeconds)
@@ -41,7 +41,8 @@ $(document).ready(function() {
                 "moduleId": moduleId,
                 "chapterId": chapterId,
                 "partId": partId,
-                "progressInSeconds": progressInSeconds
+                "progressInSeconds": progressInSeconds,
+                "duration": totalDurationRounded
               })
         };
 
@@ -57,43 +58,26 @@ $(document).ready(function() {
 
     var player;
     var hasSeekedToLastProgress = false;
-    function trackProgressWithSeek(seekVideoFlag, userProgress) {
-        console.log(seekVideoFlag, userProgress);
-        if(!player)
-            player = new playerjs.Player('bunny-stream-embed');
 
-        let totalDuration = 0;
-        let lastProgress = 0;
+    function bindPlayerTrackingEvents() {
+        let lastSavedSecond = -1;
 
-        player.on('ready', () => {
-            console.log('Ready');
-        });
+        if (!player) return;
 
         player.on('play', () => {
             console.log('Video is playing');
-
-            if(!hasSeekedToLastProgress) {
-                hasSeekedToLastProgress = true;
-                player.setCurrentTime(userProgress);
-            }
-
         });
 
-        player.getDuration((duration) => {
-            totalDuration = duration;
-        });
-
-
-        let lastSavedSecond = -1;
         player.on('timeupdate', (timingData) => {
             const currentTime = timingData.seconds;
             const progressPercentage = Math.floor((currentTime / timingData.duration) * 100);
             const currentTimeRounded = Math.floor(currentTime);
             const totalDurationRounded = Math.floor(timingData.duration);
 
-            if ((currentTimeRounded !== lastSavedSecond) && (currentTimeRounded === totalDurationRounded || currentTimeRounded % 11 === 0)) {
+            if ((currentTimeRounded !== lastSavedSecond) &&
+                (currentTimeRounded === totalDurationRounded || currentTimeRounded % 11 === 0)) {
                 lastSavedSecond = currentTimeRounded;
-                saveProgress(courseId, moduleId, chapterId, selectedPartId, currentTimeRounded, progressPercentage);
+                saveProgress(courseId, moduleId, chapterId, selectedPartId, currentTimeRounded, totalDurationRounded, progressPercentage);
             }
         });
     }
@@ -101,18 +85,45 @@ $(document).ready(function() {
 
 
 
-    function renderContentVideo(contentSource, userProgress) {
+    function renderContentVideo(contentDirectory, contentSource, userProgress) {
         userProgress = !userProgress ? 0 : parseInt(userProgress);
         player = null; //Remove older video
         document.getElementById("videoRenderSpace").innerHTML = '' +
-            '<iframe id="bunny-stream-embed" src="https://iframe.mediadelivery.net/embed/475938/'+contentSource+'?autoplay=true" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> </iframe>';
+          '<iframe id="bunny-stream-embed" ' +
+          'src="https://iframe.mediadelivery.net/embed/'+contentDirectory+'/' + contentSource + '?autoplay=true" ' +
+          'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" ' +
+          'allowfullscreen>' +
+          '</iframe>';
 
-        if(userProgress > 10)
-            trackProgressWithSeek(true, userProgress);
+        const iframe = document.getElementById("bunny-stream-embed");
 
-        setTimeout(function () {
-          trackProgressWithSeek(false, -1);
-        }, 10000);
+        // Wait for iframe to fully load
+        iframe.onload = () => {
+            console.log("Iframe loaded");
+
+            player = new playerjs.Player(iframe);
+
+            player.on('ready', () => {
+                console.log("Player ready");
+
+                if (userProgress > 10 && !hasSeekedToLastProgress) {
+                    hasSeekedToLastProgress = true;
+                    console.log("Seeking to", userProgress);
+                    player.setCurrentTime(userProgress);
+                }
+            });
+
+            bindPlayerTrackingEvents();
+        };
+
+
+
+        // if(userProgress > 10)
+        //     trackProgressWithSeek(true, userProgress);
+
+        // setTimeout(function () {
+        //   trackProgressWithSeek(false, -1);
+        // }, 10000);
 
         updateChapterProgressRings();
     }
@@ -169,7 +180,7 @@ $(document).ready(function() {
 
 
 
-        renderContentVideo(selectedPartData.source, selectedPartData.progress);
+        renderContentVideo(selectedPartData.directory, selectedPartData.source, selectedPartData.progress);
     }
 
     function getUserProgress(progress, duration) {
