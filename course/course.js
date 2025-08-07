@@ -128,12 +128,12 @@ $(document).ready(function() {
 
 
     function renderContentVideo(contentSource, userProgress) {
+        userProgress = !userProgress ? 0 : parseInt(userProgress);
         player = null; //Remove older video
         document.getElementById("videoRenderSpace").innerHTML = '' +
-            '<iframe id="bunny-stream-embed" src="https://iframe.mediadelivery.net/embed/475938/'+contentSource+'" width="720" height="400" frameborder="0" allow="autoplay"></iframe>';
+            '<iframe id="bunny-stream-embed" src="https://iframe.mediadelivery.net/embed/475938/'+contentSource+'" width="720" height="400" frameborder="0" '+ userProgress == -1 ? 'allow="autoplay"' : '' +'></iframe>';
 
-        userProgress = !userProgress ? 0 : parseInt(userProgress);
-
+        
         if(userProgress > 10)
             trackProgressWithSeek(true, userProgress);
 
@@ -326,19 +326,9 @@ $(document).ready(function() {
     }
 
     function openContent(partId, contentSource) {
-
-        //Reset last open vide seek cache
-        hasSeekedToLastProgress = false;
-        player = new playerjs.Player('bunny-stream-embed');
-
-
         const url = new URL(window.location);
         url.searchParams.set('view', partId);
-        window.history.pushState({}, '', url);
-
-        selectedPartId = partId;
-
-        fetchChapterData();
+        window.location.href = url; // Actually navigates to the new URL
     }
 
 
