@@ -9,8 +9,19 @@ $(document).ready(function() {
     selectedPartId = selectedPartId && selectedPartId >= 0 ? selectedPartId : 0;
 
 
+
+    function reRenderSidePanelProgress(progressPercentage) {
+      const chapterList = document.querySelector('#partsList');
+      const activeItem = chapterList.querySelector('li.chapter.active');
+      if (activeItem)
+        activeItem.setAttribute('data-progress', progressPercentage);
+    }
+
+
+
+
     var saveProgressClaimed = -1;
-    function saveProgress(courseId, moduleId, chapterId, partId, progressInSeconds) {
+    function saveProgress(courseId, moduleId, chapterId, partId, progressInSeconds, progressPercentage) {
 
         //Prevent same progress getting called
         if(saveProgressClaimed === progressInSeconds)
@@ -39,6 +50,7 @@ $(document).ready(function() {
 
         $.ajax(saveProgressAPI).done(function (response) {
             if(response.status == "success") {
+                reRenderSidePanelProgress(progressPercentage);
             } else {
                 console.warn('Unable to save course progress.')
             }
@@ -82,7 +94,7 @@ $(document).ready(function() {
                 (currentTimeRounded === totalDurationRounded || currentTimeRounded % 11 === 0)
             ) {
                 lastSavedSecond = currentTimeRounded;
-                saveProgress(courseId, moduleId, chapterId, selectedPartId, currentTimeRounded);
+                saveProgress(courseId, moduleId, chapterId, selectedPartId, currentTimeRounded, progressPercentage);
             }
         });
 
