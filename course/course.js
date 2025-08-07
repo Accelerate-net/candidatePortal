@@ -329,6 +329,7 @@ $(document).ready(function() {
         const url = new URL(window.location);
         url.searchParams.set('view', partId);
         window.location.href = url; // Actually navigates to the new URL
+        window.location.reload();
     }
 
 
