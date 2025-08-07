@@ -69,14 +69,16 @@ $(document).ready(function() {
 
         player.on('ready', () => {
             console.log('Ready');
-            if(!hasSeekedToLastProgress) {
-                hasSeekedToLastProgress = true;
-                player.setCurrentTime(userProgress);
-            }
         });
 
         player.on('play', () => {
             console.log('Video is playing');
+
+            if(!hasSeekedToLastProgress) {
+                hasSeekedToLastProgress = true;
+                player.setCurrentTime(userProgress);
+            }
+
         });
 
         player.getDuration((duration) => {
