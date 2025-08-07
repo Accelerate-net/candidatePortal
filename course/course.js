@@ -10,7 +10,7 @@ $(document).ready(function() {
 
 
     var player;
-    function trackProgress() {
+    function trackProgressWithSeek(seekVideoFlag, userProgress) {
         if(!player)
             player = new playerjs.Player('bunny-stream-embed');
 
@@ -23,6 +23,7 @@ $(document).ready(function() {
 
         player.on('play', () => {
             console.log('Video is playing');
+            player.currentTime = userProgress;
         });
 
         player.getDuration((duration) => {
@@ -41,13 +42,18 @@ $(document).ready(function() {
 
 
 
-    function renderContentVideo(contentSource) {
+    function renderContentVideo(contentSource, userProgress) {
         player = null; //Remove older video
         document.getElementById("videoRenderSpace").innerHTML = '' +
             '<iframe id="bunny-stream-embed" src="https://iframe.mediadelivery.net/embed/475938/'+contentSource+'" width="720" height="400" frameborder="0" allow="autoplay"></iframe>';
-    
+
+        userProgress = !userProgress ? 0 : parseInt(userProgress);
+
+        if(userProgress > 0)
+            trackProgressWithSeek(true, userProgress);
+
         setTimeout(function () {
-          trackProgress();
+          trackProgressWithSeek(false, -1);
         }, 3000);
 
         updateChapterProgressRings();
@@ -105,7 +111,7 @@ $(document).ready(function() {
 
 
 
-        renderContentVideo(selectedPartData.source);
+        renderContentVideo(selectedPartData.source, selectedPartData.progress);
     }
 
     function getUserProgress(progress, duration) {
