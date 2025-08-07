@@ -69,14 +69,14 @@ $(document).ready(function() {
 
         player.on('ready', () => {
             console.log('Ready');
-        });
-
-        player.on('play', () => {
-            console.log('Video is playing');
             if(!hasSeekedToLastProgress) {
                 hasSeekedToLastProgress = true;
                 player.setCurrentTime(userProgress);
             }
+        });
+
+        player.on('play', () => {
+            console.log('Video is playing');
         });
 
         player.getDuration((duration) => {
@@ -132,12 +132,12 @@ $(document).ready(function() {
 
         userProgress = !userProgress ? 0 : parseInt(userProgress);
 
-        if(userProgress > 0)
+        if(userProgress > 10)
             trackProgressWithSeek(true, userProgress);
 
         setTimeout(function () {
           trackProgressWithSeek(false, -1);
-        }, 3000);
+        }, 10000);
 
         updateChapterProgressRings();
     }
