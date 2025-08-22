@@ -5,7 +5,7 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
 }])
 
 
-.controller('candidateDashboardController', function($scope, $http, $interval, $cookies) {
+.controller('candidateDashboardController', function($scope, $http, $interval, $cookies, $timeout) {
 
     //Check if logged in
     if($cookies.get("crispriteUserToken")){
@@ -207,6 +207,9 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
     $scope.courseListingFound = false;
     $scope.getCourseListingData = function(id) {
         $scope.courseIdOpen = id;
+        
+        // Ensure we're on the test series tab
+        $scope.activeTab = 'testSeries';
         $http({
           method  : 'GET',
           url     : 'https://crisprtech.app/crispr-apis/user/test-series-progress.php'+(id ? '?id='+id : ''),
@@ -223,6 +226,11 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
                 if(!$scope.courseIdOpen && $scope.courseListing && $scope.courseListing.testSeriesEnrolled && $scope.courseListing.testSeriesEnrolled[0]) {
                     $scope.courseIdOpen = $scope.courseListing.testSeriesEnrolled[0].code;
                     $scope.courseNameOpen = $scope.courseListing.testSeriesEnrolled[0].title;
+                }
+                
+                // Auto-select first test series if available and we're on the test series tab
+                if ($scope.activeTab === 'testSeries' && $scope.courseListing && $scope.courseListing.testSeriesList && $scope.courseListing.testSeriesList.length > 0) {
+                    $scope.getCourseListingData($scope.courseListing.testSeriesList[0].code);
                 }
 
                 //Render progress chart if applicable
@@ -255,8 +263,14 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
          })
          .then(function(response) {
             if(response.data.status == "success"){
-                $scope.courseBundlesListing = response.data.data;
+                $scope.courseBundlesListing = response.data.data.enrolledCourses;
+                $scope.courseBundleData = response.data.data.enrolledCourses; // Store in the variable used by switchTab
                 $scope.courseBundlesListingFound = true;
+                
+                // Auto-select first course bundle if we're on the course bundles tab
+                if ($scope.activeTab === 'courseBundles' && response.data.data && response.data.data.length > 0) {
+                    $scope.selectCourseBundle(response.data.data.enrolledCourses[0]);
+                }
             } else {
                 $scope.courseBundlesListingFound = false;
             }
@@ -264,6 +278,19 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
     }
 
     $scope.getCourseBundlesList();
+
+    // Initialize with first card selected after data loads
+    $timeout(function() {
+        // Auto-select first test series on initial load
+        if ($scope.courseListing && $scope.courseListing.testSeriesList && $scope.courseListing.testSeriesList.length > 0) {
+            $scope.getCourseListingData($scope.courseListing.testSeriesList[0].code);
+        }
+        
+        // Auto-select first course bundle on initial load if on course bundles tab
+        if ($scope.activeTab === 'courseBundles' && $scope.courseBundleData && $scope.courseBundleData.length > 0) {
+            $scope.selectCourseBundle($scope.courseBundleData[0]);
+        }
+    }, 1000); // Wait 1 second for data to load
 
 
 
@@ -381,5 +408,186 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
         }, 3000);
     }
 
+    // Tab Management
+    $scope.activeTab = 'testSeries'; // Default to test series tab
+
+    $scope.switchTab = function(tabName) {
+        $scope.activeTab = tabName;
+        
+        // Clear any selected course bundle when switching to test series
+        if (tabName === 'testSeries') {
+            $scope.selectedCourseBundleId = null;
+            $scope.selectedCourseBundleData = null;
+        }
+        
+        // Clear any selected test series when switching to course bundles
+        if (tabName === 'courseBundles') {
+            $scope.courseIdOpen = null;
+            
+            // Auto-select first course bundle if available
+            if ($scope.courseBundleData && $scope.courseBundleData.length > 0) {
+                $scope.selectCourseBundle($scope.courseBundleData[0]);
+            }
+        }
+        
+        // Auto-select first test series if available
+        if (tabName === 'testSeries') {
+            if ($scope.courseListing && $scope.courseListing.testSeriesList && $scope.courseListing.testSeriesList.length > 0) {
+                $scope.getCourseListingData($scope.courseListing.testSeriesList[0].code);
+            }
+        }
+    }
+
+    // Course Bundle Selection and Content Rendering
+    $scope.selectedCourseBundleId = null;
+    $scope.selectedCourseBundleData = null;
+
+    $scope.selectCourseBundle = function(courseBundle) {
+        $scope.selectedCourseBundleId = courseBundle.id;
+        $scope.selectedCourseBundleData = courseBundle;
+        
+        // Ensure we're on the course bundles tab
+        $scope.activeTab = 'courseBundles';
+        
+        // Fetch course bundle progress data
+        $scope.fetchCourseBundleProgress(courseBundle.id);
+    }
+
+    $scope.clearCourseSelection = function() {
+        $scope.selectedCourseBundleId = null;
+        $scope.selectedCourseBundleData = null;
+    }
+
+    $scope.fetchCourseBundleProgress = function(bundleId) {
+        $http({
+            method: 'GET',
+            url: 'https://crisprtech.app/crispr-apis/user/course-bundle-progress.php',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': getUserToken()
+            }
+        })
+        .then(function(response) {
+            if(response.data.status === "success") {
+                const selectedContent = response.data.data.coursesMetadata[bundleId];
+                $scope.renderCourseBundleContent(selectedContent.modules, selectedContent.chapters);
+            } else {
+                $scope.showToaster("Failed to load course bundle data");
+            }
+        })
+        .catch(function(error) {
+            $scope.showToaster("Error loading course bundle data");
+        });
+    }
+
+    $scope.renderCourseBundleContent = function(modules, chapters) {
+        // Use $timeout to ensure DOM is ready
+        $timeout(function() {
+            const tabContainer = document.getElementById('tab-container');
+            const tabContents = document.getElementById('tab-contents');
+
+            if (!tabContainer || !tabContents) {
+                $timeout(function() {
+                    $scope.renderCourseBundleContent(modules, chapters);
+                }, 100);
+                return;
+            }
+
+            tabContainer.innerHTML = '';
+            tabContents.innerHTML = '';
+
+            let firstTabId = null;
+
+            Object.keys(modules).forEach((modId, index) => {
+                const mod = modules[modId];
+                if (index === 0) firstTabId = modId;
+
+                // Create tab button
+                const tabBtn = document.createElement('button');
+                tabBtn.className = 'tab';
+                tabBtn.textContent = mod.name;
+                tabBtn.setAttribute('data-module-id', modId);
+                tabBtn.onclick = function() { 
+                    const moduleId = this.getAttribute('data-module-id');
+                    $scope.showCourseBundleTab(moduleId);
+                };
+                tabContainer.appendChild(tabBtn);
+
+                // Create tab content container
+                const contentDiv = document.createElement('div');
+                contentDiv.id = `module-${modId}`;
+                contentDiv.className = 'tab-content';
+                contentDiv.style.display = 'none';
+
+                // Filter chapters for this module
+                const modChapters = chapters.filter(c => c.moduleId == modId);
+
+                if (modChapters.length > 0) {
+                    const table = document.createElement('table');
+                    
+                    // Add table header
+                    const thead = document.createElement('thead');
+                    table.appendChild(thead);
+                    
+                    // Add table body
+                    const tbody = document.createElement('tbody');
+                    modChapters.forEach(ch => {
+                        const tr = document.createElement('tr');
+
+                        if (!ch.url) {
+                            tr.classList.add('disabled');
+                        }
+
+                        const watchButton = ch.url
+                            ? `<button class="btn-view" onclick="window.open('${ch.url}', '_blank')">Watch</button>`
+                            : '';
+
+                        tr.innerHTML = `
+                            <td>Chapter ${ch.chapterNumber} : <strong>${ch.title}</strong></td>
+                            <td>${watchButton}</td>
+                        `;
+
+                        tbody.appendChild(tr);
+                    });
+                    
+                    table.appendChild(tbody);
+                    contentDiv.appendChild(table);
+                } else {
+                    contentDiv.innerHTML = "<p>No chapters available.</p>";
+                }
+
+                tabContents.appendChild(contentDiv);
+            });
+
+            // Show first tab by default
+            if (firstTabId) {
+                $scope.showCourseBundleTab(firstTabId);
+            }
+        }, 100);
+    }
+
+    $scope.showCourseBundleTab = function(tabId) {
+        
+        // Hide all tab contents
+        const tabContents = document.querySelectorAll('#tab-contents .tab-content');
+        tabContents.forEach(content => content.style.display = 'none');
+
+        // Remove active class from all tabs
+        const tabs = document.querySelectorAll('#tab-container .tab');
+        tabs.forEach(tab => tab.classList.remove('active'));
+
+        // Show selected tab content
+        const selectedContent = document.getElementById(`module-${tabId}`);
+        if (selectedContent) {
+            selectedContent.style.display = 'block';
+        }
+
+        // Set active class on selected tab
+        // Find the tab by its text content matching the module name
+        const tabIndex = parseInt(tabId) - 1;
+        if (tabs[tabIndex]) {
+            tabs[tabIndex].classList.add('active');
+        }
+    }
 
 });

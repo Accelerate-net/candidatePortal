@@ -134,49 +134,130 @@
 
 								<div class="col-md-8">
 
-										<!-- EXAM SERIES -->
-										<div class="selectCourseBar-container">
-									        <div class="selectCourseBar-header">
-									            <div class="selectCourseBar-icon">
-									                <img src="https://img.icons8.com/color/96/system-information.png" width="28px">
-									            </div>
-									            <h2 class="selectCourseBar-title">Enrolled Test Series</h2>
-									        </div>
-									        <div class="selectCourseBar-scroll-container">
-									            <div class="selectCourseBar-options">
-									                <span href="" ng-click="getCourseListingData(courseItemTile.code)" class="selectCourseBar-option" ng-repeat="courseItemTile in courseListing.testSeriesEnrolled track by $index" ng-class="{'selectCourseBar-optionActive' : courseItemTile.code == courseIdOpen}">{{courseItemTile.title}}</span>
-									                <p style="font-size: 16px;" ng-if="!courseListingFound">You are not enrolled to any test series yet.
-									              		 <a href="https://crisprlearning.com/courses/" target="new">Click here</a> to enroll for Crispr Tests Series.
-									                </p>
-									            </div>
-									        </div>
-									    </div>
+										<!-- MODERN LEARNING PORTAL -->
+										<div class="learning-portal">
+											<!-- Portal Header -->
+											<div class="portal-header">
+												<div class="portal-title">
+													<h2>Learning Portal</h2>
+													<p>Manage your courses and exam series</p>
+												</div>
+												<div class="portal-stats">
+													<div class="stat-item">
+														<span class="stat-number" ng-if="courseListing.testSeriesEnrolled">{{courseListing.testSeriesEnrolled.length}}</span>
+														<span class="stat-number" ng-if="!courseListing.testSeriesEnrolled">0</span>
+														<span class="stat-label">Test Series</span>
+													</div>
+													<div class="stat-item">
+														<span class="stat-number" ng-if="courseBundlesListing">{{courseBundlesListing.length}}</span>
+														<span class="stat-number" ng-if="!courseBundlesListing">0</span>
+														<span class="stat-label">Courses</span>
+													</div>
+												</div>
+											</div>
 
+											<!-- Content Selection Tabs -->
+											<div class="content-tabs">
+												<div class="tab-nav">
+													<div class="tab-item" ng-class="{'active': activeTab === 'testSeries'}" ng-click="switchTab('testSeries')">
+														<div class="tab-icon">
+															<i class="fa fa-desktop"></i>
+														</div>
+														<span>TEST SERIES</span>
+														<div class="tab-indicator"></div>
+													</div>
+													<div class="tab-item" ng-class="{'active': activeTab === 'courseBundles'}" ng-click="switchTab('courseBundles')">
+														<div class="tab-icon">
+															<i class="fa fa-book"></i>
+														</div>
+														<span>COURSES</span>
+														<div class="tab-indicator"></div>
+													</div>
+												</div>
 
-									    <!-- COURSE BUNDLES -->
-									    <div class="selectCourseBar-container">
-									        <div class="selectCourseBar-header">
-									            <div class="selectCourseBar-icon">
-									                <img src="https://img.icons8.com/color/96/book.png" width="28px">
-									            </div>
-									            <h2 class="selectCourseBar-title">Course Bundles</h2>
+												<!-- Test Series Selection -->
+												<div class="tab-panel" ng-show="activeTab === 'testSeries'">
+													<div class="selection-grid" ng-if="courseListing.testSeriesEnrolled && courseListing.testSeriesEnrolled.length > 0">
+														<div class="selection-card" 
+															 ng-repeat="courseItemTile in courseListing.testSeriesEnrolled track by $index" 
+															 ng-class="{'selected': courseItemTile.code == courseIdOpen, 'clickable': true}"
+															 ng-click="getCourseListingData(courseItemTile.code)">
+															<div class="card-header">
+																<div class="card-icon">
+																	<i class="fa fa-desktop"></i>
+																</div>
+																<div class="card-status" ng-if="courseItemTile.code == courseIdOpen">
+																	<i class="fa fa-check-circle"></i>
+																</div>
+															</div>
+															<div class="card-body">
+																<h4>{{courseItemTile.title}}</h4>
+															</div>
+														</div>
+													</div>
+													
+													<div class="empty-state" ng-if="!courseListingFound">
+														<div class="empty-icon">
+															<i class="fa fa-graduation-cap"></i>
+														</div>
+														<p>Enroll in test series to start practicing</p>
+														<a href="https://crisprlearning.com/courses/" target="new" class="btn-primary">Enroll Now</a>
+													</div>
+												</div>
+
+												<!-- Course Bundles Selection -->
+												<div class="tab-panel" ng-show="activeTab === 'courseBundles'">
+													<div class="selection-grid" ng-if="courseBundlesListing && courseBundlesListing.length > 0">
+														<div class="selection-card" 
+															 ng-repeat="courseBundleItem in courseBundlesListing track by $index" 
+															 ng-class="{'selected': courseBundleItem.id == selectedCourseBundleId, 'clickable': true}"
+															 ng-click="selectCourseBundle(courseBundleItem)">
+															<div class="card-header">
+																<div class="card-icon">
+																	<i class="fa fa-book"></i>
+																</div>
+																<div class="card-status" ng-if="courseBundleItem.id == selectedCourseBundleId">
+																	<i class="fa fa-play-circle"></i>
+																</div>
+															</div>
+															<div class="card-body">
+																<h4>{{courseBundleItem.title}}</h4>
+															</div>
+														</div>
+													</div>
+													
+													<div class="empty-state" ng-if="!courseBundlesListingFound">
+														<div class="empty-icon">
+															<i class="fa fa-book"></i>
+														</div>
+														<p>No course bundles have been added for you</p>
+													</div>
+												</div>
+											</div>
+										</div>
+
+									    <!-- Dynamic Course Content Container -->
+									    <div class="course-bundle-content-container" ng-show="selectedCourseBundleId && activeTab === 'courseBundles'">
+									        <!-- Selected Course Title -->
+									        <div class="selected-course-title">
+									            <h3 class="course-name">{{selectedCourseBundleData.title}}</h3>
 									        </div>
-									        <div class="selectCourseBar-scroll-container">
-									            <div class="selectCourseBar-options">
-									                <a ng-href="{{courseBundleItem.url}}" target="_self" class="selectCourseBar-option" ng-repeat="courseBundleItem in courseBundlesListing track by $index" ng-class="{'selectCourseBar-optionActive' : 1 == 1}">{{courseBundleItem.title}}</a>
-									                <p style="font-size: 16px;" ng-if="!courseBundlesListingFound">You are not added to any courses yet.
-									                </p>
-									            </div>
+									        
+									        <div class="tab-container" id="tab-container">
+									            <!-- Tabs will be dynamically generated here -->
+									        </div>
+									        <div id="tab-contents">
+									            <!-- Tab content will be dynamically generated here -->
 									        </div>
 									    </div>
 
 								</div>
 							</div>
 
-							<div class="row dashboardViewContainerForCourse">
+							<div class="row dashboardViewContainerForCourse" ng-show="courseIdOpen && activeTab === 'testSeries'">
 								<div class="col-md-8">
 									    <div class="courseContentContainer">
-									        
+									       
 									        <div class="courseContentTile" ng-repeat="courseItem in courseListing.coursesList track by $index" ng-click="" ng-class="{'blockedCourseContent' : courseItem.locked}">
 									        	<div class="courseContentSummary" ng-if="courseItem.lastScore"><span>
 									        	Scored <b>{{(courseItem.lastScore/100).toFixed(0)}}</b> on {{courseItem.lastAttempted}}</span></div>
@@ -216,7 +297,6 @@
 										    <p>Your Progress in <b style="color: #0a9190">{{courseNameOpen}}</b></p>
 										</div>
 								</div>
-
 							</div>
 
 
@@ -282,11 +362,7 @@
     <!-- Load page level scripts-->
     
 <script type="text/javascript" src="assets/plugins/form-fseditor/jquery.fseditor-min.js"></script>            			<!-- Fullscreen Editor -->
-<script type="text/javascript" src="assets/plugins/bootbox/bootbox.js"></script> 	<!-- Bootbox -->
-
-<script type="text/javascript" src="assets/demo/demo-dashboard.js"></script>
-
-    <!-- End loading page level scripts-->
+<script type="text/javascript" src="assets/plugins/bootbox/bootbox.js"></script>
 
     </body>
 </html>
