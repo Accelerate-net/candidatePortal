@@ -155,6 +155,7 @@
                 var authData = {
                   "url": "https://crisprtech.app/crispr-apis/user/authenticate.php",
                   "method": "POST",
+                  "dataType": "json",
                   "timeout": 0,
                   "headers": {
                     "Content-Type": "application/json"
@@ -165,7 +166,8 @@
                 };
 
                 $.ajax(authData).done(function (authResponse) {
-                    var response = JSON.parse(authResponse);
+                    var response = authResponse;
+
                     if(response.status == "success") {
                         showToaster(response.message);
 
@@ -222,6 +224,7 @@
                 var loginData = {
                   "url": "https://crisprtech.app/crispr-apis/user/login.php",
                   "method": "POST",
+                  "dataType": "json",
                   "timeout": 0,
                   "headers": {
                     "Content-Type": "application/json"
@@ -234,7 +237,7 @@
                 };
 
                 $.ajax(loginData).done(function (loginResponse) {
-                    var response = JSON.parse(loginResponse);
+                    var response = loginResponse;
                     if(response.status == "success") {
                         //Set cookies
                         var now = new Date();
