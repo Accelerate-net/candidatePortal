@@ -46,8 +46,16 @@
                     <p style="font-weight: 300;">Please enter your mobile number to continue.</p>
 
                     <div class="input-group">
-                        <div>🇮🇳 <b>+91</b></div>
-                        <input id="mobile" type="tel" style="font-weight: bold;" maxlength="10" required>
+                        <select id="countryCode" aria-label="Select country code">
+                            <option value="+91" data-flag="🇮🇳">🇮🇳 India +91</option>
+                            <option value="+973" data-flag="🇧🇭">🇧🇭 Bahrain +973</option>
+                            <option value="+965" data-flag="🇰🇼">🇰🇼 Kuwait +965</option>
+                            <option value="+968" data-flag="🇴🇲">🇴🇲 Oman +968</option>
+                            <option value="+974" data-flag="🇶🇦">🇶🇦 Qatar +974</option>
+                            <option value="+966" data-flag="🇸🇦">🇸🇦 KSA +966</option>
+                            <option value="+971" data-flag="🇦🇪">🇦🇪 UAE +971</option>
+                        </select>
+                        <input id="mobile" type="tel" inputmode="numeric" style="font-weight: bold;" maxlength="10" required>
                     </div>
                 </div>
 
@@ -61,9 +69,10 @@
                         <input class="otpEntry" id="otp3" type="tel" maxlength="1" required>
                         <input class="otpEntry" style="margin-right: 0" id="otp4" type="tel" maxlength="1" required>
                     </div>
+                    <button id="resendOtpButton" class="resend-btn" type="button" onclick="handleResendOTP()" disabled style="display: none;">Resend in 01:59 min</button>
                 </div>
                 <button class="continue-btn" id="loginStep1Button" onclick="sendOTP()" style="position: relative;">
-                    Continue
+                    <span id="loginStep1ButtonLabel">Get OTP on Phone</span>
                     <span id="loginLoader1" style="display: none; position: absolute; right: 10px; top: 10px"><div class="loader"></div></span>
                 </button>
                 <button class="continue-btn" id="loginStep2Button" onclick="processLogin()" style="display: none; position: relative;">
@@ -119,22 +128,162 @@
 
         checkIfLoggedIn();        
 
-        function maskedMobileNumber(mobileNumber) {
-            if (typeof mobileNumber !== 'string' || mobileNumber.length !== 10) {
+        const COUNTRY_CODE_STORAGE_KEY = "selectedCountryCode";
+        const OTP_RESEND_DEFAULT_SECONDS = 119;
+        const mobileCountryRules = {
+            "+91": {
+                digits: 10,
+                regex: /^[6-9]\d{9}$/
+            },
+            "+973": {
+                digits: 8,
+                regex: /^\d{8}$/
+            },
+            "+965": {
+                digits: 8,
+                regex: /^\d{8}$/
+            },
+            "+968": {
+                digits: 8,
+                regex: /^\d{8}$/
+            },
+            "+974": {
+                digits: 8,
+                regex: /^\d{8}$/
+            },
+            "+966": {
+                digits: 9,
+                regex: /^\d{9}$/
+            },
+            "+971": {
+                digits: 9,
+                regex: /^\d{9}$/
+            }
+        };
+        let resendCountdownInterval = null;
+
+        function getCountryCode() {
+            return document.getElementById('countryCode').value;
+        }
+
+        function getCountryConfig() {
+            return mobileCountryRules[getCountryCode()] || mobileCountryRules["+91"];
+        }
+
+        function getFullMobileNumber() {
+            return getCountryCode() + document.getElementById('mobile').value;
+        }
+
+        function getCountryCodeDigits() {
+            return getCountryCode().replace('+', '');
+        }
+
+        function updateContinueButtonLabel() {
+            const buttonLabel = document.getElementById('loginStep1ButtonLabel');
+
+            if (getCountryCode() === '+91') {
+                buttonLabel.textContent = 'Get OTP on Phone';
+            } else {
+                buttonLabel.textContent = 'Get OTP on WhatsApp';
+            }
+        }
+
+        function formatResendCountdown(secondsRemaining) {
+            const safeSeconds = Math.max(0, parseInt(secondsRemaining, 10) || 0);
+            const minutes = String(Math.floor(safeSeconds / 60)).padStart(2, '0');
+            const seconds = String(safeSeconds % 60).padStart(2, '0');
+            const suffix = safeSeconds >= 60 ? 'min' : 'sec';
+            return 'Resend in ' + minutes + ':' + seconds + ' ' + suffix;
+        }
+
+        function updateResendButton(secondsRemaining) {
+            const resendButton = document.getElementById('resendOtpButton');
+            resendButton.style.display = 'inline-block';
+
+            if (secondsRemaining > 0) {
+                resendButton.disabled = true;
+                resendButton.textContent = formatResendCountdown(secondsRemaining);
+            } else {
+                resendButton.disabled = false;
+                resendButton.textContent = 'Resend OTP';
+            }
+        }
+
+        function startResendCountdown(secondsRemaining) {
+            clearInterval(resendCountdownInterval);
+
+            let timeLeft = Math.max(0, parseInt(secondsRemaining, 10) || 0);
+            updateResendButton(timeLeft);
+
+            if (timeLeft === 0) {
+                return;
+            }
+
+            resendCountdownInterval = setInterval(() => {
+                timeLeft -= 1;
+                updateResendButton(timeLeft);
+
+                if (timeLeft <= 0) {
+                    clearInterval(resendCountdownInterval);
+                }
+            }, 1000);
+        }
+
+        function showOTPStep(mobileNumber) {
+            const url = new URL(window.location);
+            url.searchParams.set("step", 2);
+            window.history.pushState({}, '', url);
+
+            document.getElementById("loginStep1Button").style.display = 'none';
+            document.getElementById("loginLoader1").style.display = 'none';
+            document.getElementById("loginStep1").style.display = 'none';
+            document.getElementById("loginStep1Button").disabled = false;
+            document.getElementById("loginStep2").style.display = 'block';
+            document.getElementById("loginStep2Button").style.display = 'block';
+            document.getElementById('otp1').focus();
+            document.getElementById('loginAttemptingMobile').innerHTML = 'as ' + maskedMobileNumber(getCountryCode(), mobileNumber);
+        }
+
+        function loadStoredCountryCode() {
+            const storedCountryCode = localStorage.getItem(COUNTRY_CODE_STORAGE_KEY);
+            if (storedCountryCode && mobileCountryRules[storedCountryCode]) {
+                document.getElementById('countryCode').value = storedCountryCode;
+                return;
+            }
+
+            document.getElementById('countryCode').value = '+91';
+        }
+
+        function maskedMobileNumber(countryCode, mobileNumber) {
+            if (typeof mobileNumber !== 'string' || mobileNumber.length < 6) {
                 return "";
             }
 
             const digits = mobileNumber.split('');
-            // Mask the 3rd, 4th, 6th, and 7th positions with 'X'
-            digits[2] = 'X'; // 3rd position (index 2)
-            digits[3] = 'X'; // 4th position (index 3)
-            digits[5] = 'X'; // 6th position (index 5)
-            digits[6] = 'X'; // 7th position (index 6)
+            for (let i = 2; i < digits.length - 2; i++) {
+                digits[i] = 'X';
+            }
 
-            return digits.join('');
+            return countryCode + " " + digits.join('');
         }
 
-        function sendOTP() {
+        function syncMobileInputWithCountry() {
+            const mobileInput = document.getElementById('mobile');
+            const countryConfig = getCountryConfig();
+            mobileInput.maxLength = countryConfig.digits;
+            mobileInput.placeholder = "Mobile number";
+            mobileInput.value = mobileInput.value.replace(/\D/g, '').slice(0, countryConfig.digits);
+            document.getElementById('mobileError').innerHTML = '';
+            updateContinueButtonLabel();
+        }
+
+        function handleResendOTP() {
+            document.getElementById('resendOtpButton').disabled = true;
+            document.getElementById('resendOtpButton').textContent = 'Sending...';
+            sendOTP(true);
+        }
+
+        function sendOTP(isResend = false) {
 
             //Update URL param
             const url = new URL(window.location);
@@ -142,9 +291,10 @@
             window.history.pushState({}, '', url);
 
             var mobileNumber = document.getElementById('mobile').value;
-            const indianMobileRegex = /^[6-9]\d{9}$/;
+            const countryConfig = getCountryConfig();
+            const fullMobileNumber = getFullMobileNumber();
 
-            if (indianMobileRegex.test(mobileNumber)) {
+            if (countryConfig.regex.test(mobileNumber)) {
 
                 //Disable button
                 document.getElementById("loginStep1Button").disabled = true;
@@ -161,7 +311,8 @@
                     "Content-Type": "application/json"
                   },
                   "data": JSON.stringify({
-                    "username": mobileNumber
+                    "username": fullMobileNumber,
+                    "countryCode": getCountryCodeDigits()
                   }),
                 };
 
@@ -179,37 +330,42 @@
 
                         //Post Success
                         setTimeout(() => {
-                            document.getElementById("loginStep1Button").style.display = 'none';
-                            document.getElementById("loginLoader1").style.display = 'none';
-                            document.getElementById("loginStep1").style.display = 'none';
-                            document.getElementById("loginStep1Button").disabled = false;
-                            document.getElementById("loginStep2").style.display = 'block';
-                            document.getElementById("loginStep2Button").style.display = 'block';
-                            document.getElementById('otp1').focus();
-                            document.getElementById('loginAttemptingMobile').innerHTML = 'as ' + maskedMobileNumber(mobileNumber);
+                            showOTPStep(mobileNumber);
+                            startResendCountdown(OTP_RESEND_DEFAULT_SECONDS);
                         }, 500);
 
                     } else {
                         showToaster(response.error);
-                        //Post Failure
                         document.getElementById("loginLoader1").style.display = 'none';
                         document.getElementById("loginStep1Button").disabled = false;
+                        const pendingSeconds = parseInt(response.data, 10);
+
+                        if (!Number.isNaN(pendingSeconds) && pendingSeconds > 0) {
+                            showOTPStep(mobileNumber);
+                            startResendCountdown(pendingSeconds);
+                        } else if (isResend) {
+                            updateResendButton(0);
+                        }
                     }
                 });
             } else {
+                if (isResend) {
+                    updateResendButton(0);
+                }
                 showToaster("Enter a valid mobile number");
             }
         }
 
         function processLogin() {
             var mobileNumber = document.getElementById('mobile').value;
-            const indianMobileRegex = /^[6-9]\d{9}$/;
+            const countryConfig = getCountryConfig();
+            const fullMobileNumber = getFullMobileNumber();
 
             const urlParams = new URLSearchParams(window.location.search);
             const key = urlParams.get('key');
 
 
-            if (indianMobileRegex.test(mobileNumber) && key) {
+            if (countryConfig.regex.test(mobileNumber) && key) {
                 const otp = getOTP();
                 if(otp.length != 4) {
                     showToaster("Please enter all 4 digits of one-time passcode")
@@ -230,7 +386,8 @@
                     "Content-Type": "application/json"
                   },
                   "data": JSON.stringify({
-                    "username": mobileNumber,
+                    "username": fullMobileNumber,
+                    "countryCode": getCountryCodeDigits(),
                     "passcode": otp,
                     "key": key
                   }),
@@ -264,6 +421,8 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
+            loadStoredCountryCode();
+            syncMobileInputWithCountry();
             document.getElementById('mobile').focus();
         });
 
@@ -341,19 +500,28 @@
         });
 
         function validateMobile(mobileNumber) {
-            const indianMobileRegex = /^[6-9]\d{9}$/;
+            const countryConfig = getCountryConfig();
 
-            if (indianMobileRegex.test(mobileNumber)) {
+            if (countryConfig.regex.test(mobileNumber)) {
                 document.getElementById('mobileError').innerHTML = '';
             } else {
                 document.getElementById('mobileError').innerHTML = 'Invalid Mobile Number';
             }
         }
+        document.getElementById('countryCode').addEventListener('change', function() {
+            localStorage.setItem(COUNTRY_CODE_STORAGE_KEY, this.value);
+            syncMobileInputWithCountry();
+            if (document.getElementById('mobile').value.length > 0) {
+                validateMobile(document.getElementById('mobile').value);
+            }
+        });
         document.getElementById('mobile').addEventListener('change', function() {
             validateMobile(this.value);
         });
         document.getElementById('mobile').addEventListener('input', function() {
-            if(this.value.length == 10)
+            const countryConfig = getCountryConfig();
+            this.value = this.value.replace(/\D/g, '').slice(0, countryConfig.digits);
+            if(this.value.length == countryConfig.digits)
                 validateMobile(this.value);
             else {
                 document.getElementById('mobileError').innerHTML = '';
