@@ -230,7 +230,18 @@
             }, 1000);
         }
 
-        function showOTPStep(mobileNumber) {
+        function getMaskedMobileFromMessage(message, fallbackMobileNumber) {
+            if (typeof message === 'string') {
+                const match = message.match(/sent to\s+(.+)$/i);
+                if (match && match[1]) {
+                    return match[1].trim();
+                }
+            }
+
+            return maskedMobileNumber(getCountryCode(), fallbackMobileNumber);
+        }
+
+        function showOTPStep(mobileNumber, maskedMobileText) {
             const url = new URL(window.location);
             url.searchParams.set("step", 2);
             window.history.pushState({}, '', url);
@@ -243,7 +254,7 @@
             document.getElementById("loginStep2").style.display = 'block';
             document.getElementById("loginStep2Button").style.display = 'block';
             document.getElementById('otp1').focus();
-            document.getElementById('loginAttemptingMobile').innerHTML = 'as ' + maskedMobileNumber(getCountryCode(), mobileNumber);
+            document.getElementById('loginAttemptingMobile').innerHTML = 'as ' + maskedMobileText;
         }
 
         function loadStoredCountryCode() {
@@ -331,7 +342,7 @@
 
                         //Post Success
                         setTimeout(() => {
-                            showOTPStep(mobileNumber);
+                            showOTPStep(mobileNumber, getMaskedMobileFromMessage(response.message, mobileNumber));
                             startResendCountdown(OTP_RESEND_DEFAULT_SECONDS);
                         }, 500);
 
@@ -342,7 +353,7 @@
                         const pendingSeconds = parseInt(response.data, 10);
 
                         if (!Number.isNaN(pendingSeconds) && pendingSeconds > 0) {
-                            showOTPStep(mobileNumber);
+                            showOTPStep(mobileNumber, maskedMobileNumber(getCountryCode(), mobileNumber));
                             startResendCountdown(pendingSeconds);
                         } else if (isResend) {
                             updateResendButton(0);
