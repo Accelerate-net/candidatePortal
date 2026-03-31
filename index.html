@@ -161,6 +161,7 @@
             }
         };
         let resendCountdownInterval = null;
+        let shouldWarnBeforeLeavingOtpStep = false;
 
         function getCountryCode() {
             return document.getElementById('countryCode').value;
@@ -234,6 +235,7 @@
             url.searchParams.set("step", 2);
             window.history.pushState({}, '', url);
 
+            shouldWarnBeforeLeavingOtpStep = true;
             document.getElementById("loginStep1Button").style.display = 'none';
             document.getElementById("loginLoader1").style.display = 'none';
             document.getElementById("loginStep1").style.display = 'none';
@@ -292,7 +294,6 @@
 
             var mobileNumber = document.getElementById('mobile').value;
             const countryConfig = getCountryConfig();
-            const fullMobileNumber = getFullMobileNumber();
 
             if (countryConfig.regex.test(mobileNumber)) {
 
@@ -311,7 +312,7 @@
                     "Content-Type": "application/json"
                   },
                   "data": JSON.stringify({
-                    "username": fullMobileNumber,
+                    "username": mobileNumber,
                     "countryCode": getCountryCodeDigits()
                   }),
                 };
@@ -359,7 +360,6 @@
         function processLogin() {
             var mobileNumber = document.getElementById('mobile').value;
             const countryConfig = getCountryConfig();
-            const fullMobileNumber = getFullMobileNumber();
 
             const urlParams = new URLSearchParams(window.location.search);
             const key = urlParams.get('key');
@@ -386,7 +386,7 @@
                     "Content-Type": "application/json"
                   },
                   "data": JSON.stringify({
-                    "username": fullMobileNumber,
+                    "username": mobileNumber,
                     "countryCode": getCountryCodeDigits(),
                     "passcode": otp,
                     "key": key
@@ -396,6 +396,8 @@
                 $.ajax(loginData).done(function (loginResponse) {
                     var response = loginResponse;
                     if(response.status == "success") {
+                        shouldWarnBeforeLeavingOtpStep = false;
+
                         //Set cookies
                         var now = new Date();
                         now.setDate(now.getDate() + 7); // Set expiration to 7 days from now
@@ -424,6 +426,15 @@
             loadStoredCountryCode();
             syncMobileInputWithCountry();
             document.getElementById('mobile').focus();
+        });
+
+        window.addEventListener('beforeunload', function(event) {
+            if (!shouldWarnBeforeLeavingOtpStep) {
+                return;
+            }
+
+            event.preventDefault();
+            event.returnValue = 'Do you want to go back to login screen?';
         });
 
 
