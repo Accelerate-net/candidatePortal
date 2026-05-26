@@ -201,6 +201,47 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
 
     $scope.fetchDashboardSummaryData();
 
+    $scope.centerAllotment = null;
+    $scope.centerAllotmentFound = false;
+    $scope.centerAllotmentNotSubmitted = false;
+    $scope.fetchCenterAllotmentData = function() {
+        $http({
+          method  : 'GET',
+          url     : 'https://crisprtech.app/crispr-apis/user/center-allotment.php',
+          headers : {
+            'Content-Type': 'application/json',
+            'Authorization': getUserToken()
+          }
+         })
+         .then(function(response) {
+            if(response.data.status == "success" && response.data.data){
+                $scope.centerAllotment = response.data.data;
+                var peers = $scope.centerAllotment.peers || {};
+                var center = (peers.fromTestCenter || []).length;
+                var city = (peers.fromTestCity || []).length;
+                $scope.centerAllotment.peerMatchCount = center + city;
+                $scope.centerAllotmentFound = true;
+                $scope.centerAllotmentNotSubmitted = false;
+            } else {
+                $scope.centerAllotmentFound = false;
+                $scope.centerAllotmentNotSubmitted = true;
+            }
+        });
+    }
+    $scope.fetchCenterAllotmentData();
+
+    $scope.buildWhatsappLink = function(peer, matchType) {
+        if(!peer || !peer.contactWhatsapp) return '#';
+        var digits = (''+peer.contactWhatsapp).replace(/\D/g,'');
+        if(digits.length === 10) digits = '91' + digits;
+        var firstName = (peer.name || '').split(' ')[0];
+        var details = ($scope.centerAllotment && $scope.centerAllotment.yourDetails) || {};
+        var location = matchType === 'center' ? (details.testCenter || '') : (details.testCity || '');
+        var label = matchType === 'center' ? 'same center' : 'same city';
+        var message = 'Hi ' + firstName + ', I am also allotted ' + label + ' ' + location + ' as yours. Can we connect once?';
+        return 'https://web.whatsapp.com/send?phone=' + digits + '&text=' + encodeURIComponent(message);
+    }
+
     $scope.courseIdOpen;
     $scope.courseNameOpen;
     $scope.courseListing = {};
