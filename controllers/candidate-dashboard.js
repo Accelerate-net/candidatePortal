@@ -239,7 +239,7 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
         var details = ($scope.centerAllotment && $scope.centerAllotment.yourDetails) || {};
         var location = matchType === 'center' ? (details.testCenter || '') : (details.testCity || '');
         var label = matchType === 'center' ? 'same center' : 'same city';
-        var message = 'Hi ' + firstName + ', I am also allotted ' + label + ' ' + location + ' as yours. Can we connect once?';
+        var message = 'Hi ' + firstName + ', I got your contact from Crispr Learning Community. I am also allotted ' + label + ' ' + location + ' as yours. Can we connect once?';
         return 'https://web.whatsapp.com/send?phone=' + digits + '&text=' + encodeURIComponent(message);
     }
 

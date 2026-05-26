@@ -445,6 +445,26 @@
 
 										    </div>
 
+										    <!-- DISCLAIMER -->
+										    <div ng-if="centerAllotment.peerMatchCount > 0" style="
+										        margin-top:18px;
+										        background:#fef9c3;
+										        border:1px solid #fde68a;
+										        border-radius:16px;
+										        padding:18px 20px;
+										        color:#713f12;
+										        font-size:13px;
+										        line-height:1.7;
+										    ">
+										        <div style="font-weight:700;margin-bottom:6px;">Disclaimer</div>
+										        <div>
+										            The peer matches shown here are based solely on the information voluntarily submitted by students through the form. This initiative is intended only to help students coordinate travel, accommodation, and exam-day planning for IAT 2026.
+										        </div>
+										        <div style="margin-top:10px;">
+										            Crispr Learning does not independently verify the factual accuracy of the submitted details and is not responsible for any incorrect, incomplete, or misleading information shared by users. Students are advised to exercise their own discretion while connecting with others.
+										        </div>
+										    </div>
+
 										    <!-- EMPTY STATE: submitted but no matches -->
 										    <div ng-if="centerAllotment.peerMatchCount == 0" style="
 										        background:#fffbeb;
