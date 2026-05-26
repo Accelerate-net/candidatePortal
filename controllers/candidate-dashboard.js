@@ -241,7 +241,7 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
         var label = matchType === 'center' ? 'same test center' : 'same test city';
         var myName = (details.name || '').split(' ')[0];
         var message = 'Hi ' + firstName + ', myself ' + myName + ', I got your contact from Crispr Learning Community. I am also allotted with the ' + label + ' ' + location + ' as yours, for IAT 2026. Can we connect once?';
-        return 'https://web.whatsapp.com/send?phone=' + digits + '&text=' + encodeURIComponent(message);
+        return 'https://api.whatsapp.com/send?phone=' + digits + '&text=' + encodeURIComponent(message);
     }
 
     $scope.courseIdOpen;
