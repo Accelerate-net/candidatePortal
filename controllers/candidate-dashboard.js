@@ -204,6 +204,7 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
     $scope.centerAllotment = null;
     $scope.centerAllotmentFound = false;
     $scope.centerAllotmentNotSubmitted = false;
+    $scope.peerFormUrl = 'https://forms.gle/aLu6FN2ahGGGicKbA';
     $scope.fetchCenterAllotmentData = function() {
         $http({
           method  : 'GET',
