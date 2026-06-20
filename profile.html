@@ -117,6 +117,7 @@
 				<a href="#tab-about" id="profileTab1" ng-click="changeActiveTab(1)" role="tab" data-toggle="tab" class="list-group-item" ng-class="getActiveClass(1)"><i class="ti ti-user"></i> About {{profileData.name}}</a>
 				<a href="#tab-projects" id="profileTab2" ng-click="changeActiveTab(2)" role="tab" data-toggle="tab" class="list-group-item" ng-class="getActiveClass(2)"><i class="ti ti-view-list-alt"></i> Courses Enrolled <span class="badge badge-primary">{{profileData.courses.length}}</span></a>
 				<a href="#tab-edit" id="profileTab3" ng-click="changeActiveTab(3)" ole="tab" data-toggle="tab" class="list-group-item" ng-class="getActiveClass(3)"><i class="ti ti-pencil"></i> Edit Details</a>
+				<a href="#tab-student-photo" id="profileTab4" ng-click="changeActiveTab(4)" role="tab" data-toggle="tab" class="list-group-item" ng-class="getActiveClass(4)"><i class="ti ti-image"></i> Student Photo</a>
 			</div>
 		</div><!-- col-sm-3 -->
 		<div class="col-sm-9">
@@ -419,6 +420,32 @@
 					</div>
 				</div>
 
+				<div class="tab-pane" id="tab-student-photo">
+					<div class="panel panel-bluegray">
+						<div class="panel-heading">
+							<h2 class="profileSubTitle">Student Photo</h2>
+						</div>
+						<div class="panel-body">
+							<p style="color: #838383; margin-bottom: 20px;">Upload a clear passport-style photo. It will be cropped to a <strong>826 &times; 1062 pixels</strong> window before saving.</p>
+
+							<!-- Existing photo: show preview with Modify / Remove -->
+							<div ng-if="profileData.idPhoto" style="text-align: center;">
+								<img ng-src="{{profileData.idPhoto}}" style="max-width: 248px; width: 100%; border: 1px solid #ddd; border-radius: 4px;">
+								<div style="margin-top: 20px;">
+									<button class="btn btn-primary" ng-click="attachStudentPhoto()" style="margin: 0 5px;"><i class="fa fa-pencil" style="margin-right: 5px;"></i>Modify Photo</button>
+									<button class="btn btn-danger" ng-click="removeStudentPhoto()" style="margin: 0 5px;"><i class="fa fa-trash" style="margin-right: 5px;"></i>Remove Photo</button>
+								</div>
+							</div>
+
+							<!-- No photo yet: show Upload -->
+							<div ng-if="!profileData.idPhoto" style="text-align: center; padding: 40px 0;">
+								<i class="ti ti-image" style="font-size: 64px; color: #cfcfcf; display: block; margin-bottom: 20px;"></i>
+								<button class="btn btn-success" ng-click="attachStudentPhoto()"><i class="fa fa-upload" style="margin-right: 5px;"></i>Upload Student Photo</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
 			</div><!-- .tab-content -->
 		</div><!-- col-sm-8 -->
 	</div>
@@ -465,7 +492,31 @@
  </div>
  <!-- /.modal-dialog -->
 </div>
-<!-- /.modal -->	
+<!-- /.modal -->
+
+<!-- Student Photo Modal -->
+<div class="modal fade" id="studentPhotoModal" tabindex="-1" role="dialog" aria-labelledby="studentPhotoModalLabel" aria-hidden="true">
+ <div class="modal-dialog">
+    <div class="modal-content" style="max-width: 810px; width: 100%; min-width: 300px;">
+       <div class="modal-body">
+          <div style="margin-top: 10px">
+             <img id="studentPhotoImage" ng-src="{{studentPhotoImage}}" style="max-width: 100%;">
+          </div>
+          <p style="margin: 0; padding-top: 15px; color: #bdc3c7">Crop window is fixed to 826 &times; 1062 pixels. Only JPG, PNG files are supported.</p>
+       </div>
+       <div class="modal-footer">
+          <div class="row" style="padding: 15px">
+             <button class="btn-success btn pull-right" ng-click="saveStudentPhoto()" style="margin: 0 0 0 10px;" ng-show="studentPhotoLoadedToFrame">Save</button>
+             <button type="button" class="btn btn-default pull-right" data-dismiss="modal" style="margin: 0 0 0 10px;">Close</button>
+             <div style="padding:5px 10px; background:#00ad2d; border:1px solid #00ad2d; position:relative; color:#fff; border-radius:2px; text-align:center; float:left; cursor:pointer">Select an Image<input type="file" id="studentPhotoFileInput" accept="image/jpeg, image/png" style="position: absolute; z-index: 1000; opacity: 0; cursor: pointer; right: 0; top: 0; height: 100%; font-size: 24px; width: 100%;"/></div>
+          </div>
+       </div>
+    </div>
+    <!-- /.modal-content -->
+ </div>
+ <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
     <!-- Load site level scripts -->
 

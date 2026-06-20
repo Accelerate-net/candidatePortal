@@ -7,7 +7,7 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
 
 .controller('candidateDashboardController', function($scope, $http, $interval, $cookies, $timeout) {
 
-    //Check if logged in
+    // //Check if logged in
     if($cookies.get("crispriteUserToken")){
       $scope.isLoggedIn = true;
     }

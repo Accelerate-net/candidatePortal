@@ -8,21 +8,21 @@ angular.module('CandidateProfileApp', ['ngCookies'])
 .controller('candidateProfileController', function($scope, $http, $interval, $cookies) {
 
     //Check if logged in
-    if($cookies.get("crispriteUserToken")){
-      $scope.isLoggedIn = true;
-    }
-    else{
-      $scope.isLoggedIn = false;
-      window.location = "index.html";
-    }
+    // if($cookies.get("crispriteUserToken")){
+    //   $scope.isLoggedIn = true;
+    // }
+    // else{
+    //   $scope.isLoggedIn = false;
+    //   window.location = "index.html";
+    // }
 
-    //Logout function
-    $scope.logoutNow = function(){
-      if($cookies.get("crispriteUserToken")){
-        $cookies.remove("crispriteUserToken");
-        window.location = "index.html";
-      }
-    }
+    // //Logout function
+    // $scope.logoutNow = function(){
+    //   if($cookies.get("crispriteUserToken")){
+    //     $cookies.remove("crispriteUserToken");
+    //     window.location = "index.html";
+    //   }
+    // }
 
     function getUserToken() {
       return "Bearer " + $cookies.get("crispriteUserToken");  
@@ -276,6 +276,128 @@ angular.module('CandidateProfileApp', ['ngCookies'])
                 $scope.showToaster("Profile photo has been updated")
               }
           });   
+    };
+
+
+    //Student Photo (826 x 1062 crop window, saved to Bunny storage via backend)
+
+    $scope.studentPhotoImage = '';
+    $scope.studentPhotoLoadedToFrame = false;
+    var studentPhotoCropper;
+
+    var STUDENT_PHOTO_WIDTH = 826;
+    var STUDENT_PHOTO_HEIGHT = 1062;
+
+    var initStudentPhotoCropper = function(dataURL) {
+      $scope.studentPhotoImage = dataURL;
+      setTimeout(function(){
+        var image = document.getElementById('studentPhotoImage');
+        if (studentPhotoCropper) {
+          studentPhotoCropper.destroy();
+        }
+        studentPhotoCropper = new Cropper(image, {
+          aspectRatio: STUDENT_PHOTO_WIDTH / STUDENT_PHOTO_HEIGHT,
+          autoCropArea: 1,
+          viewMode: 1,
+          scalable: false
+        });
+      }, 1000);
+      $scope.studentPhotoLoadedToFrame = true;
+    };
+
+    var handleStudentPhotoSelect = function(evt) {
+      var file = evt.currentTarget.files[0];
+      if (!file) return;
+
+      if (file.type === "image/heic" || file.type === "image/heif") {
+        heic2any({
+          blob: file,
+          toType: "image/jpeg",
+        }).then(function (resultBlob) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            $scope.$apply(function () {
+              initStudentPhotoCropper(e.target.result);
+            });
+          };
+          reader.readAsDataURL(resultBlob);
+        });
+      } else {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $scope.$apply(function () {
+            initStudentPhotoCropper(e.target.result);
+          });
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+
+    angular.element(document.querySelector('#studentPhotoFileInput')).on('change', handleStudentPhotoSelect);
+
+    $scope.attachStudentPhoto = function(){
+      $scope.studentPhotoLoadedToFrame = false;
+      $scope.studentPhotoImage = '';
+      $('#studentPhotoModal').modal('show');
+    };
+
+    $scope.saveStudentPhoto = function(){
+      if (!studentPhotoCropper) return;
+      var canvas = studentPhotoCropper.getCroppedCanvas({
+        width: STUDENT_PHOTO_WIDTH,
+        height: STUDENT_PHOTO_HEIGHT,
+        fillColor: '#fff',
+        imageSmoothingEnabled: true,
+        imageSmoothingQuality: 'high',
+      });
+      var photoDataURL = canvas.toDataURL('image/jpeg', 0.92);
+
+      $http({
+        method  : 'POST',
+        url     : 'https://crisprtech.app/crispr-apis/user/upload-id-photo.php',
+        data    : { "photo": photoDataURL },
+        headers : {
+          'Content-Type': 'application/json',
+          'Authorization': getUserToken()
+        }
+      })
+      .then(function(response) {
+        if (response.data.status == "success") {
+          // Backend returns the Bunny CDN URL; cache-bust so the new crop shows immediately
+          $scope.profileData.idPhoto = response.data.data + '?t=' + new Date().getTime();
+          $scope.showToaster("Student photo has been updated");
+        } else {
+          $scope.showToaster("Upload failed");
+        }
+        studentPhotoCropper.destroy();
+        studentPhotoCropper = null;
+        $('#studentPhotoModal').modal('hide');
+      }, function() {
+        $scope.showToaster("Upload failed");
+      });
+    };
+
+    $scope.removeStudentPhoto = function(){
+      if (!confirm("Remove the student photo?")) return;
+      $http({
+        method  : 'POST',
+        url     : 'https://crisprtech.app/crispr-apis/user/remove-id-photo.php',
+        data    : {},
+        headers : {
+          'Content-Type': 'application/json',
+          'Authorization': getUserToken()
+        }
+      })
+      .then(function(response) {
+        if (response.data.status == "success") {
+          $scope.profileData.idPhoto = '';
+          $scope.showToaster("Student photo has been removed");
+        } else {
+          $scope.showToaster("Remove failed");
+        }
+      }, function() {
+        $scope.showToaster("Remove failed");
+      });
     };
 
 
