@@ -322,6 +322,77 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
 
     $scope.getCourseBundlesList();
 
+
+    //Weekly Exams (Quizzes)
+    $scope.weeklyExamsList = [];
+    $scope.weeklyExamsFound = false;
+    $scope.getWeeklyExamsList = function() {
+        $http({
+          method  : 'GET',
+          url     : 'https://crisprtech.app/crispr-apis/user/quiz/list-quiz.php?page=1&size=10',
+          headers : {
+            'Content-Type': 'application/json',
+            'Authorization': getUserToken()
+          }
+         })
+         .then(function(response) {
+            if(response.data.status == "success" && response.data.data && response.data.data.length > 0){
+                $scope.weeklyExamsList = response.data.data;
+                $scope.weeklyExamsFound = true;
+            } else {
+                $scope.weeklyExamsList = [];
+                $scope.weeklyExamsFound = false;
+            }
+        });
+    }
+
+    $scope.getWeeklyExamsList();
+
+    //Show weekly exams only when the user has access to at least one course/test series
+    $scope.hasCourseAccess = function() {
+        var enrolledSeries = $scope.courseListing && $scope.courseListing.testSeriesEnrolled && $scope.courseListing.testSeriesEnrolled.length > 0;
+        var enrolledBundles = $scope.courseBundlesListing && $scope.courseBundlesListing.length > 0;
+        return enrolledSeries || enrolledBundles;
+    }
+
+    //Start a weekly exam and open its instructions page on the exam portal
+    $scope.attemptWeeklyExam = function(quizId) {
+
+        let browserFingerprint = {
+            screenWidth: screen.width,
+            screenHeight: screen.height,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            language: navigator.language,
+            platform: navigator.platform,
+            cpuCores: navigator.hardwareConcurrency,
+            deviceMemory: navigator.deviceMemory || "unknown",
+        };
+
+        var data = {
+            "quiz": quizId,
+            "fingerprint": browserFingerprint
+        }
+
+        $http({
+          method  : 'POST',
+          url     : 'https://crisprtech.app/crispr-apis/user/quiz/start-quiz.php?termsAccepted=0',
+          headers : {
+            'Content-Type': 'application/json',
+            'Authorization': getUserToken()
+          },
+          data    : data
+         })
+         .then(function(response) {
+            if(response.data.status == "success") {
+                var redirectUrl = response.data.data.url;
+                redirectUrl = redirectUrl + '&metadata=' + encodeURIComponent(JSON.stringify(response.data.data.metadata));
+                window.open(redirectUrl, "_blank");
+            } else {
+                $scope.showToaster(response.data.message || response.data.error);
+            }
+        });
+    }
+
     // Initialize with first card selected after data loads
     $timeout(function() {
         // Auto-select first test series on initial load
