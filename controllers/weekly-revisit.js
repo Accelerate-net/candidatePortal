@@ -28,7 +28,12 @@ angular.module('WeeklyRevisitApp', ['ngCookies'])
     	return "Bearer " + $cookies.get("crispriteUserToken");
     }
 
-    //Render endpoints for weekly exam (quiz) questions and solutions
+    function getUserTokenRaw() {
+        return $cookies.get("crispriteUserToken");
+    }
+
+    //Render endpoints for weekly exam (quiz) questions and solutions.
+    //These are loaded as <img> so auth is passed via a URL-encoded token query param instead of a header.
     var QUESTION_RENDER_URL = 'https://crisprtech.app/crispr-apis/user/quiz/render-question.php?id=';
     var SOLUTION_RENDER_URL = 'https://crisprtech.app/crispr-apis/user/quiz/render-quiz-solution.php?id=';
 
@@ -169,10 +174,12 @@ angular.module('WeeklyRevisitApp', ['ngCookies'])
             return;
         }
 
+        var tokenParam = '&token=' + encodeURIComponent(getUserTokenRaw());
+
         $scope.questionDetails = {
             sectionData: sectionData,
-            questionURL: QUESTION_RENDER_URL + question.qi,
-            solutionURL: SOLUTION_RENDER_URL + question.qi,
+            questionURL: QUESTION_RENDER_URL + question.qi + tokenParam,
+            solutionURL: SOLUTION_RENDER_URL + question.qi + tokenParam,
             answer: question.answer,
             attempt: question.attempt,
             topic: '',
