@@ -580,7 +580,7 @@ angular.module('CandidateReportApp', ['ngCookies'])
     	$('#questionPreviewModal').modal('show'); 
     	$scope.questionData = questionData; 
     	$scope.questionData.sectionName = sectionName;
-    	$scope.questionData.url = "https://crisprtech.app/crispr-apis/user/render-question.php?id=" + questionData['qi'];    	
+    	$scope.questionData.url = "https://crisprtech.app/crispr-apis/user/quiz/render-question.php?id=" + questionData['qi'];
   	}
   	
 
@@ -629,7 +629,7 @@ angular.module('CandidateReportApp', ['ngCookies'])
   	$scope.openSolutionsView = function() {
   		var reportId = getReportIdPassed();
   		if(reportId && reportId > 1)
-  			window.location.href = "https://candidate.crisprlearning.com/revisit.html?attemptId="+reportId+"&question=1&section=1";
+  			window.location.href = "https://candidate.crisprlearning.com/weekly-revisit.html?attemptId="+reportId+"&question=1&section=1";
   	}
 
 });
