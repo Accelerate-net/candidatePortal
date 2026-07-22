@@ -474,6 +474,7 @@ angular.module('CandidateReportApp', ['ngCookies'])
 	    $scope.overallIncorrect = totalIncorrect;
 	    $scope.overallUnattempted = totalUnattempted;
 	    $scope.overallScore = totalMarks;
+	    $scope.overallTotalQuestions = totalCorrect + totalIncorrect + totalUnattempted;
 	};
 
 
@@ -588,9 +589,12 @@ angular.module('CandidateReportApp', ['ngCookies'])
   	$scope.getTotalScoreIcon = function() {
   		var currentScore = $scope.reportData.totalScore;
   		var previousTestScore = parseInt($scope.reportData.previousScoreInSeries);
+  		//No prior attempt to compare against -> show a neutral icon
+  		if(!$scope.reportData.hasOtherAttempts || isNaN(previousTestScore))
+  			return "ti ti-medall blueTileIcon";
   		if(currentScore >= previousTestScore)
   			return "ti ti-stats-up greenTileIcon";
-  		else 
+  		else
   			return "ti ti-stats-down redTileIcon";
   	}
 
@@ -601,9 +605,12 @@ angular.module('CandidateReportApp', ['ngCookies'])
   	$scope.getStrikeRateIcon = function() {
   		var currentStrikeRate = $scope.reportData.strikeRate;
   		var previousStrikeRate = parseInt($scope.reportData.previousStrikeRateInSeries);
+  		//No prior attempt to compare against -> show a neutral icon
+  		if(!$scope.reportData.hasOtherAttempts || isNaN(previousStrikeRate))
+  			return "blueTileIcon";
   		if(currentStrikeRate >= previousStrikeRate)
   			return "greenTileIcon";
-  		else 
+  		else
   			return "redTileIcon";
   	}
 

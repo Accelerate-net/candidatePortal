@@ -126,33 +126,33 @@
 					</div>
 					<div class="reportSummaryTileHolder">
 						<div class="info-tile tile-danger reportSummaryTile">
-							<div class="tile-heading summaryTimesHeaderText"><span>Attempted Questions</span></div>
+							<div class="tile-heading summaryTimesHeaderText"><span>Questions Summary</span></div>
 							<div class="tile-body" style="line-height: 0">
 
 							<div class="toughnessTileContainer">
 									<div class="toughnessTileItem">
 									  <div class="toughnessTileCircle toughnessTileGreen">
-									    <div class="toughnessTileTop">{{reportData.questionLevel['1']['attempted']}}</div>
+									    <div class="toughnessTileTop">{{overallCorrect}}</div>
 									    <div class="toughnessTileLine"></div>
-									    <div class="toughnessTileBottom">{{reportData.questionLevel['1']['total']}}</div>
+									    <div class="toughnessTileBottom">{{overallTotalQuestions}}</div>
 									  </div>
-									  <div class="toughnessTileLabel">Easy</div>
+									  <div class="toughnessTileLabel">Correct</div>
 									</div>
 									<div class="toughnessTileItem">
 									  <div class="toughnessTileCircle toughnessTileYellow">
-									    <div class="toughnessTileTop">{{reportData.questionLevel['2']['attempted']}}</div>
+									    <div class="toughnessTileTop">{{overallUnattempted}}</div>
 									    <div class="toughnessTileLine"></div>
-									    <div class="toughnessTileBottom">{{reportData.questionLevel['2']['total']}}</div>
+									    <div class="toughnessTileBottom">{{overallTotalQuestions}}</div>
 									  </div>
-									  <div class="toughnessTileLabel">Medium</div>
+									  <div class="toughnessTileLabel">Skipped</div>
 									</div>
 									<div class="toughnessTileItem">
 									  <div class="toughnessTileCircle toughnessTileRed">
-									    <div class="toughnessTileTop">{{reportData.questionLevel['3']['attempted']}}</div>
+									    <div class="toughnessTileTop">{{overallIncorrect}}</div>
 									    <div class="toughnessTileLine"></div>
-									    <div class="toughnessTileBottom">{{reportData.questionLevel['3']['total']}}</div>
+									    <div class="toughnessTileBottom">{{overallTotalQuestions}}</div>
 									  </div>
-									  <div class="toughnessTileLabel">Hard</div>
+									  <div class="toughnessTileLabel">Wrong</div>
 									</div>
 							</div>
 
