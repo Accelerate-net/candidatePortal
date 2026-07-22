@@ -546,7 +546,7 @@ angular.module('CandidateReportApp', ['ngCookies'])
     $scope.fetchReportData = function() {
         $http({
           method  : 'GET',
-          url     : 'https://crisprtech.app/crispr-apis/user/exam-report.php?id=' + getReportIdPassed(),
+          url     : 'https://crisprtech.app/crispr-apis/user/quiz/quiz-report.php?id=' + getReportIdPassed(),
           headers : {
             'Content-Type': 'application/json',
             'Authorization': getUserToken()
