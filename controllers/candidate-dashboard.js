@@ -348,6 +348,36 @@ angular.module('CandidateDashboardApp', ['ngCookies'])
 
     $scope.getWeeklyExamsList();
 
+    //Weekly Exam Reports (attempted quiz scores) - shown as a table above the Learning Portal
+    $scope.weeklyExamReports = [];
+    $scope.weeklyExamReportsFound = false;
+    $scope.getWeeklyExamReports = function() {
+        $http({
+          method  : 'GET',
+          url     : 'https://crisprtech.app/crispr-apis/user/quiz/quiz-summary.php',
+          headers : {
+            'Content-Type': 'application/json',
+            'Authorization': getUserToken()
+          }
+         })
+         .then(function(response) {
+            if(response.data.status == "success" && response.data.data && response.data.data.length > 0){
+                $scope.weeklyExamReports = response.data.data;
+                $scope.weeklyExamReportsFound = true;
+            } else {
+                $scope.weeklyExamReports = [];
+                $scope.weeklyExamReportsFound = false;
+            }
+        });
+    }
+
+    $scope.getWeeklyExamReports();
+
+    //Open a weekly exam report
+    $scope.viewWeeklyExamReport = function(attemptId) {
+        window.location.href = "/weekly-report.html?attemptId=" + attemptId;
+    }
+
     //Show weekly exams only when the user has access to at least one course/test series
     $scope.hasCourseAccess = function() {
         var enrolledSeries = $scope.courseListing && $scope.courseListing.testSeriesEnrolled && $scope.courseListing.testSeriesEnrolled.length > 0;

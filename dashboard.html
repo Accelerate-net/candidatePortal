@@ -339,113 +339,6 @@
 										    </div>
 
 
-										    <!-- SAME CITY -->
-										    <div ng-if="centerAllotment.peers.fromTestCity.length > 0" style="
-										        background:white;
-										        border:1px solid #e5e7eb;
-										        border-radius:24px;
-										        padding:28px;
-										        box-shadow:0 4px 18px rgba(0,0,0,0.04);
-										    ">
-
-										        <div style="
-										            display:flex;
-										            justify-content:space-between;
-										            align-items:center;
-										            margin-bottom:22px;
-										            flex-wrap:wrap;
-										            gap:10px;
-										        ">
-
-										            <div>
-										                <div style="
-										                    font-size:22px;
-										                    font-weight:700;
-										                    color:#111827;
-										                ">
-										                    Same Test City
-										                </div>
-
-										                <div style="
-										                    font-size:14px;
-										                    color:#6b7280;
-										                    margin-top:4px;
-										                ">
-										                    {{centerAllotment.peers.fromTestCity.length}} student<span ng-if="centerAllotment.peers.fromTestCity.length != 1">s</span> in {{centerAllotment.yourDetails.testCity}}
-										                </div>
-										            </div>
-
-										            <div style="
-										                background:#dbeafe;
-										                color:#1d4ed8;
-										                padding:8px 14px;
-										                border-radius:999px;
-										                font-size:13px;
-										                font-weight:600;
-										            ">
-										                Test City Match
-										            </div>
-
-										        </div>
-
-										        <!-- STUDENT LIST -->
-										        <div style="
-										            display:flex;
-										            flex-direction:column;
-										            gap:14px;
-										        ">
-
-										            <!-- CARD -->
-										            <div ng-repeat="peer in centerAllotment.peers.fromTestCity" style="
-										                border:1px solid #f1f5f9;
-										                border-radius:18px;
-										                padding:18px;
-										                display:flex;
-										                justify-content:space-between;
-										                align-items:center;
-										                flex-wrap:wrap;
-										                gap:12px;
-										            ">
-
-										                <div>
-										                    <div style="
-										                        font-size:18px;
-										                        font-weight:600;
-										                        color:#111827;
-										                    ">
-										                        {{peer.name}}
-										                    </div>
-
-										                    <div style="
-										                        font-size:14px;
-										                        color:#6b7280;
-										                        margin-top:4px;
-										                    ">
-										                        Appearing in {{centerAllotment.yourDetails.testCity}}
-										                    </div>
-										                </div>
-
-										                <a ng-href="{{buildWhatsappLink(peer, 'city')}}" target="_blank"
-										                   title="Contact on WhatsApp"
-										                   style="
-										                        text-decoration:none;
-										                        display:inline-flex;
-										                        align-items:center;
-										                        gap:8px;
-										                        color:#111827;
-										                        font-size:16px;
-										                        font-weight:600;
-										                   ">
-										                   <img width="36" height="36" src="https://img.icons8.com/color/48/whatsapp--v1.png" alt="WhatsApp"/>
-										                   <span>{{peer.contactWhatsapp}}</span>
-										                </a>
-
-										            </div>
-
-										        </div>
-
-										    </div>
-
 										    <!-- DISCLAIMER -->
 										    <div ng-if="centerAllotment.peerMatchCount > 0" style="
 										        margin-top:18px;
@@ -539,6 +432,51 @@
 															<span ng-if="!weeklyExam.attempted">Start Exam</span>
 														</a>
 													</div>
+												</div>
+											</div>
+										</div>
+
+										<!-- WEEKLY EXAM SCORES -->
+										<div class="weekly-exam-scores" ng-if="weeklyExamReportsFound" style="max-width:900px;margin:0 auto 30px;font-family:Inter,Arial,sans-serif;">
+											<div style="margin-bottom:18px;">
+												<h2 style="margin:0;font-size:22px;font-weight:700;color:#111827;">Weekly Exams</h2>
+												<p style="margin:4px 0 0;font-size:14px;color:#6b7280;">Your scores from attempted weekly exams</p>
+											</div>
+
+											<div style="background:#fff;border:1px solid #eef0f3;border-radius:20px;box-shadow:0 6px 20px rgba(0,0,0,0.05);overflow:hidden;">
+												<div style="overflow-x:auto;">
+													<table style="width:100%;border-collapse:collapse;font-size:14px;min-width:560px;">
+														<thead>
+															<tr style="background:#f9fafb;text-align:left;color:#6b7280;">
+																<th style="padding:14px 20px;font-weight:600;">Exam Name</th>
+																<th style="padding:14px 20px;font-weight:600;">Date</th>
+																<th style="padding:14px 20px;font-weight:600;">Score</th>
+																<th style="padding:14px 20px;font-weight:600;">Accuracy</th>
+																<th style="padding:14px 20px;font-weight:600;">Report</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr ng-repeat="report in weeklyExamReports track by report.attemptId" style="border-top:1px solid #f1f5f9;">
+																<td style="padding:16px 20px;font-weight:600;color:#111827;">{{report.title}}</td>
+																<td style="padding:16px 20px;color:#374151;">{{report.dateOfExam}}</td>
+																<td style="padding:16px 20px;color:#374151;font-weight:600;">{{report.score}}</td>
+																<td style="padding:16px 20px;color:#374151;">{{report.accuracy}}%</td>
+																<td style="padding:16px 20px;">
+																	<a ng-click="viewWeeklyExamReport(report.attemptId)" style="
+																		display:inline-block;
+																		padding:8px 16px;
+																		border-radius:10px;
+																		font-size:13px;
+																		font-weight:600;
+																		cursor:pointer;
+																		color:#fff;
+																		background:linear-gradient(135deg,#083e58,#015f73);
+																		white-space:nowrap;
+																	">View Report</a>
+																</td>
+															</tr>
+														</tbody>
+													</table>
 												</div>
 											</div>
 										</div>
