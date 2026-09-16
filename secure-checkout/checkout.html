@@ -14,7 +14,8 @@
 
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#f3f7fa">
     <title>Crispr Secure Checkout</title>
 
     <link rel="icon" href="https://crisprlearning.com/wp-content/uploads/2025/01/favicon.png" sizes="192x192" />
@@ -27,7 +28,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link type="text/css" href="../assets/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
@@ -46,9 +47,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 21px;
-            font-weight: bold;
-            color: #838383;
+            font-size: 18px;
+            font-weight: 700;
+            color: #64748b;
             z-index: 1000;
         }
 
@@ -60,13 +61,13 @@
         #loaderScreen::after {
             content: "";
             display: inline-block;
-            width: 24px;
-            height: 24px;
-            border: 3px solid #838383;
-            border-top: 3px solid transparent;
+            width: 22px;
+            height: 22px;
+            border: 3px solid #d9eef1;
+            border-top: 3px solid #005f73;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-left: 15px;
+            margin-left: 12px;
         }
     </style>
 </head>
@@ -74,7 +75,8 @@
 
 <body>
     <header class="header">
-        <img src="../assets/logo/crispr-logo-for-dark-bg.png" alt="allbirds logo">
+        <img src="../assets/logo/crispr-logo.svg" alt="Crispr Learning logo">
+        <small>Secure checkout</small>
     </header>
 
     <div id="toaster" class="toaster"></div>
@@ -85,46 +87,45 @@
 
                 <div id="loginStep1">
                     <h2>Login / Register</h2>
-                    <p style="font-weight: 300;">Please enter your mobile number to continue.</p>
-                    <div class="input-group" style="margin-top: 20px">
+                    <p>Please enter your mobile number to continue.</p>
+                    <div class="input-group">
                         <div>🇮🇳 <b>+91</b></div>
-                        <input id="mobile" type="tel" style="font-weight: bold;" maxlength="10" required>
+                        <input id="mobile" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="Mobile number" maxlength="10" required>
                     </div>
                 </div>
 
                 <div id="loginStep2" style="display: none">
-                    <h2>Continue <span style="font-weight: 300; font-size: 50%;"><span id="loginAttemptingMobile"></span></span></h2>
-                    <p style="font-weight: 300;">Please enter the one-time passcode.</p>
-                    <p style="font-weight: 300; font-size: 12px; margin: 0 0 10px 0;"></p>
-                    <div class="input-group otp" style="border: 1px solid transparent;">
-                        <input class="otpEntry" style="margin-left: 0" id="otp1" type="tel" maxlength="1" required>
-                        <input class="otpEntry" id="otp2" type="tel" maxlength="1" required>
-                        <input class="otpEntry" id="otp3" type="tel" maxlength="1" required>
-                        <input class="otpEntry" style="margin-right: 0" id="otp4" type="tel" maxlength="1" required>
+                    <h2>Continue <span id="loginAttemptingMobile"></span></h2>
+                    <p>Please enter the one-time passcode.</p>
+                    <div class="input-group otp">
+                        <input class="otpEntry" id="otp1" type="tel" inputmode="numeric" maxlength="1" aria-label="OTP digit 1" required>
+                        <input class="otpEntry" id="otp2" type="tel" inputmode="numeric" maxlength="1" aria-label="OTP digit 2" required>
+                        <input class="otpEntry" id="otp3" type="tel" inputmode="numeric" maxlength="1" aria-label="OTP digit 3" required>
+                        <input class="otpEntry" id="otp4" type="tel" inputmode="numeric" maxlength="1" aria-label="OTP digit 4" required>
                     </div>
                 </div>
-                <button class="continue-btn" id="loginStep1Button" onclick="sendOTP()" style="position: relative;">
+                <button class="continue-btn" id="loginStep1Button" onclick="sendOTP()">
                     Continue
-                    <span id="loginLoader1" style="display: none; position: absolute; right: 10px; top: 10px"><div class="loader"></div></span>
+                    <span id="loginLoader1" style="display: none;"><div class="loader"></div></span>
                 </button>
-                <button class="continue-btn" id="loginStep2Button" onclick="processLogin()" style="display: none; position: relative;">
+                <button class="continue-btn" id="loginStep2Button" onclick="processLogin()" style="display: none;">
                     Login Now
-                    <span id="loginLoader2" style="display: none; position: absolute; right: 10px; top: 10px"><div class="loader"></div></span>
+                    <span id="loginLoader2" style="display: none;"><div class="loader"></div></span>
                 </button>
 
 
                 <!-- Error Messages -->
-                <div style="position: relative; margin-top: 5px; height: 15px; display: block;" id="mobileErrorHolder">
-                    <p id="mobileError" style="margin: 0; font-size: 12px; color: rgb(230, 113, 113); text-align: left;"></p>
+                <div style="position: relative; margin-top: 8px; min-height: 18px; display: block;" id="mobileErrorHolder">
+                    <p id="mobileError" style="margin: 0; text-align: left;"></p>
                 </div>
 
                 <div id="loginStep3" style="display: none;">
-                    <h2>Logged in <span style="font-weight: 300; font-size: 70%;">as <span id="loggedInAsName"></span></span>
-                        <span style="font-weight: 300; text-align: right; float: right; margin-top: 10px; font-size: 12px; text-decoration: underline; color: #27b6e7; cursor: pointer; display: none;" id="logoutButton" onclick="logoutCurrentUser()">Logout</span>
+                    <h2>Logged in <span>as <span id="loggedInAsName"></span></span>
+                        <span id="logoutButton" onclick="logoutCurrentUser()" style="display: none;">Logout</span>
                     </h2>
                     <div class="input-group">
                         <div>🇮🇳 <b>+91</b></div>
-                        <input id="mobileRegistered" type="tel" style="font-weight: bold;" maxlength="10" required="" disabled>
+                        <input id="mobileRegistered" type="tel" maxlength="10" required="" disabled>
                     </div>
                 </div>
 
@@ -132,6 +133,7 @@
 
             <div class="addressSection" id="billingAddressView" style="display: none">
                 <h2>Billing Address</h2>
+                <p>We need these details for your invoice.</p>
                 <div class="billing-group">
                     <input type="text" placeholder="Full Name" id="fullname" onkeyup="checkPaymentButton()">
                 </div>
@@ -146,7 +148,7 @@
                 </div>
                 <input type="text" placeholder="Email for Communication" id="email" onkeyup="checkPaymentButton()">
             </div>
-            
+
             <section class="payment-section">
                 <p>By placing this order, you agree to our <a href="https://crisprlearning.com/terms-and-conditions/" target="new">Terms of Service</a> and understand our <a href="https://crisprlearning.com/privacy-policy/" target="new">Privacy Policy</a>.</p>
             </section>
@@ -154,7 +156,7 @@
 
         <section class="summary-section">
             <h2>Order Summary</h2>
-            
+
             <div class="cartItems" id="crisprCartItems">
             </div>
 

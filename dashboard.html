@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Test Series</title>
+    <title>Dashboard · Crispr Learning</title>
 
     <link rel="icon" href="https://crisprlearning.com/wp-content/uploads/2025/01/favicon.png" sizes="192x192" />
     <link rel="apple-touch-icon" href="https://crisprlearning.com/wp-content/uploads/2025/01/favicon.png" />
@@ -13,703 +13,451 @@
     <meta name="bingbot" content="noindex, nofollow">
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#f3f7fa">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-touch-fullscreen" content="yes">
 
-    <link type='text/css' href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <link type="text/css" href="assets/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet">        <!-- Font Awesome -->
     <link type="text/css" href="assets/fonts/themify-icons/themify-icons.css" rel="stylesheet">              <!-- Themify Icons -->
-    <link type="text/css" href="assets/css/styles.css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
-
-    <link type="text/css" href="assets/plugins/codeprettifier/prettify.css" rel="stylesheet">                <!-- Code Prettifier -->
-    <link type="text/css" href="assets/plugins/iCheck/skins/minimal/blue.css" rel="stylesheet">              <!-- iCheck -->
-
-	<link type="text/css" href="assets/plugins/form-fseditor/fseditor.css" rel="stylesheet">                      		<!-- FullScreen Editor -->
+    <link type="text/css" href="assets/css/portal.css" rel="stylesheet">                                     <!-- Portal design system -->
 
     <!-- Controller -->
-  	<script src="assets/js/jquery.js"></script>
-  	<script src="assets/js/angular.min.js"></script>
-  	<script src="assets/js/angular-cookies.min.js"></script>
-  	<script src="controllers/candidate-dashboard.js"></script>
-
-    </head>
-
-    <body class="animated-content" ng-app="CandidateDashboardApp" ng-controller="candidateDashboardController" ng-cloak>
-        
-        <div id="toaster" class="myCustomToaster"></div>
-        <header id="topnav" class="navbar navbar-midnightblue navbar-fixed-top" role="banner" style="background: linear-gradient(135deg, #083e58, #015f73);">
-
-			<div class="logo-area">
-				<span class="navbar-brand" style="min-width: 120px;"></span>
-			</div>
-
-			<ul class="nav navbar-nav toolbar pull-right">
-
-				<li class="dropdown toolbar-icon-bg">
-					<a href="#" class="dropdown-toggle username unsetBackgroundColor" data-toggle="dropdown">
-						<img class="img-circle" ng-src="{{dashboardSummaryData.photo || 'https://img.icons8.com/color/100/user.png'}}" alt=""/>
-					</a>
-					<ul class="dropdown-menu userinfo arrow">
-						<li><a href="dashboard.html"><i class="ti ti-home"></i><span>Dashboard</span></a></li>
-						<li><a href="profile.html"><i class="ti ti-user"></i><span>My Profile</span></a></li>
-						<li ng-click="logoutNow()"><a><i class="ti ti-shift-right"></i><span>Sign Out</span></a></li>
-					</ul>
-				</li>
-
-			</ul>
-
-		</header>
-
-        <div id="wrapper">
-            <div id="layout-static">
-                <div class="static-content-wrapper">
-                    <div class="static-content">
-                        <div class="page-content">
-
-                            <div class="container-fluid" style="padding-top: 10px;">
-                            	<div data-widget-group="group1" class="ui-sortable">
-							
-
-							<div class="row dashboardViewProfileSummary" ng-show="!createView">
-								<div class="col-md-4">
-									<div class="dashboardViewImage">
-									    <img ng-src="{{dashboardSummaryData.photo || 'https://img.icons8.com/color/100/user.png'}}" style="width: 80px; height: 80px; border-radius: 50%; align-self: flex-end;">
-									    <span style="font-size: 26px; font-weight: 300; align-self: flex-end; color: #FFF; margin-bottom: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Welcome {{dashboardSummaryData.name}}!
-									    	<span style="display: block; font-size: 14px; color: #ffb706; font-weight: 400;">{{dashboardSummaryData.aspiration}}</span></span>
-
-									</div>
-								</div>
-		                        <div class="col-md-8">
-		                        	<div class="dashboardViewTileRow">
-				                           <div class="info-tile info-tile-alt tile-blue dashboardViewProfileSummaryTile" title="Accuracy across all the tests attempted">
-				                              <div class="tile-heading"><span>Strike Rate <i class="fa fa-flash" style="margin-left: 5px"></i></span></div>
-				                              <div class="tile-body" style="text-align: left">
-				                              	<span ng-if="dashboardSummaryData.dashboardSummary.strikeRateFrom > 0">{{(dashboardSummaryData.dashboardSummary.strikeRate / 100).toFixed(1)}}%</span>
-				                              	<span ng-if="dashboardSummaryData.dashboardSummary.strikeRateFrom == 0">NA</span>
-				                              </div>
-				                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-grey tileBottom">
-				                              	<tag ng-if="dashboardSummaryData.dashboardSummary.strikeRateFrom > 0">from {{dashboardSummaryData.dashboardSummary.strikeRateFrom}} attempted tests</tag>
-				                              	<tag ng-if="dashboardSummaryData.dashboardSummary.strikeRateFrom == 0">not tests attempted</tag>
-				                              </span></div>
-				                           </div>
-
-				                           <div class="info-tile info-tile-alt tile-blue dashboardViewProfileSummaryTile" title="Avg. score across all the tests attempted">
-				                              <div class="tile-heading"><span>Avg Score <i class="fa fa-bar-chart" style="margin-left: 5px"></i></span></div>
-				                              <div class="tile-body" style="text-align: left">
-				                              	<span ng-if="dashboardSummaryData.dashboardSummary.averageScoreFrom > 0">{{(dashboardSummaryData.dashboardSummary.averageScore / 100).toFixed(0)}} / {{dashboardSummaryData.dashboardSummary.averageScoreBase}}</span>
-				                              	<span ng-if="dashboardSummaryData.dashboardSummary.averageScoreFrom == 0">NA</span></div>
-				                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-default tileBottom">
-				                              	<tag ng-if="dashboardSummaryData.dashboardSummary.averageScoreFrom > 0">from {{dashboardSummaryData.dashboardSummary.averageScoreFrom}} attempted tests</tag>
-				                              	<tag ng-if="dashboardSummaryData.dashboardSummary.averageScoreFrom == 0">not tests attempted</tag>
-				                              </span></div>
-				                           </div>
-
-				                           <div class="info-tile info-tile-alt tile-blue dashboardViewProfileSummaryTile" title="Total PYQs solved">
-				                              <div class="tile-heading"><span>PYQs Solved <i class="fa fa-check" style="margin-left: 5px"></i></span></div>
-				                              <div class="tile-body" style="text-align: left"><span>{{dashboardSummaryData.dashboardSummary.pyqSolved}}</span></div>
-				                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-grey tileBottom">
-				                              	<tag ng-if="dashboardSummaryData.dashboardSummary.pyqSolvedFrom > 0">from {{dashboardSummaryData.dashboardSummary.pyqSolvedFrom}} questions</tag>
-				                              	<tag ng-if="dashboardSummaryData.dashboardSummary.pyqSolvedFrom == 0">no PYQs available</tag>
-				                              </span></div>
-				                           </div>
-
-				                           <div class="info-tile info-tile-alt tile-blue dashboardViewProfileSummaryTile" title="Your strong subject">
-				                              <div class="tile-heading"><span>Strong Subject <i class="fa fa-star" style="margin-left: 5px"></i></span></div>
-				                              <div class="tile-body" style="text-align: left">
-				                              	<span ng-if="dashboardSummaryData.dashboardSummary.strongSubject != ''">{{dashboardSummaryData.dashboardSummary.strongSubject}}</span>
-				                              	<span ng-if="dashboardSummaryData.dashboardSummary.strongSubject == ''">NA</span></div>
-				                              <div class="tile-footer" style="left: 16px !important; right: unset;"><span class="text-default tileBottom">
-				                              	<tag ng-if="dashboardSummaryData.dashboardSummary.strongSubject != ''">contributes {{(dashboardSummaryData.dashboardSummary.strongSubjectPercentage).toFixed(0)}}% to total</tag>
-				                              	<tag ng-if="dashboardSummaryData.dashboardSummary.strongSubject == ''">no sufficient data</tag>
-				                              </span></div>
-				                           </div>
-		                           </div>
-		                        </div>
-
-		                    </div>
-
-							<div class="row dashboardViewContainer">
-
-								<div class="col-md-8">
-
-										<!-- PEER MATCHES -->
-										<div ng-if="centerAllotmentFound" style="max-width:900px;margin:0 auto 30px;font-family:Inter,Arial,sans-serif;">
-
-										    <!-- HERO CARD -->
-										    <div style="
-										        background:linear-gradient(135deg,#111827,#1f2937);
-										        border-radius:24px;
-										        padding:32px;
-										        color:white;
-										        box-shadow:0 10px 30px rgba(0,0,0,0.12);
-										        margin-bottom:24px;
-										    ">
-
-										        <div style="
-										            display:flex;
-										            justify-content:space-between;
-										            align-items:flex-start;
-										            flex-wrap:wrap;
-										            gap:20px;
-										        ">
-
-										            <div>
-										                <div style="
-										                    font-size:14px;
-										                    opacity:0.8;
-										                    margin-bottom:8px;
-										                ">
-										                    Candidate Dashboard
-										                </div>
-
-										                <h2 style="
-										                    margin:0;
-										                    font-size:34px;
-										                    line-height:1.2;
-										                    font-weight:700;
-										                ">
-										                    Hi {{centerAllotment.yourDetails.name}} 👋
-										                </h2>
-
-										                <div style="
-										                    margin-top:10px;
-										                    font-size:16px;
-										                    color:#d1d5db;
-										                ">
-										                    <span ng-if="centerAllotment.peerMatchCount > 0">We found students attending your exam center and from your city.</span>
-										                    <span ng-if="centerAllotment.peerMatchCount == 0">No peer matches yet for your exam center or city.</span>
-										                </div>
-										            </div>
-
-										            <div style="
-										                background:#16a34a;
-										                color:white;
-										                padding:10px 16px;
-										                border-radius:999px;
-										                font-size:14px;
-										                font-weight:600;
-										                height:fit-content;
-										            ">
-										                {{centerAllotment.peerMatchCount}} Peer Match<span ng-if="centerAllotment.peerMatchCount != 1">es</span> Found
-										            </div>
-
-										        </div>
-
-										        <!-- INFO GRID -->
-										        <div style="
-										            display:grid;
-										            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-										            gap:16px;
-										            margin-top:28px;
-										        ">
-
-										            <div style="
-										                background:rgba(255,255,255,0.08);
-										                padding:18px;
-										                border-radius:18px;
-										            ">
-										                <div style="font-size:13px;color:#9ca3af;margin-bottom:8px;">
-										                    Home Location
-										                </div>
-
-										                <div style="font-size:18px;font-weight:600;">
-										                    {{centerAllotment.yourDetails.place || 'NA'}}
-										                </div>
-										            </div>
-
-										            <div style="
-										                background:rgba(255,255,255,0.08);
-										                padding:18px;
-										                border-radius:18px;
-										            ">
-										                <div style="font-size:13px;color:#9ca3af;margin-bottom:8px;">
-										                    Allotted Center
-										                </div>
-
-										                <div style="font-size:18px;font-weight:600;">
-										                    {{centerAllotment.yourDetails.testCenter || 'NA'}}<span ng-if="centerAllotment.yourDetails.testCity">, {{centerAllotment.yourDetails.testCity}}</span>
-										                </div>
-										            </div>
-
-										        </div>
-
-										    </div>
-
-
-										    <!-- SAME CENTER -->
-										    <div ng-if="centerAllotment.peers.fromTestCenter.length > 0" style="
-										        background:white;
-										        border:1px solid #e5e7eb;
-										        border-radius:24px;
-										        padding:28px;
-										        margin-bottom:22px;
-										        box-shadow:0 4px 18px rgba(0,0,0,0.04);
-										    ">
-
-										        <div style="
-										            display:flex;
-										            justify-content:space-between;
-										            align-items:center;
-										            margin-bottom:22px;
-										            flex-wrap:wrap;
-										            gap:10px;
-										        ">
-
-										            <div>
-										                <div style="
-										                    font-size:22px;
-										                    font-weight:700;
-										                    color:#111827;
-										                ">
-										                    Same Exam Center
-										                </div>
-
-										                <div style="
-										                    font-size:14px;
-										                    color:#6b7280;
-										                    margin-top:4px;
-										                ">
-										                    {{centerAllotment.peers.fromTestCenter.length}} student<span ng-if="centerAllotment.peers.fromTestCenter.length != 1">s</span> attending your exact test center
-										                </div>
-										            </div>
-
-										            <div style="
-										                background:#dcfce7;
-										                color:#166534;
-										                padding:8px 14px;
-										                border-radius:999px;
-										                font-size:13px;
-										                font-weight:600;
-										            ">
-										                Center Match
-										            </div>
-
-										        </div>
-
-										        <!-- STUDENT -->
-										        <div ng-repeat="peer in centerAllotment.peers.fromTestCenter" style="
-										            border:1px solid #f1f5f9;
-										            border-radius:18px;
-										            padding:18px;
-										            margin-bottom:12px;
-										            display:flex;
-										            justify-content:space-between;
-										            align-items:center;
-										            flex-wrap:wrap;
-										            gap:12px;
-										        ">
-
-										            <div>
-										                <div style="
-										                    font-size:18px;
-										                    font-weight:600;
-										                    color:#111827;
-										                ">
-										                    {{peer.name}}
-										                </div>
-
-										                <div style="
-										                    font-size:14px;
-										                    color:#6b7280;
-										                    margin-top:4px;
-										                ">
-										                    Appearing at {{centerAllotment.yourDetails.testCenter}}<span ng-if="centerAllotment.yourDetails.testCity">, {{centerAllotment.yourDetails.testCity}}</span>
-										                </div>
-										            </div>
-
-										            <a ng-href="{{buildWhatsappLink(peer, 'center')}}" target="_blank"
-										               title="Contact on WhatsApp"
-										               style="
-										                    text-decoration:none;
-										                    display:inline-flex;
-										                    align-items:center;
-										                    gap:8px;
-										                    color:#111827;
-										                    font-size:16px;
-										                    font-weight:600;
-										               ">
-										               <img width="36" height="36" src="https://img.icons8.com/color/48/whatsapp--v1.png" alt="WhatsApp"/>
-										               <span>{{peer.contactWhatsapp}}</span>
-										            </a>
-
-										        </div>
-
-										    </div>
-
-
-										    <!-- DISCLAIMER -->
-										    <div ng-if="centerAllotment.peerMatchCount > 0" style="
-										        margin-top:18px;
-										        background:#fef9c3;
-										        border:1px solid #fde68a;
-										        border-radius:16px;
-										        padding:18px 20px;
-										        color:#713f12;
-										        font-size:13px;
-										        line-height:1.7;
-										    ">
-										        <div style="font-weight:700;margin-bottom:6px;">Disclaimer</div>
-										        <div>
-										            The peer matches shown here are based solely on the information voluntarily submitted by students through the form. This initiative is intended only to help students coordinate travel, accommodation, and exam-day planning for IAT 2026.
-										        </div>
-										        <div style="margin-top:10px;">
-										            Crispr Learning does not independently verify the factual accuracy of the submitted details and is not responsible for any incorrect, incomplete, or misleading information shared by users. Students are advised to exercise their own discretion while connecting with others.
-										        </div>
-										    </div>
-
-										    <!-- EMPTY STATE: submitted but no matches -->
-										    <div ng-if="centerAllotment.peerMatchCount == 0" style="
-										        background:#fffbeb;
-										        border:1px solid #fde68a;
-										        border-radius:24px;
-										        padding:28px 32px;
-										        text-align:center;
-										        box-shadow:0 4px 18px rgba(0,0,0,0.04);
-										    ">
-										        <div style="font-size:42px;margin-bottom:10px;">⏳</div>
-										        <h3 style="margin:0;font-size:20px;color:#111827;font-weight:700;">
-										            No matches found
-										        </h3>
-										        <div style="max-width:560px;margin:10px auto 0;color:#6b7280;line-height:1.6;font-size:15px;">
-										            We'll update here as soon as we get more data from your peers. Share the form with more friends to get them to fill it in.
-										        </div>
-										    </div>
-
-										</div>
-
-										<!-- WEEKLY EXAMS -->
-										<div class="weekly-exams" ng-if=" hasCourseAccess() && weeklyExamsFound" style="max-width:900px;margin:0 auto 30px;font-family:Inter,Arial,sans-serif;">
-											<div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:18px;">
-												<div>
-													<h2 style="margin:0;font-size:22px;font-weight:700;color:#111827;">Weekly Exams</h2>
-													<p style="margin:4px 0 0;font-size:14px;color:#6b7280;">Stay exam-ready with your weekly practice tests</p>
-												</div>
-											</div>
-
-											<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;">
-												<div ng-repeat="weeklyExam in weeklyExamsList track by weeklyExam.id" style="
-													background:#fff;
-													border:1px solid #eef0f3;
-													border-radius:20px;
-													overflow:hidden;
-													box-shadow:0 6px 20px rgba(0,0,0,0.05);
-													display:flex;
-													flex-direction:column;
-												">
-													<div style="position:relative;">
-														<img ng-src="{{weeklyExam.photo}}" alt="{{weeklyExam.title}}" style="width:100%;height:150px;object-fit:cover;display:block;background:#f3f4f6;">
-														<span ng-if="weeklyExam.attempted" style="position:absolute;top:12px;right:12px;background:#16a34a;color:#fff;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:600;">
-															<i class="fa fa-check"></i> Attempted
-														</span>
-														<span ng-if="!weeklyExam.attempted" style="position:absolute;top:12px;right:12px;background:#f59e0b;color:#fff;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:600;">
-															New
-														</span>
-													</div>
-
-													<div style="padding:18px 20px;display:flex;flex-direction:column;flex:1;">
-														<h4 style="margin:0 0 6px;font-size:17px;font-weight:700;color:#111827;">{{weeklyExam.title}}</h4>
-														<p style="margin:0 0 14px;font-size:13px;color:#6b7280;line-height:1.6;flex:1;">{{weeklyExam.brief}}</p>
-
-														<div style="display:flex;gap:18px;margin-bottom:16px;color:#374151;font-size:13px;">
-															<span title="Duration"><i class="fa fa-clock-o" style="color:#0a9190;margin-right:5px;"></i>{{weeklyExam.duration}} min</span>
-															<span title="Questions"><i class="fa fa-list-ol" style="color:#0a9190;margin-right:5px;"></i>{{weeklyExam.totalQuestions}} Qs</span>
-														</div>
-
-														<a ng-click="attemptWeeklyExam(weeklyExam.id)" style="
-															display:block;
-															text-align:center;
-															padding:11px 16px;
-															border-radius:12px;
-															font-size:14px;
-															font-weight:600;
-															cursor:pointer;
-															color:#fff;
-															background:linear-gradient(135deg,#083e58,#015f73);
-														">
-															<span ng-if="weeklyExam.attempted">Re-attempt</span>
-															<span ng-if="!weeklyExam.attempted">Start Exam</span>
-														</a>
-													</div>
-												</div>
-											</div>
-										</div>
-
-										<!-- WEEKLY EXAM SCORES -->
-										<div class="weekly-exam-scores" ng-if="weeklyExamReportsFound" style="max-width:900px;margin:0 auto 30px;font-family:Inter,Arial,sans-serif;">
-											<div style="margin-bottom:18px;">
-												<h2 style="margin:0;font-size:22px;font-weight:700;color:#111827;">Weekly Exams</h2>
-												<p style="margin:4px 0 0;font-size:14px;color:#6b7280;">Your scores from attempted weekly exams</p>
-											</div>
-
-											<div style="background:#fff;border:1px solid #eef0f3;border-radius:20px;box-shadow:0 6px 20px rgba(0,0,0,0.05);overflow:hidden;">
-												<div style="overflow-x:auto;">
-													<table style="width:100%;border-collapse:collapse;font-size:14px;min-width:560px;">
-														<thead>
-															<tr style="background:#f9fafb;text-align:left;color:#6b7280;">
-																<th style="padding:14px 20px;font-weight:600;">Exam Name</th>
-																<th style="padding:14px 20px;font-weight:600;">Date</th>
-																<th style="padding:14px 20px;font-weight:600;">Score</th>
-																<th style="padding:14px 20px;font-weight:600;">Accuracy</th>
-																<th style="padding:14px 20px;font-weight:600;">Report</th>
-															</tr>
-														</thead>
-														<tbody>
-															<tr ng-repeat="report in weeklyExamReports track by report.attemptId" style="border-top:1px solid #f1f5f9;">
-																<td style="padding:16px 20px;font-weight:600;color:#111827;">{{report.title}}</td>
-																<td style="padding:16px 20px;color:#374151;">{{report.dateOfExam}}</td>
-																<td style="padding:16px 20px;color:#374151;font-weight:600;">{{report.score}}</td>
-																<td style="padding:16px 20px;color:#374151;">{{report.accuracy}}%</td>
-																<td style="padding:16px 20px;">
-																	<a ng-click="viewWeeklyExamReport(report.attemptId)" style="
-																		display:inline-block;
-																		padding:8px 16px;
-																		border-radius:10px;
-																		font-size:13px;
-																		font-weight:600;
-																		cursor:pointer;
-																		color:#fff;
-																		background:linear-gradient(135deg,#083e58,#015f73);
-																		white-space:nowrap;
-																	">View Report</a>
-																</td>
-															</tr>
-														</tbody>
-													</table>
-												</div>
-											</div>
-										</div>
-
-										<!-- MODERN LEARNING PORTAL -->
-										<div class="learning-portal">
-											<!-- Portal Header -->
-											<div class="portal-header">
-												<div class="portal-title">
-													<h2>Learning Portal</h2>
-													<p>Manage your courses and exam series</p>
-												</div>
-												<div class="portal-stats">
-													<div class="stat-item">
-														<span class="stat-number" ng-if="courseListing.testSeriesEnrolled">{{courseListing.testSeriesEnrolled.length}}</span>
-														<span class="stat-number" ng-if="!courseListing.testSeriesEnrolled">0</span>
-														<span class="stat-label">Test Series</span>
-													</div>
-													<div class="stat-item">
-														<span class="stat-number" ng-if="courseBundlesListing">{{courseBundlesListing.length}}</span>
-														<span class="stat-number" ng-if="!courseBundlesListing">0</span>
-														<span class="stat-label">Courses</span>
-													</div>
-												</div>
-											</div>
-
-											<!-- Content Selection Tabs -->
-											<div class="content-tabs">
-												<div class="tab-nav">
-													<div class="tab-item" ng-class="{'active': activeTab === 'testSeries'}" ng-click="switchTab('testSeries')">
-														<div class="tab-icon">
-															<i class="fa fa-desktop"></i>
-														</div>
-														<span>TEST SERIES</span>
-														<div class="tab-indicator"></div>
-													</div>
-													<div class="tab-item" ng-class="{'active': activeTab === 'courseBundles'}" ng-click="switchTab('courseBundles')">
-														<div class="tab-icon">
-															<i class="fa fa-book"></i>
-														</div>
-														<span>COURSES</span>
-														<div class="tab-indicator"></div>
-													</div>
-												</div>
-
-												<!-- Test Series Selection -->
-												<div class="tab-panel" ng-show="activeTab === 'testSeries'">
-													<div class="selection-grid" ng-if="courseListing.testSeriesEnrolled && courseListing.testSeriesEnrolled.length > 0">
-														<div class="selection-card" 
-															 ng-repeat="courseItemTile in courseListing.testSeriesEnrolled track by $index" 
-															 ng-class="{'selected': courseItemTile.code == courseIdOpen, 'clickable': true}"
-															 ng-click="getCourseListingData(courseItemTile.code)">
-															<div class="card-header">
-																<div class="card-icon">
-																	<i class="fa fa-desktop"></i>
-																</div>
-																<div class="card-status" ng-if="courseItemTile.code == courseIdOpen">
-																	<i class="fa fa-check-circle"></i>
-																</div>
-															</div>
-															<div class="card-body">
-																<h4>{{courseItemTile.title}}</h4>
-															</div>
-														</div>
-													</div>
-													
-													<div class="empty-state" ng-if="!courseListingFound">
-														<div class="empty-icon">
-															<i class="fa fa-graduation-cap"></i>
-														</div>
-														<p>Enroll in test series to start practicing</p>
-														<a href="https://crisprlearning.com/courses/" target="new" class="btn-primary">Enroll Now</a>
-													</div>
-												</div>
-
-												<!-- Course Bundles Selection -->
-												<div class="tab-panel" ng-show="activeTab === 'courseBundles'">
-													<div class="selection-grid" ng-if="courseBundlesListing && courseBundlesListing.length > 0">
-														<div class="selection-card" 
-															 ng-repeat="courseBundleItem in courseBundlesListing track by $index" 
-															 ng-class="{'selected': courseBundleItem.id == selectedCourseBundleId, 'clickable': true}"
-															 ng-click="selectCourseBundle(courseBundleItem)">
-															<div class="card-header">
-																<div class="card-icon">
-																	<i class="fa fa-book"></i>
-																</div>
-																<div class="card-status" ng-if="courseBundleItem.id == selectedCourseBundleId">
-																	<i class="fa fa-play-circle"></i>
-																</div>
-															</div>
-															<div class="card-body">
-																<h4>{{courseBundleItem.title}}</h4>
-															</div>
-														</div>
-													</div>
-													
-													<div class="empty-state" ng-if="!courseBundlesListingFound">
-														<div class="empty-icon">
-															<i class="fa fa-book"></i>
-														</div>
-														<p>No course bundles have been added for you</p>
-													</div>
-												</div>
-											</div>
-										</div>
-
-									    <!-- Dynamic Course Content Container -->
-									    <div class="course-bundle-content-container" ng-show="selectedCourseBundleId && activeTab === 'courseBundles'">
-									        <!-- Selected Course Title -->
-									        <div class="selected-course-title">
-									            <h3 class="course-name">{{selectedCourseBundleData.title}}</h3>
-									        </div>
-									        
-									        <div class="tab-container" id="tab-container">
-									            <!-- Tabs will be dynamically generated here -->
-									        </div>
-									        <div id="tab-contents">
-									            <!-- Tab content will be dynamically generated here -->
-									        </div>
-									    </div>
-
-								</div>
-							</div>
-
-							<div class="row dashboardViewContainerForCourse" ng-show="courseIdOpen && activeTab === 'testSeries'">
-								<div class="col-md-8">
-									    <div class="courseContentContainer">
-									       
-									        <div class="courseContentTile" ng-repeat="courseItem in courseListing.coursesList track by $index" ng-click="" ng-class="{'blockedCourseContent' : courseItem.locked}">
-									        	<div class="courseContentSummary" ng-if="courseItem.lastScore"><span>
-									        	Scored <b>{{(courseItem.lastScore/100).toFixed(0)}}</b> on {{courseItem.lastAttempted}}</span></div>
-									            <div class="courseContentIcon" ng-class="getCourseIconImage(courseItem)"></div>
-									            <img ng-src="{{courseItem.photo}}" alt="">
-									            <div class="courseContentTileContent">
-									            	<div class="premiumContentIcon" ng-if="!courseItem.locked && courseItem.premium" title="Premium Content"><i class="ti ti-crown"></i></div>
-									                <h5>{{courseItem.title}}</h5>
-									                <p class="multiline-ellipsis">{{courseItem.brief}}</p>
-									                <span ng-if="!courseItem.locked">
-									                	<a ng-click="attemptExam(courseItem.key, courseListing.currentTestSeriesInfo.series)" ng-if="courseItem.availableForAttempt" id="{{ 'attempt_' + courseListing.currentTestSeriesInfo.code + '_' + courseItem.key }}">
-									                		<tag ng-if="courseItem.previousAttemptId">Attempt Again</tag>
-									                		<tag ng-if="!courseItem.previousAttemptId">Attempt Now</tag>
-									                	</a>
-									                	<a ng-click="viewLastReport(courseItem.previousAttemptId)" ng-if="courseItem.previousAttemptId" class="viewReport">Score Card</a>
-									                </span>
-									                <span ng-if="courseItem.locked">
-									                	<a ng-click="goToPurchaseLink(courseListing.currentTestSeriesInfo.code)" class="courseContentPurchase" id="{{ 'attempt_' + courseListing.currentTestSeriesInfo.code + '_' + courseItem.key }}"> <i class="ti ti-crown"></i> Get Membership</a>
-									                </span>
-									            </div>
-									        </div>
-
-									    </div>
-								</div>
-
-
-								<!-- Progress Graph -->
-								<div class="col-md-4" ng-show="showProgressChart()">
-										<div class="panel testSeriesProgressChartPanel">
-										    <div class="panel-body testSeriesProgressChartPanelBody" style="height: 320px; padding: 0 10px;">
-										        <!-- Scrollable wrapper for the chart -->
-										        <div class="chart-scrollable-wrapper" style="overflow-x: auto; overflow-y: hidden; height: 100%; border: 2px solid #e6eded; padding: 10px;">
-										            <!-- Chart container with dynamic width -->
-										            <div id="testSeriesProgressChart" style="height: 280px; width: 400px;" class="mt-sm mb-sm"></div>
-										        </div>
-										    </div>
-										    <p>Your Progress in <b style="color: #0a9190">{{courseNameOpen}}</b></p>
-										</div>
-								</div>
-							</div>
-
-
-								</div>
-                            </div> <!-- .container-fluid -->
-                        </div> <!-- #page-content -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/angular.min.js"></script>
+    <script src="assets/js/angular-cookies.min.js"></script>
+    <script src="controllers/candidate-dashboard.js"></script>
+</head>
+
+<body ng-app="CandidateDashboardApp" ng-controller="candidateDashboardController" ng-cloak>
+
+    <div id="toaster" class="myCustomToaster"></div>
+
+    <div class="cp-shell">
+
+        <!-- Sidebar (desktop) -->
+        <aside class="cp-sidebar">
+            <a class="cp-brand-logo" href="dashboard.html"><img src="assets/logo/crispr-logo.svg" alt="Crispr Learning"></a>
+
+            <nav class="cp-nav" aria-label="Primary">
+                <a class="cp-nav-link" href="dashboard.html" data-nav="dashboard.html">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>
+                    <span>Dashboard</span>
+                </a>
+                <a class="cp-nav-link" href="profile.html" data-nav="profile.html">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+                    <span>My Profile</span>
+                </a>
+            </nav>
+
+            <div class="cp-sidebar-foot">
+                <a class="cp-user-strip" href="profile.html">
+                    <img class="cp-avatar is-sm" ng-src="{{dashboardSummaryData.photo || 'https://img.icons8.com/color/100/user.png'}}" alt="">
+                    <div>
+                        <strong>{{dashboardSummaryData.name || 'Candidate'}}</strong>
+                        <small>{{dashboardSummaryData.aspiration || 'Crispr Learning'}}</small>
                     </div>
-                    <footer role="contentinfo">
-    <div class="clearfix">
-        <ul class="list-unstyled list-inline pull-left">
-            <li><h6 style="margin: 0; text-transform: none">&copy; 2025 Crispr Learning</h6></li>
-        </ul>
-    </div>
-</footer>
+                </a>
+                <button type="button" class="cp-nav-link cp-nav-logout" ng-click="logoutNow()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M14 8l4 4-4 4"/><path d="M18 12H9"/></svg>
+                    <span>Sign out</span>
+                </button>
+            </div>
+        </aside>
+
+        <div class="cp-main">
+            <header class="cp-topbar">
+                <div class="cp-topbar-left">
+                    <a class="cp-brand-mobile" href="dashboard.html"><img src="assets/logo/crispr-logo.svg" alt="Crispr Learning"></a>
+                    <h1 class="cp-page-title">Dashboard</h1>
+                </div>
+                <div class="cp-topbar-right">
+                    <a class="cp-icon-btn cp-topbar-profile" href="profile.html" aria-label="My profile">
+                        <img class="cp-avatar is-sm" ng-src="{{dashboardSummaryData.photo || 'https://img.icons8.com/color/100/user.png'}}" alt="">
+                    </a>
+                    <button type="button" class="cp-icon-btn cp-topbar-logout" ng-click="logoutNow()" aria-label="Sign out">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M14 8l4 4-4 4"/><path d="M18 12H9"/></svg>
+                    </button>
+                </div>
+            </header>
+
+            <main class="cp-content">
+                <div class="cp-page">
+
+                    <!-- WELCOME + SUMMARY TILES -->
+                    <div class="cp-grid cp-grid-dash-top" ng-show="!createView">
+                        <section class="cp-card is-dark">
+                            <div class="cp-welcome">
+                                <img class="cp-welcome-avatar" ng-src="{{dashboardSummaryData.photo || 'https://img.icons8.com/color/100/user.png'}}" alt="">
+                                <div class="cp-welcome-text">
+                                    <small>Candidate dashboard</small>
+                                    <h2>Welcome {{dashboardSummaryData.name}}!</h2>
+                                    <span class="cp-pill is-sky" ng-if="dashboardSummaryData.aspiration">{{dashboardSummaryData.aspiration}}</span>
+                                </div>
+                            </div>
+                        </section>
+
+                        <div class="cp-kpi-grid">
+                            <section class="cp-card" title="Accuracy across all the tests attempted">
+                                <div class="cp-kpi-head">
+                                    <h2>Strike Rate</h2>
+                                    <span class="cp-kpi-icon"><i class="fa fa-flash"></i></span>
+                                </div>
+                                <div class="cp-kpi-value">
+                                    <strong ng-if="dashboardSummaryData.dashboardSummary.strikeRateFrom > 0">{{(dashboardSummaryData.dashboardSummary.strikeRate / 100).toFixed(1)}}%</strong>
+                                    <strong ng-if="dashboardSummaryData.dashboardSummary.strikeRateFrom == 0">NA</strong>
+                                </div>
+                                <p class="cp-kpi-sub">
+                                    <tag ng-if="dashboardSummaryData.dashboardSummary.strikeRateFrom > 0">from <b>{{dashboardSummaryData.dashboardSummary.strikeRateFrom}}</b> attempted tests</tag>
+                                    <tag ng-if="dashboardSummaryData.dashboardSummary.strikeRateFrom == 0">no tests attempted</tag>
+                                </p>
+                            </section>
+
+                            <section class="cp-card" title="Avg. score across all the tests attempted">
+                                <div class="cp-kpi-head">
+                                    <h2>Avg Score</h2>
+                                    <span class="cp-kpi-icon"><i class="fa fa-bar-chart"></i></span>
+                                </div>
+                                <div class="cp-kpi-value">
+                                    <strong ng-if="dashboardSummaryData.dashboardSummary.averageScoreFrom > 0">{{(dashboardSummaryData.dashboardSummary.averageScore / 100).toFixed(0)}} <small>/ {{dashboardSummaryData.dashboardSummary.averageScoreBase}}</small></strong>
+                                    <strong ng-if="dashboardSummaryData.dashboardSummary.averageScoreFrom == 0">NA</strong>
+                                </div>
+                                <p class="cp-kpi-sub">
+                                    <tag ng-if="dashboardSummaryData.dashboardSummary.averageScoreFrom > 0">from <b>{{dashboardSummaryData.dashboardSummary.averageScoreFrom}}</b> attempted tests</tag>
+                                    <tag ng-if="dashboardSummaryData.dashboardSummary.averageScoreFrom == 0">no tests attempted</tag>
+                                </p>
+                            </section>
+
+                            <section class="cp-card" title="Total PYQs solved">
+                                <div class="cp-kpi-head">
+                                    <h2>PYQs Solved</h2>
+                                    <span class="cp-kpi-icon"><i class="fa fa-check"></i></span>
+                                </div>
+                                <div class="cp-kpi-value">
+                                    <strong>{{dashboardSummaryData.dashboardSummary.pyqSolved}}</strong>
+                                </div>
+                                <p class="cp-kpi-sub">
+                                    <tag ng-if="dashboardSummaryData.dashboardSummary.pyqSolvedFrom > 0">from <b>{{dashboardSummaryData.dashboardSummary.pyqSolvedFrom}}</b> questions</tag>
+                                    <tag ng-if="dashboardSummaryData.dashboardSummary.pyqSolvedFrom == 0">no PYQs available</tag>
+                                </p>
+                            </section>
+
+                            <section class="cp-card" title="Your strong subject">
+                                <div class="cp-kpi-head">
+                                    <h2>Strong Subject</h2>
+                                    <span class="cp-kpi-icon"><i class="fa fa-star"></i></span>
+                                </div>
+                                <div class="cp-kpi-value">
+                                    <strong ng-if="dashboardSummaryData.dashboardSummary.strongSubject != ''">{{dashboardSummaryData.dashboardSummary.strongSubject}}</strong>
+                                    <strong ng-if="dashboardSummaryData.dashboardSummary.strongSubject == ''">NA</strong>
+                                </div>
+                                <p class="cp-kpi-sub">
+                                    <tag ng-if="dashboardSummaryData.dashboardSummary.strongSubject != ''">contributes <b>{{(dashboardSummaryData.dashboardSummary.strongSubjectPercentage).toFixed(0)}}%</b> to total</tag>
+                                    <tag ng-if="dashboardSummaryData.dashboardSummary.strongSubject == ''">no sufficient data</tag>
+                                </p>
+                            </section>
+                        </div>
+                    </div>
+
+                    <!-- PEER MATCHES -->
+                    <div class="cp-stack" ng-if="centerAllotmentFound">
+
+                        <!-- HERO CARD -->
+                        <section class="cp-card is-dark">
+                            <div class="cp-hero-top">
+                                <div>
+                                    <small>Exam centre</small>
+                                    <h2>Hi {{centerAllotment.yourDetails.name}} 👋</h2>
+                                    <p>
+                                        <span ng-if="centerAllotment.peerMatchCount > 0">We found students attending your exam center and from your city.</span>
+                                        <span ng-if="centerAllotment.peerMatchCount == 0">No peer matches yet for your exam center or city.</span>
+                                    </p>
+                                </div>
+                                <span class="cp-pill is-lime"><span>{{centerAllotment.peerMatchCount}} Peer Match<span ng-if="centerAllotment.peerMatchCount != 1">es</span> Found</span></span>
+                            </div>
+
+                            <dl class="cp-dl cp-hero-grid">
+                                <div>
+                                    <dt>Home Location</dt>
+                                    <dd>{{centerAllotment.yourDetails.place || 'NA'}}</dd>
+                                </div>
+                                <div>
+                                    <dt>Allotted Center</dt>
+                                    <dd>{{centerAllotment.yourDetails.testCenter || 'NA'}}<span ng-if="centerAllotment.yourDetails.testCity">, {{centerAllotment.yourDetails.testCity}}</span></dd>
+                                </div>
+                            </dl>
+                        </section>
+
+                        <!-- SAME CENTER -->
+                        <section class="cp-card" ng-if="centerAllotment.peers.fromTestCenter.length > 0">
+                            <div class="cp-card-head">
+                                <div>
+                                    <h2>Same Exam Center</h2>
+                                    <p>{{centerAllotment.peers.fromTestCenter.length}} student<span ng-if="centerAllotment.peers.fromTestCenter.length != 1">s</span> attending your exact test center</p>
+                                </div>
+                                <span class="cp-pill is-lime">Center Match</span>
+                            </div>
+
+                            <ul class="cp-peer-list">
+                                <li class="cp-peer" ng-repeat="peer in centerAllotment.peers.fromTestCenter">
+                                    <div class="cp-peer-meta">
+                                        <strong>{{peer.name}}</strong>
+                                        <small>Appearing at {{centerAllotment.yourDetails.testCenter}}<span ng-if="centerAllotment.yourDetails.testCity">, {{centerAllotment.yourDetails.testCity}}</span></small>
+                                    </div>
+                                    <a class="cp-peer-wa" ng-href="{{buildWhatsappLink(peer, 'center')}}" target="_blank" title="Contact on WhatsApp">
+                                        <img src="https://img.icons8.com/color/48/whatsapp--v1.png" alt="WhatsApp"/>
+                                        <span>{{peer.contactWhatsapp}}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </section>
+
+                        <!-- DISCLAIMER -->
+                        <div class="cp-alert cp-alert-warn cp-alert-inline" ng-if="centerAllotment.peerMatchCount > 0">
+                            <strong>Disclaimer</strong>
+                            <p>The peer matches shown here are based solely on the information voluntarily submitted by students through the form. This initiative is intended only to help students coordinate travel, accommodation, and exam-day planning for IAT 2026.</p>
+                            <p>Crispr Learning does not independently verify the factual accuracy of the submitted details and is not responsible for any incorrect, incomplete, or misleading information shared by users. Students are advised to exercise their own discretion while connecting with others.</p>
+                        </div>
+
+                        <!-- EMPTY STATE: submitted but no matches -->
+                        <section class="cp-card cp-state" ng-if="centerAllotment.peerMatchCount == 0">
+                            <span class="cp-state-icon is-warn">⏳</span>
+                            <strong>No matches found</strong>
+                            <p>We'll update here as soon as we get more data from your peers. Share the form with more friends to get them to fill it in.</p>
+                        </section>
+                    </div>
+
+                    <!-- WEEKLY EXAMS -->
+                    <div class="cp-stack weekly-exams" ng-if="hasCourseAccess() && weeklyExamsFound">
+                        <div class="cp-section-head">
+                            <div class="cp-section-head-text">
+                                <h2>Weekly Exams</h2>
+                                <p>Stay exam-ready with your weekly practice tests</p>
+                            </div>
+                        </div>
+
+                        <div class="cp-grid cp-grid-exams">
+                            <section class="cp-card cp-exam" ng-repeat="weeklyExam in weeklyExamsList track by weeklyExam.id">
+                                <div class="cp-exam-media">
+                                    <img ng-src="{{weeklyExam.photo}}" alt="{{weeklyExam.title}}">
+                                    <span class="cp-pill is-lime" ng-if="weeklyExam.attempted"><i class="fa fa-check"></i> Attempted</span>
+                                    <span class="cp-pill is-sky" ng-if="!weeklyExam.attempted">New</span>
+                                </div>
+                                <div class="cp-exam-body">
+                                    <h4>{{weeklyExam.title}}</h4>
+                                    <p>{{weeklyExam.brief}}</p>
+                                    <div class="cp-exam-meta">
+                                        <span title="Duration"><i class="fa fa-clock-o"></i>{{weeklyExam.duration}} min</span>
+                                        <span title="Questions"><i class="fa fa-list-ol"></i>{{weeklyExam.totalQuestions}} Qs</span>
+                                    </div>
+                                    <a class="cp-btn cp-btn-primary" ng-click="attemptWeeklyExam(weeklyExam.id)">
+                                        <span ng-if="weeklyExam.attempted">Re-attempt</span>
+                                        <span ng-if="!weeklyExam.attempted">Start Exam</span>
+                                    </a>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                    <!-- WEEKLY EXAM SCORES -->
+                    <section class="cp-card weekly-exam-scores" ng-if="weeklyExamReportsFound">
+                        <div class="cp-card-head">
+                            <div>
+                                <h2>Weekly Exam Scores</h2>
+                                <p>Your scores from attempted weekly exams</p>
+                            </div>
+                            <span class="cp-pill is-ghost"><span>{{weeklyExamReports.length}} attempt<span ng-if="weeklyExamReports.length != 1">s</span></span></span>
+                        </div>
+                        <div class="cp-table-wrap">
+                            <table class="cp-table" style="min-width: 560px;">
+                                <thead>
+                                    <tr>
+                                        <th>Exam Name</th>
+                                        <th>Date</th>
+                                        <th>Score</th>
+                                        <th>Accuracy</th>
+                                        <th>Report</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="report in weeklyExamReports track by report.attemptId">
+                                        <td><strong>{{report.title}}</strong></td>
+                                        <td class="cp-td-muted">{{report.dateOfExam}}</td>
+                                        <td class="is-num">{{report.score}}</td>
+                                        <td><span class="cp-pill is-ghost cp-pill-sm">{{report.accuracy}}%</span></td>
+                                        <td>
+                                            <a class="cp-btn cp-btn-ghost cp-btn-sm" ng-click="viewWeeklyExamReport(report.attemptId)">View Report</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- LEARNING PORTAL -->
+                    <section class="cp-card learning-portal">
+                        <div class="cp-card-head">
+                            <div>
+                                <h2>Learning Portal</h2>
+                                <p>Manage your courses and exam series</p>
+                            </div>
+                            <div class="cp-portal-stats">
+                                <span class="cp-pill is-ghost"><span>
+                                    <b ng-if="courseListing.testSeriesEnrolled">{{courseListing.testSeriesEnrolled.length}}</b>
+                                    <b ng-if="!courseListing.testSeriesEnrolled">0</b>
+                                    Test Series
+                                </span></span>
+                                <span class="cp-pill is-ghost"><span>
+                                    <b ng-if="courseBundlesListing">{{courseBundlesListing.length}}</b>
+                                    <b ng-if="!courseBundlesListing">0</b>
+                                    Courses
+                                </span></span>
+                            </div>
+                        </div>
+
+                        <!-- Content Selection Tabs -->
+                        <div class="cp-seg" role="tablist">
+                            <button type="button" class="cp-seg-item" role="tab" ng-class="{'active': activeTab === 'testSeries'}" ng-click="switchTab('testSeries')">
+                                <i class="fa fa-desktop"></i> Test Series
+                            </button>
+                            <button type="button" class="cp-seg-item" role="tab" ng-class="{'active': activeTab === 'courseBundles'}" ng-click="switchTab('courseBundles')">
+                                <i class="fa fa-book"></i> Courses
+                            </button>
+                        </div>
+
+                        <!-- Test Series Selection -->
+                        <div class="tab-panel" ng-show="activeTab === 'testSeries'">
+                            <div class="cp-select-grid" ng-if="courseListing.testSeriesEnrolled && courseListing.testSeriesEnrolled.length > 0">
+                                <div class="cp-select-card"
+                                     ng-repeat="courseItemTile in courseListing.testSeriesEnrolled track by $index"
+                                     ng-class="{'selected': courseItemTile.code == courseIdOpen}"
+                                     ng-click="getCourseListingData(courseItemTile.code)">
+                                    <span class="cp-select-card-icon"><i class="fa fa-desktop"></i></span>
+                                    <h4>{{courseItemTile.title}}</h4>
+                                    <span class="cp-select-card-check" ng-if="courseItemTile.code == courseIdOpen"><i class="fa fa-check-circle"></i></span>
+                                </div>
+                            </div>
+
+                            <div class="cp-state" ng-if="!courseListingFound">
+                                <span class="cp-state-icon"><i class="fa fa-graduation-cap"></i></span>
+                                <p>Enroll in test series to start practicing</p>
+                                <a href="https://crisprlearning.com/courses/" target="new" class="cp-btn cp-btn-primary">Enroll Now</a>
+                            </div>
+                        </div>
+
+                        <!-- Course Bundles Selection -->
+                        <div class="tab-panel" ng-show="activeTab === 'courseBundles'">
+                            <div class="cp-select-grid" ng-if="courseBundlesListing && courseBundlesListing.length > 0">
+                                <div class="cp-select-card"
+                                     ng-repeat="courseBundleItem in courseBundlesListing track by $index"
+                                     ng-class="{'selected': courseBundleItem.id == selectedCourseBundleId}"
+                                     ng-click="selectCourseBundle(courseBundleItem)">
+                                    <span class="cp-select-card-icon"><i class="fa fa-book"></i></span>
+                                    <h4>{{courseBundleItem.title}}</h4>
+                                    <span class="cp-select-card-check" ng-if="courseBundleItem.id == selectedCourseBundleId"><i class="fa fa-play-circle"></i></span>
+                                </div>
+                            </div>
+
+                            <div class="cp-state" ng-if="!courseBundlesListingFound">
+                                <span class="cp-state-icon"><i class="fa fa-book"></i></span>
+                                <p>No course bundles have been added for you</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Dynamic Course Content Container -->
+                    <section class="cp-card course-bundle-content-container" ng-show="selectedCourseBundleId && activeTab === 'courseBundles'">
+                        <div class="cp-bundle-title selected-course-title">
+                            <span class="cp-bundle-icon"><i class="fa fa-play"></i></span>
+                            <h3 class="course-name">{{selectedCourseBundleData.title}}</h3>
+                        </div>
+
+                        <div class="tab-container" id="tab-container">
+                            <!-- Module tabs are generated by the controller -->
+                        </div>
+                        <div id="tab-contents">
+                            <!-- Chapter tables are generated by the controller -->
+                        </div>
+                    </section>
+
+                    <!-- TEST SERIES CONTENT -->
+                    <div class="cp-grid cp-grid-series dashboardViewContainerForCourse" ng-show="courseIdOpen && activeTab === 'testSeries'">
+                        <div class="courseContentContainer">
+                            <div class="courseContentTile" ng-repeat="courseItem in courseListing.coursesList track by $index" ng-class="{'blockedCourseContent' : courseItem.locked}">
+                                <div class="courseContentSummary" ng-if="courseItem.lastScore"><span>Scored <b>{{(courseItem.lastScore/100).toFixed(0)}}</b> on {{courseItem.lastAttempted}}</span></div>
+                                <div class="courseContentIcon" ng-class="getCourseIconImage(courseItem)"></div>
+                                <img ng-src="{{courseItem.photo}}" alt="">
+                                <div class="courseContentTileContent">
+                                    <div class="premiumContentIcon" ng-if="!courseItem.locked && courseItem.premium" title="Premium Content"><i class="ti ti-crown"></i></div>
+                                    <h5>{{courseItem.title}}</h5>
+                                    <p class="multiline-ellipsis">{{courseItem.brief}}</p>
+                                    <span ng-if="!courseItem.locked">
+                                        <a ng-click="attemptExam(courseItem.key, courseListing.currentTestSeriesInfo.series)" ng-if="courseItem.availableForAttempt" id="{{ 'attempt_' + courseListing.currentTestSeriesInfo.code + '_' + courseItem.key }}">
+                                            <tag ng-if="courseItem.previousAttemptId">Attempt Again</tag>
+                                            <tag ng-if="!courseItem.previousAttemptId">Attempt Now</tag>
+                                        </a>
+                                        <a ng-click="viewLastReport(courseItem.previousAttemptId)" ng-if="courseItem.previousAttemptId" class="viewReport">Score Card</a>
+                                    </span>
+                                    <span ng-if="courseItem.locked">
+                                        <a ng-click="goToPurchaseLink(courseListing.currentTestSeriesInfo.code)" class="courseContentPurchase" id="{{ 'attempt_' + courseListing.currentTestSeriesInfo.code + '_' + courseItem.key }}"> <i class="ti ti-crown"></i> Get Membership</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Progress Graph -->
+                        <section class="cp-card testSeriesProgressChartPanel" ng-show="showProgressChart()">
+                            <div class="cp-card-head">
+                                <h2>Your Progress</h2>
+                            </div>
+                            <div class="cp-chart-scroll">
+                                <div id="testSeriesProgressChart" class="cp-chart"></div>
+                            </div>
+                            <p class="cp-chart-caption">Scores across your attempts in <b>{{courseNameOpen}}</b></p>
+                        </section>
+                    </div>
 
                 </div>
-            </div>
+            </main>
+
+            <footer class="cp-foot" role="contentinfo">&copy; 2025 Crispr Learning</footer>
+
+            <!-- Bottom tab bar (mobile) -->
+            <nav class="cp-tabbar" aria-label="Primary">
+                <a class="cp-tab" href="dashboard.html" data-nav="dashboard.html">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>
+                    <span>Dashboard</span>
+                </a>
+                <a class="cp-tab" href="profile.html" data-nav="profile.html">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+                    <span>Profile</span>
+                </a>
+                <button type="button" class="cp-tab" ng-click="logoutNow()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M14 8l4 4-4 4"/><path d="M18 12H9"/></svg>
+                    <span>Sign out</span>
+                </button>
+            </nav>
         </div>
+    </div>
 
-    
-    <!-- Load site level scripts -->
+    <!-- Site level scripts -->
+    <script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>                            <!-- jQuery -->
+    <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>                                <!-- Bootstrap JS (modals for bootbox) -->
 
-<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script> -->
+    <script type="text/javascript" src="assets/plugins/charts-flot/jquery.flot.min.js"></script>             <!-- Flot Main File -->
+    <script type="text/javascript" src="assets/plugins/charts-flot/jquery.flot.pie.min.js"></script>         <!-- Flot Pie Chart Plugin -->
+    <script type="text/javascript" src="assets/plugins/charts-flot/jquery.flot.stack.min.js"></script>       <!-- Flot Stacked Charts Plugin -->
+    <script type="text/javascript" src="assets/plugins/charts-flot/jquery.flot.orderBars.min.js"></script>   <!-- Flot Ordered Bars Plugin-->
+    <script type="text/javascript" src="assets/plugins/charts-flot/jquery.flot.resize.min.js"></script>      <!-- Flot Responsive -->
+    <script type="text/javascript" src="assets/plugins/charts-flot/jquery.flot.tooltip.min.js"></script>     <!-- Flot Tooltips -->
+    <script type="text/javascript" src="assets/plugins/charts-flot/jquery.flot.spline.js"></script>          <!-- Flot Curved Lines -->
 
-<script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script> 							<!-- Load jQuery -->
-<script type="text/javascript" src="assets/js/jqueryui-1.10.3.min.js"></script> 							<!-- Load jQueryUI -->
-<script type="text/javascript" src="assets/js/bootstrap.min.js"></script> 								<!-- Load Bootstrap -->
-<script type="text/javascript" src="assets/js/enquire.min.js"></script> 									<!-- Load Enquire -->
+    <script type="text/javascript" src="assets/plugins/bootbox/bootbox.js"></script>                         <!-- Bootbox (exam-in-progress confirmation) -->
+    <script type="text/javascript" src="assets/js/portal.js"></script>
 
-<script type="text/javascript" src="assets/plugins/velocityjs/velocity.min.js"></script>					<!-- Load Velocity for Animated Content -->
-<script type="text/javascript" src="assets/plugins/velocityjs/velocity.ui.min.js"></script>
-
-<script type="text/javascript" src="assets/plugins/wijets/wijets.js"></script>     						<!-- Wijet -->
-
-<script type="text/javascript" src="assets/plugins/codeprettifier/prettify.js"></script> 				<!-- Code Prettifier  -->
-<script type="text/javascript" src="assets/plugins/bootstrap-switch/bootstrap-switch.js"></script> 		<!-- Swith/Toggle Button -->
-
-<script type="text/javascript" src="assets/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js"></script>  <!-- Bootstrap Tabdrop -->
-
-
-<script type="text/javascript" src="assets/plugins/charts-flot/jquery.flot.min.js"></script>             	<!-- Flot Main File -->
-<script type="text/javascript" src="assets/plugins/charts-flot/jquery.flot.pie.min.js"></script>             <!-- Flot Pie Chart Plugin -->
-<script type="text/javascript" src="assets/plugins/charts-flot/jquery.flot.stack.min.js"></script>       	<!-- Flot Stacked Charts Plugin -->
-<script type="text/javascript" src="assets/plugins/charts-flot/jquery.flot.orderBars.min.js"></script>   	<!-- Flot Ordered Bars Plugin-->
-<script type="text/javascript" src="assets/plugins/charts-flot/jquery.flot.resize.min.js"></script>          <!-- Flot Responsive -->
-<script type="text/javascript" src="assets/plugins/charts-flot/jquery.flot.tooltip.min.js"></script> 		<!-- Flot Tooltips -->
-<script type="text/javascript" src="assets/plugins/charts-flot/jquery.flot.spline.js"></script> 				<!-- Flot Curved Lines -->
-
-
-
-<script type="text/javascript" src="assets/plugins/iCheck/icheck.min.js"></script>     					<!-- iCheck -->
-
-<script type="text/javascript" src="assets/plugins/nanoScroller/js/jquery.nanoscroller.min.js"></script> <!-- nano scroller -->
-
-<script type="text/javascript" src="assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
-
-<script type="text/javascript" src="assets/js/application.js"></script>
-<script type="text/javascript" src="assets/demo/demo.js"></script>
-
-<!-- End loading site level scripts -->
-    
-    <!-- Load page level scripts-->
-    
-<script type="text/javascript" src="assets/plugins/form-fseditor/jquery.fseditor-min.js"></script>            			<!-- Fullscreen Editor -->
-<script type="text/javascript" src="assets/plugins/bootbox/bootbox.js"></script>
-
-    </body>
+</body>
 </html>

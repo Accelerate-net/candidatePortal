@@ -13,7 +13,8 @@
     </script>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#f3f7fa">
     <title>Login to Crispr</title>
 
     <link rel="icon" href="https://crisprlearning.com/wp-content/uploads/2025/01/favicon.png" sizes="192x192" />
@@ -26,27 +27,29 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link href="assets/css/candidate-login.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="assets/css/portal.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
     <div id="toaster" class="toaster"></div>
 
-    <div class="container">
-        <div class="left-panel">
-            <h1 style="text-align: center;"><img src="../assets/logo/crispr-logo-for-dark-bg.png" width="60%" style="max-width: 400px; min-width: 200px;"></h1>
-            <p class="roboto-slim" style="font-size: 18px !important; line-height: 24px; color: #fdfdfd">Hello aspring Scientist, <br>your journey to <span style="font-weight: 300;">IISER</span> starts here. 🚀</p>
-        </div>
-        <div class="right-panel">
-            
-                <div id="loginStep1">
-                    <h2>Login / Register</h2>
-                    <p style="font-weight: 300;">Please enter your mobile number to continue.</p>
+    <div class="cp-login">
+        <div class="cp-login-card">
+            <div class="cp-login-brand">
+                <img src="assets/logo/crispr-logo.svg" alt="Crispr Learning">
+                <small>Candidate portal</small>
+            </div>
 
-                    <div class="input-group">
-                        <select id="countryCode" aria-label="Select country code">
+            <div id="loginStep1">
+                <h1>Login / Register</h1>
+                <p class="cp-login-sub">Please enter your mobile number to continue.</p>
+
+                <label class="cp-field">
+                    <span>Mobile number</span>
+                    <div class="cp-input-group input-group">
+                        <select id="countryCode" class="cp-input-prefix" aria-label="Select country code">
                             <option value="+91" data-flag="🇮🇳">🇮🇳 India +91</option>
                             <option value="+973" data-flag="🇧🇭">🇧🇭 Bahrain +973</option>
                             <option value="+965" data-flag="🇰🇼">🇰🇼 Kuwait +965</option>
@@ -55,37 +58,42 @@
                             <option value="+966" data-flag="🇸🇦">🇸🇦 KSA +966</option>
                             <option value="+971" data-flag="🇦🇪">🇦🇪 UAE +971</option>
                         </select>
-                        <input id="mobile" type="tel" inputmode="numeric" style="font-weight: bold;" maxlength="10" required>
+                        <input id="mobile" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="10" required>
                     </div>
-                </div>
+                </label>
+            </div>
 
-                <div id="loginStep2" style="display: none">
-                    <h2>Continue <span style="font-weight: 300; font-size: 50%;"><span id="loginAttemptingMobile"></span></span></h2>
-                    <p style="font-weight: 300;">Please enter the one-time passcode.</p>
-                    <p style="font-weight: 300; font-size: 12px; margin: 0 0 10px 0;"></p>
-                    <div class="input-group otp" style="border: 1px solid transparent;">
-                        <input class="otpEntry" style="margin-left: 0" id="otp1" type="tel" maxlength="1" required>
-                        <input class="otpEntry" id="otp2" type="tel" maxlength="1" required>
-                        <input class="otpEntry" id="otp3" type="tel" maxlength="1" required>
-                        <input class="otpEntry" style="margin-right: 0" id="otp4" type="tel" maxlength="1" required>
-                    </div>
-                    <button id="resendOtpButton" class="resend-btn" type="button" onclick="handleResendOTP()" disabled style="display: none;">Resend in 01:59 min</button>
+            <div id="loginStep2" style="display: none">
+                <h2>Continue <span id="loginAttemptingMobile"></span></h2>
+                <p class="cp-login-sub">Please enter the one-time passcode.</p>
+                <div class="cp-otp input-group otp">
+                    <input class="otpEntry" id="otp1" type="tel" inputmode="numeric" maxlength="1" aria-label="OTP digit 1" required>
+                    <input class="otpEntry" id="otp2" type="tel" inputmode="numeric" maxlength="1" aria-label="OTP digit 2" required>
+                    <input class="otpEntry" id="otp3" type="tel" inputmode="numeric" maxlength="1" aria-label="OTP digit 3" required>
+                    <input class="otpEntry" id="otp4" type="tel" inputmode="numeric" maxlength="1" aria-label="OTP digit 4" required>
                 </div>
-                <button class="continue-btn" id="loginStep1Button" onclick="sendOTP()" style="position: relative;">
-                    <span id="loginStep1ButtonLabel">Get OTP on Phone</span>
-                    <span id="loginLoader1" style="display: none; position: absolute; right: 10px; top: 10px"><div class="loader"></div></span>
-                </button>
-                <button class="continue-btn" id="loginStep2Button" onclick="processLogin()" style="display: none; position: relative;">
-                    Login Now
-                    <span id="loginLoader2" style="display: none; position: absolute; right: 10px; top: 10px"><div class="loader"></div></span>
-                </button>
+                <button id="resendOtpButton" class="resend-btn cp-link" type="button" onclick="handleResendOTP()" disabled style="display: none;">Resend in 01:59 min</button>
+            </div>
 
-                <!-- Error Messages -->
-                <div style="position: relative; margin-top: 5px; height: 15px; display: block;">
-                    <p id="mobileError" style="margin: 0; font-size: 12px; color: rgb(230, 113, 113); text-align: left;"></p>
-                </div>
-            <div class="footer-links">
-                <p style="font-size: 11px; text-align: left; margin: 0; padding: 0; width: 100%;">By continuing you agree to all our <a href="https://crisprlearning.com/terms-and-conditions/" target="new" style="text-decoration: underline;">Terms and Conditions</a></p>
+            <button class="cp-btn cp-btn-primary cp-btn-block continue-btn" id="loginStep1Button" onclick="sendOTP()">
+                <span id="loginStep1ButtonLabel">Get OTP on Phone</span>
+                <span id="loginLoader1" class="cp-btn-loader" style="display: none;"><div class="loader"></div></span>
+            </button>
+            <button class="cp-btn cp-btn-primary cp-btn-block continue-btn" id="loginStep2Button" onclick="processLogin()" style="display: none;">
+                Login Now
+                <span id="loginLoader2" class="cp-btn-loader" style="display: none;"><div class="loader"></div></span>
+            </button>
+
+            <!-- Error Messages -->
+            <div class="cp-field-error">
+                <p id="mobileError"></p>
+            </div>
+
+            <p class="cp-login-terms">By continuing you agree to all our <a href="https://crisprlearning.com/terms-and-conditions/" target="new">Terms and Conditions</a></p>
+
+            <div class="cp-login-tagline">
+                <span>🚀</span>
+                <span>Hello aspiring Scientist, your journey to <b>IISER</b> starts here.</span>
             </div>
         </div>
     </div>
@@ -561,6 +569,6 @@
         }
 
     </script>
-    
+
 </body>
 </html>
