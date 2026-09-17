@@ -7,19 +7,20 @@ import { nextPathFromSearch } from '../lib/api';
 import { maskMobile } from '../lib/format';
 import { useToast } from '../components/Toast';
 import WelcomeSlider from '../components/WelcomeSlider';
+import CountryCodeSelect from '../components/CountryCodeSelect';
 
 const COUNTRY_CODE_STORAGE_KEY = 'selectedCountryCode';
 const OTP_RESEND_DEFAULT_SECONDS = 119;
 const OTP_LENGTH = 4;
 
 const COUNTRIES = [
-  { code: '+91', label: '🇮🇳 India +91', digits: 10, regex: /^[6-9]\d{9}$/ },
-  { code: '+973', label: '🇧🇭 Bahrain +973', digits: 8, regex: /^\d{8}$/ },
-  { code: '+965', label: '🇰🇼 Kuwait +965', digits: 8, regex: /^\d{8}$/ },
-  { code: '+968', label: '🇴🇲 Oman +968', digits: 8, regex: /^\d{8}$/ },
-  { code: '+974', label: '🇶🇦 Qatar +974', digits: 8, regex: /^\d{8}$/ },
-  { code: '+966', label: '🇸🇦 KSA +966', digits: 9, regex: /^\d{9}$/ },
-  { code: '+971', label: '🇦🇪 UAE +971', digits: 9, regex: /^\d{9}$/ },
+  { code: '+91', flag: '🇮🇳', name: 'India', digits: 10, regex: /^[6-9]\d{9}$/ },
+  { code: '+973', flag: '🇧🇭', name: 'Bahrain', digits: 8, regex: /^\d{8}$/ },
+  { code: '+965', flag: '🇰🇼', name: 'Kuwait', digits: 8, regex: /^\d{8}$/ },
+  { code: '+968', flag: '🇴🇲', name: 'Oman', digits: 8, regex: /^\d{8}$/ },
+  { code: '+974', flag: '🇶🇦', name: 'Qatar', digits: 8, regex: /^\d{8}$/ },
+  { code: '+966', flag: '🇸🇦', name: 'Saudi Arabia', digits: 9, regex: /^\d{9}$/ },
+  { code: '+971', flag: '🇦🇪', name: 'United Arab Emirates', digits: 9, regex: /^\d{9}$/ },
 ];
 
 const countryByCode = (code) => COUNTRIES.find((c) => c.code === code) || COUNTRIES[0];
@@ -125,8 +126,7 @@ export default function LoginPage() {
     setMobileError(country.regex.test(value) ? '' : 'Invalid Mobile Number');
   }
 
-  function handleCountryChange(e) {
-    const next = e.target.value;
+  function handleCountryChange(next) {
     window.localStorage.setItem(COUNTRY_CODE_STORAGE_KEY, next);
     setCountryCode(next);
     const cfg = countryByCode(next);
@@ -134,6 +134,7 @@ export default function LoginPage() {
     setMobile(trimmed);
     setMobileError('');
     if (trimmed.length > 0) setMobileError(cfg.regex.test(trimmed) ? '' : 'Invalid Mobile Number');
+    mobileRef.current?.focus();
   }
 
   function handleMobileInput(e) {
@@ -242,94 +243,97 @@ export default function LoginPage() {
   const buttonLabel = country.code === '+91' ? 'Get OTP on Phone' : 'Get OTP on WhatsApp';
 
   return (
-    <div className="cp-login cp-login-split">
-      <WelcomeSlider />
+    <div className="cp-login">
+      <header className="cp-login-brand">
+        <img src="/logo/crispr-logo.svg" alt="Crispr Learning" />
+        <small>Candidate Portal</small>
+      </header>
 
-      <div className="cp-login-card">
-        <div className="cp-login-brand">
-          <img src="/logo/crispr-logo.svg" alt="Crispr Learning" />
-          <small>Candidate portal</small>
-        </div>
+      <div className="cp-login-split">
+        <WelcomeSlider />
 
-        {step === 'mobile' ? (
-          <div>
-            <h1>Login / Register</h1>
-            <p className="cp-login-sub">Please enter your mobile number to continue.</p>
+        <div className="cp-login-card">
+          {step === 'mobile' ? (
+            <div>
+              <h1>Login / Register</h1>
+              <p className="cp-login-sub">Please enter your mobile number to continue.</p>
 
-            <label className="cp-field">
-              <span>Mobile number</span>
-              <div className="cp-input-group">
-                <select className="cp-input-prefix" value={countryCode} onChange={handleCountryChange} aria-label="Select country code">
-                  {COUNTRIES.map((c) => <option key={c.code} value={c.code}>{c.label}</option>)}
-                </select>
-                <input
-                  ref={mobileRef}
-                  type="tel"
-                  inputMode="numeric"
-                  autoComplete="tel-national"
-                  placeholder="Mobile number"
-                  maxLength={country.digits}
-                  value={mobile}
-                  onChange={handleMobileInput}
-                  onBlur={() => { if (mobile.length > 0) validateMobile(mobile); }}
-                  onKeyDown={(e) => { if (e.key === 'Enter') sendOTP(); }}
-                  required
-                />
+              <div className="cp-field">
+                <label className="cp-label" htmlFor="cp-login-mobile">Mobile number</label>
+                <div className="cp-phone">
+                  <div className="cp-input-group">
+                    <CountryCodeSelect countries={COUNTRIES} value={countryCode} onChange={handleCountryChange} />
+                    <input
+                      id="cp-login-mobile"
+                      ref={mobileRef}
+                      type="tel"
+                      inputMode="numeric"
+                      autoComplete="tel-national"
+                      placeholder="Mobile number"
+                      maxLength={country.digits}
+                      value={mobile}
+                      onChange={handleMobileInput}
+                      onBlur={() => { if (mobile.length > 0) validateMobile(mobile); }}
+                      onKeyDown={(e) => { if (e.key === 'Enter') sendOTP(); }}
+                      required
+                    />
+                  </div>
+                </div>
               </div>
-            </label>
 
-            <button type="button" className="cp-btn cp-btn-primary cp-btn-block continue-btn" onClick={() => sendOTP()} disabled={sending}>
-              <span>{buttonLabel}</span>
-              {sending && <span className="cp-btn-loader"><div className="loader" /></span>}
-            </button>
-          </div>
-        ) : (
-          <div>
-            <h2>Continue <span>{masked}</span></h2>
-            <p className="cp-login-sub">Please enter the one-time passcode.</p>
-            <div className="cp-otp">
-              {otp.map((digit, i) => (
-                <input
-                  key={i}
-                  ref={(el) => { otpRefs.current[i] = el; }}
-                  className="otpEntry"
-                  type="tel"
-                  inputMode="numeric"
-                  maxLength={1}
-                  aria-label={`OTP digit ${i + 1}`}
-                  value={digit}
-                  onChange={(e) => handleOtpInput(i, e)}
-                  onKeyDown={(e) => handleOtpKeyDown(i, e)}
-                  required
-                />
-              ))}
-            </div>
-            {resendSeconds !== null && (
-              <button
-                type="button"
-                className="resend-btn cp-link"
-                onClick={handleResendOTP}
-                disabled={resendSending || resendSeconds > 0}
-                style={{ display: 'inline-block' }}
-              >
-                {resendSending ? 'Sending...' : resendSeconds > 0 ? formatResendCountdown(resendSeconds) : 'Resend OTP'}
+              <button type="button" className="cp-btn cp-btn-primary cp-btn-block continue-btn" onClick={() => sendOTP()} disabled={sending}>
+                <span>{buttonLabel}</span>
+                {sending && <span className="cp-btn-loader"><div className="loader" /></span>}
               </button>
-            )}
+            </div>
+          ) : (
+            <div>
+              <h2>Continue <span>{masked}</span></h2>
+              <p className="cp-login-sub">Please enter the one-time passcode.</p>
+              <div className="cp-otp">
+                {otp.map((digit, i) => (
+                  <input
+                    key={i}
+                    ref={(el) => { otpRefs.current[i] = el; }}
+                    className="otpEntry"
+                    type="tel"
+                    inputMode="numeric"
+                    maxLength={1}
+                    aria-label={`OTP digit ${i + 1}`}
+                    value={digit}
+                    onChange={(e) => handleOtpInput(i, e)}
+                    onKeyDown={(e) => handleOtpKeyDown(i, e)}
+                    required
+                  />
+                ))}
+              </div>
+              {resendSeconds !== null && (
+                <button
+                  type="button"
+                  className="resend-btn cp-link"
+                  onClick={handleResendOTP}
+                  disabled={resendSending || resendSeconds > 0}
+                  style={{ display: 'inline-block' }}
+                >
+                  {resendSending ? 'Sending...' : resendSeconds > 0 ? formatResendCountdown(resendSeconds) : 'Resend OTP'}
+                </button>
+              )}
 
-            <button type="button" className="cp-btn cp-btn-primary cp-btn-block continue-btn" onClick={processLogin} disabled={verifying}>
-              <span>Login Now</span>
-              {verifying && <span className="cp-btn-loader"><div className="loader" /></span>}
-            </button>
+              <button type="button" className="cp-btn cp-btn-primary cp-btn-block continue-btn" onClick={processLogin} disabled={verifying}>
+                <span>Login Now</span>
+                {verifying && <span className="cp-btn-loader"><div className="loader" /></span>}
+              </button>
+            </div>
+          )}
+
+          <div className="cp-field-error">
+            <p>{mobileError}</p>
           </div>
-        )}
 
-        <div className="cp-field-error">
-          <p>{mobileError}</p>
+          <p className="cp-login-terms">
+            By continuing you agree to all our <a href="https://crisprlearning.com/terms-and-conditions/" target="new">Terms and Conditions</a>
+          </p>
         </div>
-
-        <p className="cp-login-terms">
-          By continuing you agree to all our <a href="https://crisprlearning.com/terms-and-conditions/" target="new">Terms and Conditions</a>
-        </p>
       </div>
     </div>
   );

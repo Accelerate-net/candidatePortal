@@ -122,11 +122,20 @@ const routes = {
     { id: 3, title: 'Weekly Test 11 · Thermodynamics', brief: 'Laws of thermodynamics, enthalpy and entropy.', photo: IMG('c', 400, 200), duration: 45, totalQuestions: 30, attempted: true },
   ]),
   'GET /user/quiz/quiz-summary.php': () => ok([
-    { attemptId: 13, title: 'Weekly Test 15 · Electrostatics', dateOfExam: '03 Oct 2026', score: '92 / 120', accuracy: 82 },
-    { attemptId: 12, title: 'Weekly Test 14 · Genetics', dateOfExam: '26 Sep 2026', score: '58 / 80', accuracy: 74 },
-    { attemptId: 11, title: 'Weekly Test 12 · Organic Chemistry', dateOfExam: '12 Sep 2026', score: '84 / 120', accuracy: 78 },
-    { attemptId: 10, title: 'Weekly Test 11 · Thermodynamics', dateOfExam: '05 Sep 2026', score: '66 / 120', accuracy: 61 },
+    { attemptId: 13, quizId: 5, title: 'Weekly Test 15 · Electrostatics', dateOfExam: '03 Oct 2026', score: '92 / 120', accuracy: 82 },
+    { attemptId: 12, quizId: 4, title: 'Weekly Test 14 · Genetics', dateOfExam: '26 Sep 2026', score: '58 / 80', accuracy: 74 },
+    { attemptId: 11, quizId: 1, title: 'Weekly Test 12 · Organic Chemistry', dateOfExam: '12 Sep 2026', score: '84 / 120', accuracy: 78 },
+    { attemptId: 10, quizId: 3, title: 'Weekly Test 11 · Thermodynamics', dateOfExam: '05 Sep 2026', score: '66 / 120', accuracy: 61 },
   ]),
+  'GET /user/quiz/quiz-stats.php': (_b, url) => ok({
+    quizId: Number(url.searchParams.get('quizId')), attemptId: Number(url.searchParams.get('attemptId')) || 13, title: 'Weekly Test 15 · Electrostatics',
+    maxScore: 120, myScore: 92, myRank: 4, classStrength: 46, topScore: 112, classAverage: 71.5,
+    subjects: [
+      { name: 'Physics', myScore: 34, classAverage: 25.5, topScore: 40, maxScore: 40 },
+      { name: 'Chemistry', myScore: 30, classAverage: 24, topScore: 38, maxScore: 40 },
+      { name: 'Mathematics', myScore: 28, classAverage: 22, topScore: 36, maxScore: 40 },
+    ],
+  }),
   'POST /user/quiz/start-quiz.php': () => ok({ url: 'https://example.com/quiz?x=1', metadata: { demo: true } }),
   'POST /user/start-exam.php': (body) => (body.exam === 'M3' ? ok({ url: 'https://example.com/exam?attempt=1', metadata: { demo: true } }) : { status: 'error', message: 'Test already in progress' }),
   'GET /user/exam-report.php': () => ok({

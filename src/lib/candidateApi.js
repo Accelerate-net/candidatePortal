@@ -1,6 +1,6 @@
 import { api, apiUrl } from './api';
 import { getToken } from './auth';
-import { demoExamStats, demoProgressReports } from '../data/performanceDemo';
+import { demoProgressReports } from '../data/performanceDemo';
 
 /**
  * Candidate-portal API surface. Every function returns the plain payload the
@@ -94,12 +94,20 @@ export async function startExam({ exam, series, fingerprint, continueExam = fals
 }
 
 // ── My Performance ────────────────────────────────────────────────────────
-// Class statistics for one weekly-exam attempt (top score, my rank, class
-// average overall and per subject). The API for this is still to come, so it
-// resolves with sample data for now; see src/data/performanceDemo.js.
+// Class statistics for one quiz attempt, from user/quiz/quiz-stats.php:
+// { quizId, attemptId, title, maxScore, myScore, myRank, classStrength, topScore,
+//   classAverage, subjects: [{ name, myScore, classAverage, topScore, maxScore }] }
+// `report` is a row of getWeeklyExamSummary() ({ quizId, attemptId, ... }).
+// The API answers 404 with a message when the report is not generated yet.
 export async function getExamStats(report) {
-  await new Promise((r) => setTimeout(r, 250));
-  return demoExamStats(report);
+  const params = new URLSearchParams({ quizId: report?.quizId ?? '' });
+  if (report?.attemptId) params.set('attemptId', report.attemptId);
+  try {
+    return unwrap(await api.get(`/user/quiz/quiz-stats.php?${params}`));
+  } catch (err) {
+    if (err?.response?.data && typeof err.response.data === 'object') throw new ApiError(err.response.data);
+    throw err;
+  }
 }
 
 // Progress report PDFs issued by the centre: [{ id, title, issuedOn, fileType, url }],

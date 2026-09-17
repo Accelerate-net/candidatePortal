@@ -11,13 +11,15 @@ import {
   getDashboardSummary, getProgressReports, getWeeklyExamSummary,
 } from '../lib/candidateApi';
 
-// "7 Sept, 2026"
-function reportDate(iso) {
-  if (!iso) return '—'; // the progress cards table carries no issue date
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso || '';
-  const month = d.toLocaleDateString('en-GB', { month: 'short' });
-  return `${d.getDate()} ${month}, ${d.getFullYear()}`;
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+// quiz-summary.php sends "4:30 pm, 15 Sep, 2026"; show it as "15 September, 2026".
+// Anything that does not look like a date is shown as it came.
+function examDate(value) {
+  const text = String(value || '');
+  const match = text.match(/(\d{1,2})[\s,-]+([A-Za-z]{3,})[\s,-]+(\d{4})/);
+  const month = match && MONTHS.find((m) => m.toLowerCase().startsWith(match[2].slice(0, 3).toLowerCase()));
+  return month ? `${Number(match[1])} ${month}, ${match[3]}` : text;
 }
 
 export default function PerformancePage() {
@@ -95,8 +97,8 @@ export default function PerformancePage() {
           <Card>
             <div className="cp-card-head">
               <div>
-                <h2>Weekly Exam Scores</h2>
-                <p>Your scores from attempted weekly exams</p>
+                <h2>Quiz Scores</h2>
+                <p>Your scores from attempted quizzes</p>
               </div>
               <Pill tone="ghost">{plural(weeklyReports.length, 'attempt')}</Pill>
             </div>
@@ -109,7 +111,7 @@ export default function PerformancePage() {
                   {weeklyReports.map((r) => (
                     <tr key={r.attemptId}>
                       <td><strong>{r.title}</strong></td>
-                      <td className="cp-td-muted">{r.dateOfExam}</td>
+                      <td className="cp-td-muted" style={{ whiteSpace: 'nowrap' }}>{examDate(r.dateOfExam)}</td>
                       <td className="is-num">{r.score}</td>
                       <td><Pill tone="ghost" size="sm">{r.accuracy}%</Pill></td>
                       <td>
@@ -142,14 +144,13 @@ export default function PerformancePage() {
           {progressReports?.length === 0 && <p className="cp-empty">No progress reports have been issued yet. They appear here as soon as your centre publishes one.</p>}
           {progressReports?.length > 0 && (
             <div className="cp-table-wrap">
-              <table className="cp-table" style={{ minWidth: 480 }}>
+              <table className="cp-table" style={{ minWidth: 320 }}>
                 <thead>
-                  <tr><th>Date</th><th>Title</th><th>Report</th></tr>
+                  <tr><th>Title</th><th>Report</th></tr>
                 </thead>
                 <tbody>
                   {progressReports.map((r) => (
                     <tr key={r.id}>
-                      <td className="cp-td-muted" style={{ whiteSpace: 'nowrap' }}>{reportDate(r.issuedOn)}</td>
                       <td><strong>{r.title}</strong></td>
                       <td>
                         {r.url ? (

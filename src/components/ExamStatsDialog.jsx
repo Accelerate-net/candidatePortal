@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Icon } from './Icons';
-import { Pill } from './ui';
 import { getExamStats } from '../lib/candidateApi';
+
+// Marks can carry one decimal (72.5); keep differences free of float noise.
+const diff = (a, b) => Math.round(Math.abs(a - b) * 10) / 10;
 
 const pctOf = (value, max) => (max ? Math.max(2, Math.min(100, Math.round((value / max) * 100))) : 0);
 
 /**
- * Class statistics for one weekly-exam attempt: top score, my rank, class
- * average, and my score against the class average per subject.
+ * Class statistics for one quiz attempt (user/quiz/quiz-stats.php): top score,
+ * my rank, class average, and my score against the class average per subject.
  */
 export default function ExamStatsDialog({ report, onClose }) {
   const [stats, setStats] = useState(null);
@@ -45,8 +47,6 @@ export default function ExamStatsDialog({ report, onClose }) {
 
         {stats && (
           <>
-            {stats.sample && <Pill tone="sky" size="sm" className="cp-sample-pill">Sample data</Pill>}
-
             <div className="cp-stats-tiles">
               <div className="cp-pay-tile is-dark">
                 <small>My rank</small>
@@ -61,19 +61,21 @@ export default function ExamStatsDialog({ report, onClose }) {
               <div className="cp-pay-tile">
                 <small>My score</small>
                 <strong>{stats.myScore}<span> / {stats.maxScore}</span></strong>
-                <em>{stats.myScore >= stats.classAverage ? `${stats.myScore - stats.classAverage} above average` : `${stats.classAverage - stats.myScore} below average`}</em>
+                <em>{stats.myScore === stats.classAverage ? 'same as the average' : `${diff(stats.myScore, stats.classAverage)} ${stats.myScore > stats.classAverage ? 'above' : 'below'} average`}</em>
               </div>
               <div className="cp-pay-tile is-sky">
                 <small>Class avg. total</small>
                 <strong>{stats.classAverage}<span> / {stats.maxScore}</span></strong>
-                <em>{stats.classStrength} students</em>
+                <em>{stats.classStrength} student{stats.classStrength === 1 ? '' : 's'}</em>
               </div>
             </div>
 
+            {stats.subjects?.length > 0 && (
+            <>
             <h3 className="cp-stats-sub">Subject-wise: you vs class average</h3>
             <ul className="cp-stats-subjects">
-              {stats.subjects.map((s) => (
-                <li key={s.name}>
+              {stats.subjects.map((s, i) => (
+                <li key={`${s.name}-${i}`}>
                   <div className="cp-stats-row">
                     <strong>{s.name}</strong>
                     <small>out of {s.maxScore}</small>
@@ -95,6 +97,8 @@ export default function ExamStatsDialog({ report, onClose }) {
               <span><i className="is-me" />You</span>
               <span><i className="is-class" />Class average</span>
             </div>
+            </>
+            )}
           </>
         )}
       </div>
