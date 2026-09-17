@@ -6,14 +6,14 @@ import { Icon } from './Icons';
 import { Avatar } from './ui';
 import ConfirmDialog from './ConfirmDialog';
 import { useUser } from './UserProvider';
-import { hasAnyEnrolment, hasCourseEnrolment } from '../lib/profile';
+import { hasAnyEnrolment, hasCourseEnrolment, isOfflineStudent } from '../lib/profile';
 
 export const NAV = [
   { path: '/courses', label: 'Courses', short: 'Courses', icon: Icon.Book },
   { path: '/performance', label: 'My Performance', short: 'Scores', icon: Icon.Grid, needsEnrolment: true },
   { path: '/quizzes', label: 'Quizzes', short: 'Quizzes', icon: Icon.FileText, needsCourse: true },
   { path: '/test-series', label: 'Test Series', short: 'Tests', icon: Icon.Desktop },
-  { path: '/attendance', label: 'Attendance', short: 'Attendance', icon: Icon.Calendar, needsCourse: true },
+  { path: '/attendance', label: 'Attendance', short: 'Attendance', icon: Icon.Calendar, needsOffline: true },
   { path: '/profile', label: 'Profile', short: 'Profile', icon: Icon.User, tab: false },
 ];
 
@@ -68,9 +68,12 @@ export default function Layout({ title, hideTitle = false, backTo, user, childre
   const navigate = useNavigate();
   const { profile, loading } = useUser() || {};
   const me = user || profile || {};
-  // Quizzes and Attendance only show for candidates enrolled in a course (not
-  // for test-series-only accounts); My Performance needs any enrolment at all.
-  const nav = NAV.filter((n) => (!n.needsCourse || hasCourseEnrolment(profile)) && (!n.needsEnrolment || hasAnyEnrolment(profile)));
+  // Quizzes only show for candidates enrolled in a course (not for
+  // test-series-only accounts); My Performance needs any enrolment at all;
+  // Attendance is for offline (classroom) students, `offlineOnboarded`.
+  const nav = NAV.filter((n) => (!n.needsCourse || hasCourseEnrolment(profile))
+    && (!n.needsEnrolment || hasAnyEnrolment(profile))
+    && (!n.needsOffline || isOfflineStudent(profile)));
   const pendingPhoto = !user?.name && !profile && Boolean(loading);
   const [confirmOpen, setConfirmOpen] = useState(false);
 

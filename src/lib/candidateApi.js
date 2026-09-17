@@ -1,6 +1,5 @@
 import { api, apiUrl } from './api';
 import { getToken } from './auth';
-import { demoProgressReports } from '../data/performanceDemo';
 
 /**
  * Candidate-portal API surface. Every function returns the plain payload the
@@ -110,17 +109,17 @@ export async function getExamStats(report) {
   }
 }
 
-// Progress report PDFs issued by the centre: [{ id, title, issuedOn, fileType, url }],
-// the same shape the parent portal uses (`issuedOn` is null when the centre
-// records no date). If /user/progress-reports.php cannot be reached this falls
-// back to sample rows (flagged `sample: true`).
+// Progress report PDFs issued by the centre, from user/progress-reports.php:
+// [{ id, title, url, issuedOn, fileType }] (`issuedOn` is null: the table has no
+// date). The page hides the section when there is nothing to show, so a failed
+// call counts as "no reports".
 export async function getProgressReports() {
   try {
     const data = unwrap(await api.get('/user/progress-reports.php'));
-    return Array.isArray(data) ? data : [];
+    return Array.isArray(data) ? data.filter((r) => r?.url) : [];
   } catch (err) {
     if (err?.response?.status === 401) throw err;
-    return demoProgressReports;
+    return [];
   }
 }
 

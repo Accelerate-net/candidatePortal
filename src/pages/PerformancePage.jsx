@@ -3,7 +3,6 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { Icon } from '../components/Icons';
 import { Avatar, Card, KpiCard, Pill } from '../components/ui';
-import { useToast } from '../components/Toast';
 import { useUser } from '../components/UserProvider';
 import ExamStatsDialog from '../components/ExamStatsDialog';
 import { pct, pct1, plural } from '../lib/format';
@@ -24,7 +23,6 @@ function examDate(value) {
 
 export default function PerformancePage() {
   const navigate = useNavigate();
-  const toast = useToast();
   const { profile } = useUser() || {};
 
   const [summary, setSummary] = useState({ name: '', aspiration: '' });
@@ -128,7 +126,8 @@ export default function PerformancePage() {
           </Card>
         )}
 
-        {/* PROGRESS REPORTS */}
+        {/* PROGRESS REPORTS: shown only when the centre has issued at least one */}
+        {progressReports?.length > 0 && (
         <Card>
           <div className="cp-card-head">
             <div>
@@ -136,13 +135,9 @@ export default function PerformancePage() {
               <p>Reports issued by your centre, newest first</p>
             </div>
             <div className="cp-portal-stats">
-              {progressReports?.some((r) => r.sample) && <Pill tone="sky" size="sm">Sample data</Pill>}
-              {progressReports && <Pill tone="ghost">{plural(progressReports.length, 'report')}</Pill>}
+              <Pill tone="ghost">{plural(progressReports.length, 'report')}</Pill>
             </div>
           </div>
-          {progressReports === null && <div className="cp-skeleton" style={{ minHeight: 96 }} aria-busy="true" />}
-          {progressReports?.length === 0 && <p className="cp-empty">No progress reports have been issued yet. They appear here as soon as your centre publishes one.</p>}
-          {progressReports?.length > 0 && (
             <div className="cp-table-wrap">
               <table className="cp-table" style={{ minWidth: 320 }}>
                 <thead>
@@ -153,23 +148,17 @@ export default function PerformancePage() {
                     <tr key={r.id}>
                       <td><strong>{r.title}</strong></td>
                       <td>
-                        {r.url ? (
-                          <a className="cp-btn cp-btn-ghost cp-btn-sm" href={r.url} target="_blank" rel="noopener noreferrer" aria-label={`View ${r.title}`}>
-                            <span className="cp-pdf-icon"><Icon.FileText width={14} height={14} /></span> View
-                          </a>
-                        ) : (
-                          <button type="button" className="cp-btn cp-btn-ghost cp-btn-sm" onClick={() => toast('Sample row. The PDF link will come from the progress-reports API.')}>
-                            <span className="cp-pdf-icon"><Icon.FileText width={14} height={14} /></span> View
-                          </button>
-                        )}
+                        <a className="cp-btn cp-btn-ghost cp-btn-sm" href={r.url} target="_blank" rel="noopener noreferrer" aria-label={`View ${r.title}`}>
+                          <span className="cp-pdf-icon"><Icon.FileText width={14} height={14} /></span> View
+                        </a>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-          )}
         </Card>
+        )}
       </div>
     </Layout>
   );

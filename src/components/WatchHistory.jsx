@@ -1,6 +1,5 @@
 import React from 'react';
 import { Icon } from './Icons';
-import { Pill } from './ui';
 import { playerUrl } from '../lib/watchHistory';
 
 const POSTERS = ['is-teal', 'is-amber', 'is-rose', 'is-indigo'];
@@ -37,7 +36,6 @@ export default function WatchHistory({ items, moduleNames = {} }) {
     <section className="cp-watch" aria-label="Recently watched">
       <h3 className="cp-watch-title">
         <Icon.PlayCircle width={16} height={16} /> Recently watched
-        {items.some((it) => it.sample) && <Pill tone="sky" size="sm">Sample data</Pill>}
       </h3>
       <div className="cp-watch-row">
         {items.map((it) => {
@@ -46,10 +44,7 @@ export default function WatchHistory({ items, moduleNames = {} }) {
           const moduleName = it.moduleName || moduleNames[it.module] || '';
           const when = it.lastWatchLabel || ago(it.lastWatch);
           return (
-            <a key={`${it.course}-${it.module}-${it.chapter}-${it.part}`} className="cp-watch-card" href={it.href || playerUrl(it)} target="_blank" rel="noopener noreferrer"
-              // A sample card without a real video behind it goes nowhere.
-              onClick={it.sample && !it.href ? (e) => e.preventDefault() : undefined}
-            >
+            <a key={`${it.course}-${it.module}-${it.chapter}-${it.part}`} className="cp-watch-card" href={it.href || playerUrl(it)} target="_blank" rel="noopener noreferrer">
               <span className={`cp-watch-thumb ${it.thumbnail ? '' : POSTERS[(Number(it.module) || 0) % POSTERS.length]}`}>
                 {it.thumbnail
                   ? <img src={it.thumbnail} alt="" loading="lazy" />

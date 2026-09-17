@@ -45,13 +45,6 @@ export default function QuizzesPage() {
   return (
     <Layout title="Quizzes">
       <div className="cp-page">
-        <div className="cp-section-head">
-          <div className="cp-section-head-text">
-            <h2>Weekly Exams</h2>
-            <p>Stay exam-ready with your weekly practice tests</p>
-          </div>
-          {!loading && access && <Pill tone="ghost">{list.length} {list.length === 1 ? 'quiz' : 'quizzes'}</Pill>}
-        </div>
 
         {loading && (
           <div className="cp-grid cp-grid-exams" aria-busy="true">

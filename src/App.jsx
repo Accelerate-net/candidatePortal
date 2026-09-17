@@ -8,7 +8,7 @@ import CoursesPage from './pages/CoursesPage';
 import { isAuthenticated } from './lib/auth';
 import { START_PATH } from './lib/api';
 import { LEGACY_ROUTES } from './lib/legacyRoutes';
-import { hasAnyEnrolment, hasCourseEnrolment } from './lib/profile';
+import { hasAnyEnrolment, hasCourseEnrolment, isOfflineStudent } from './lib/profile';
 
 // The two landing pages (login, courses) ship in the main bundle; every other
 // page is its own chunk, so charts, the photo cropper and the checkout only
@@ -59,8 +59,9 @@ const LEGACY = {
 
 // Pages that need a session send the candidate to the start page,
 // remembering where they were so login can bring them back.
-// Pages that need an enrolment: `check` is hasCourseEnrolment (quizzes,
-// attendance) or hasAnyEnrolment (my performance). Others are sent to the
+// Pages that need an enrolment: `check` is hasCourseEnrolment (quizzes),
+// hasAnyEnrolment (my performance) or isOfflineStudent (attendance, for
+// `offlineOnboarded` candidates). Others are sent to the
 // landing page once the profile says so; a profile that failed to load lets
 // the page through rather than locking the candidate out.
 function Requires({ check, children }) {
@@ -103,7 +104,7 @@ export default function App() {
           <Route path="/test-series" element={<Protected><TestSeriesPage /></Protected>} />
           <Route path="/courses" element={<Protected><CoursesPage /></Protected>} />
           <Route path="/quizzes" element={<Protected><Requires check={hasCourseEnrolment}><QuizzesPage /></Requires></Protected>} />
-          <Route path="/attendance" element={<Protected><Requires check={hasCourseEnrolment}><AttendancePage /></Requires></Protected>} />
+          <Route path="/attendance" element={<Protected><Requires check={isOfflineStudent}><AttendancePage /></Requires></Protected>} />
           <Route path="/profile" element={<Protected><ProfilePage /></Protected>} />
           <Route path="/report" element={<Protected><ReportPage variant="exam" /></Protected>} />
           <Route path="/weekly-report" element={<Protected><ReportPage variant="weekly" /></Protected>} />

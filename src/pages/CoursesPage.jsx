@@ -11,7 +11,6 @@ import WatchHistory from '../components/WatchHistory';
 import CatalogBanner from '../components/CatalogBanner';
 import CatalogSeries from '../components/CatalogSeries';
 import { getWatchHistory, playerCourseIds } from '../lib/watchHistory';
-import { demoWatchHistory } from '../data/watchHistoryDemo';
 
 /**
  * Enrolled video courses (bundles): the open course shows as a cover with a
@@ -76,15 +75,13 @@ export default function CoursesPage() {
   }, [selectCourseBundle]);
 
   // Last three videos watched in the open course; refreshed when the candidate
-  // comes back from the player tab.
+  // comes back from the player tab. With no history the section stays hidden.
   useEffect(() => {
     if (!bundleContent) { setRecent([]); return undefined; }
     let alive = true;
-    // Sample cards stand in until there is real history (API to follow).
-    const sample = () => demoWatchHistory(bundleContent.chapters, bundleContent.modules);
     const load = () => getWatchHistory(playerCourseIds(bundleContent.chapters), 3)
-      .then((list) => { if (alive) setRecent(list.length > 0 ? list : sample()); })
-      .catch(() => { if (alive) setRecent(sample()); });
+      .then((list) => { if (alive) setRecent(Array.isArray(list) ? list : []); })
+      .catch(() => { if (alive) setRecent([]); });
     load();
     const onVisible = () => { if (document.visibilityState === 'visible') load(); };
     document.addEventListener('visibilitychange', onVisible);
