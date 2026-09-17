@@ -1,0 +1,71 @@
+/* Breakpoints for the shared layout grids. Imported last so it wins over the partials above. */
+
+@media (max-width: 340px) {
+  .cp-kpi-grid, .cp-report-kpis { grid-template-columns: 1fr; }
+  .toughnessTileCircle { width: 50px; height: 50px; }
+}
+
+@media (min-width: 640px) {
+  .cp-content { padding: 18px; }
+  .cp-dl { grid-template-columns: 1fr 1fr; }
+  .cp-form-grid { grid-template-columns: 1fr 1fr; }
+  .courseContentContainer { grid-template-columns: 1fr 1fr; }
+  .cp-grid-2 { grid-template-columns: 1fr 1fr; }
+  .cp-att-kpis { grid-template-columns: repeat(2, 1fr); }
+  .cp-grid-exams { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+  .cp-kpi-grid { grid-template-columns: repeat(4, 1fr); }
+  .cp-report-kpis { grid-template-columns: repeat(2, 1fr); }
+  .cp-welcome-text h2 { font-size: 28px; }
+  .cp-otp .otpEntry { max-width: 84px; }
+}
+
+@media (min-width: 1024px) {
+  .cp-sidebar { display: flex; }
+  .cp-tabbar { display: none; }
+  .cp-pagehead-mobile { display: none; }
+  .cp-pagehead.is-untitled { display: none; } /* nothing left in it on desktop */
+  .cp-pagehead.is-untitled ~ .cp-page { padding-top: 20px; } /* breathing room in place of the title */
+  .cp-pagehead { margin: 6px 4px 18px; }
+  .cp-pagehead-title { font-size: 26px; }
+  .cp-content { padding: 16px; padding-bottom: 24px; }
+  .cp-foot { padding-bottom: 20px; text-align: center; }
+  .cp-card { padding: 22px; }
+  .cp-table-wrap { margin: 0 -22px; padding: 0 22px; }
+  .myCustomToaster { bottom: 30px; }
+
+  /* Dashboard */
+  .cp-grid-dash-top { grid-template-columns: 1.1fr 2fr; align-items: stretch; }
+  .cp-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .cp-grid-series { grid-template-columns: 2fr 1fr; align-items: start; }
+  .courseContentContainer { grid-template-columns: 1fr 1fr; }
+
+  .cp-att-kpis { grid-template-columns: repeat(4, 1fr); }
+  .cp-grid-attendance { grid-template-columns: 1.3fr 1fr; align-items: start; }
+
+  /* Profile */
+  .cp-grid-profile { grid-template-columns: 300px 1fr; align-items: start; }
+  .cp-profile-side { position: sticky; top: 16px; } /* pinned to the top while the right column scrolls */
+
+  /* Report */
+  .cp-report-kpis { grid-template-columns: repeat(4, 1fr); }
+  .cp-grid-report-mid { grid-template-columns: 1.4fr 1fr; align-items: start; }
+  .cp-grid-insights { grid-template-columns: 1fr 1fr 1.2fr; align-items: start; }
+
+  /* Revisit */
+  .cp-grid-revisit { grid-template-columns: 1.4fr 1fr; align-items: start; }
+}
+
+@media (min-width: 1280px) {
+  .cp-kpi-grid { grid-template-columns: repeat(4, 1fr); }
+  .cp-grid-dash-top { grid-template-columns: 1fr 2.2fr; }
+  .courseContentContainer { grid-template-columns: repeat(3, 1fr); }
+  .cp-grid-series .courseContentContainer { grid-template-columns: 1fr 1fr; }
+}
+
+@media (min-width: 1440px) {
+  .cp-grid-series .courseContentContainer { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

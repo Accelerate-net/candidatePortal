@@ -1,0 +1,11 @@
+/* My Performance: welcome card and KPI grid. */
+
+.cp-welcome { display: flex; align-items: center; gap: 16px; }
+.cp-welcome-avatar.cp-avatar-wrap { width: 72px; height: 72px; border-radius: 50%; }
+.cp-welcome-text { min-width: 0; }
+.cp-welcome-text small { display: block; font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; opacity: .7; }
+.cp-welcome-text h2 { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin: 4px 0 8px; overflow-wrap: anywhere; }
+.cp-welcome-text .cp-pill { margin-top: 2px; }
+.cp-kpi-grid { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
+.cp-kpi-grid .cp-card { padding: 16px; }
+.cp-kpi-grid .cp-kpi-value strong { font-size: 28px; }

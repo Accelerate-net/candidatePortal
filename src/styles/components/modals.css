@@ -1,0 +1,49 @@
+/* Modals: photo crop, date-of-birth field, confirm dialog, profile completion popup. */
+
+/* Photo crop modal */
+.cp-modal.cp-modal-lg { max-width: 840px; max-height: calc(100dvh - 32px); overflow-y: auto; }
+.cp-modal-actions.is-spread { flex-wrap: wrap; }
+.cp-modal-actions.is-spread .cp-btn { flex: 0 0 auto; }
+.cp-crop-frame { border-radius: 16px; background: var(--panel-soft); min-height: 60px; }
+.cp-crop-frame img { max-width: 100%; max-height: 65vh; display: block; }
+.cp-file-btn { position: relative; overflow: hidden; }
+.cp-file-btn input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; font-size: 24px; width: 100%; height: 100%; z-index: 2; }
+
+/* Date of birth: dd-mm-yyyy text plus a native picker */
+.cp-dob { display: flex; align-items: center; gap: 8px; position: relative; }
+.cp-dob .cp-input { flex: 1; }
+.cp-dob-native { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; right: 0; bottom: 0; }
+
+/* ── Confirm dialog (sign out) ──────────────────────────────────────────── */
+.cp-modal-backdrop {
+  position: fixed; inset: 0; z-index: 1100;
+  background: rgba(0, 74, 90, 0.55);
+  display: flex; align-items: flex-end; justify-content: center;
+  padding: 16px; padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  animation: cp-fade .15s ease-out;
+}
+@keyframes cp-fade { from { opacity: 0; } to { opacity: 1; } }
+.cp-modal {
+  width: 100%; max-width: 400px; background: var(--panel); border-radius: 24px;
+  padding: 22px 20px; box-shadow: 0 24px 60px rgba(0, 74, 90, 0.3);
+  animation: cp-rise .18s cubic-bezier(.22, 1, .36, 1);
+}
+@keyframes cp-rise { from { transform: translateY(16px); opacity: 0; } to { transform: none; opacity: 1; } }
+.cp-modal h2 { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; color: var(--brand-deep); margin-bottom: 6px; }
+.cp-modal p { font-size: 14px; color: var(--muted); margin-bottom: 18px; }
+.cp-modal-actions { display: flex; gap: 10px; }
+.cp-modal-actions .cp-btn { flex: 1; }
+@media (min-width: 640px) {
+  .cp-modal-backdrop { align-items: center; }
+}
+
+/* Profile completion popup */
+.cp-profile-modal { max-width: 440px; max-height: calc(100dvh - 32px); overflow-y: auto; }
+.cp-modal-head { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+.cp-modal-head .cp-state-icon { width: 46px; height: 46px; border-radius: 14px; margin: 0; flex-shrink: 0; background: var(--brand-soft); font-size: 18px; }
+.cp-modal-head h2 { margin-bottom: 4px; }
+.cp-modal-head p { margin-bottom: 0; }
+.cp-field em { font-style: normal; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; margin-left: 6px; }
+.cp-req { color: var(--bad-ink); }
+.cp-opt { color: var(--muted); }
+.cp-profile-modal .cp-modal-actions { margin-top: 6px; }

@@ -3,9 +3,34 @@
   "configurations": [
     {
       "name": "candidate-portal",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8899"],
-      "port": 8899
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 5175
+    },
+    {
+      "name": "mock-api",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "scripts/mock-api.mjs"
+      ],
+      "port": 8098
+    },
+    {
+      "name": "candidate-portal-mock",
+      "runtimeExecutable": "env",
+      "runtimeArgs": [
+        "VITE_API_BASE=http://127.0.0.1:8098/crispr-apis",
+        "npx",
+        "vite",
+        "--host",
+        "--port",
+        "5176",
+        "--strictPort"
+      ],
+      "port": 5176
     }
   ]
 }

@@ -1,0 +1,40 @@
+/* Profile page. */
+
+/* Enrolled courses: linked names get a dotted underline; schedule sits under the name */
+.cp-course-link { color: inherit; text-decoration: underline dotted; text-decoration-thickness: 1.5px; text-underline-offset: 4px; text-decoration-color: var(--teal); }
+.cp-course-link:hover { color: var(--brand); text-decoration-style: solid; }
+.cp-course-schedule { display: block; margin-top: 3px; font-size: 12px; font-weight: 500; color: var(--muted); opacity: .85; }
+.cp-profile-card { text-align: center; }
+.photo-container { position: relative; display: inline-block; cursor: pointer; width: 104px; height: 104px; margin: 4px auto 12px; }
+.photo-container .photo { width: 100%; height: 100%; border-radius: 50%; display: block; background: var(--panel-soft); box-shadow: 0 0 0 4px var(--brand-soft); }
+.photo-container .overlay-text {
+  z-index: 2;
+  position: absolute; inset: 0; border-radius: 50%; display: grid; place-items: center;
+  color: #fff; font-size: 12px; font-weight: 700; background: rgba(0, 74, 90, 0.6);
+  opacity: 0; transition: opacity .2s;
+}
+.photo-container:hover .overlay-text, .photo-container:focus-visible .overlay-text { opacity: 1; }
+.cp-profile-card .name { font-size: 19px; font-weight: 800; letter-spacing: -0.01em; }
+.cp-profile-card .info { margin-top: 6px; }
+.cp-profile-card .joined { margin-top: 10px; font-size: 12.5px; color: var(--muted); font-weight: 600; }
+.cp-profile-nav { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; }
+.cp-profile-nav .list-group-item {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 14px; border: none; width: 100%; cursor: pointer;
+  font-weight: 600; font-size: 14.5px; color: var(--ink-2); text-decoration: none; background: transparent; text-align: left;
+  transition: background .15s, color .15s;
+}
+.cp-profile-nav .list-group-item svg { color: var(--brand); flex-shrink: 0; }
+.cp-profile-nav .list-group-item:hover { background: var(--brand-soft); color: var(--brand); }
+.cp-profile-nav .list-group-item.active { background: var(--brand); color: #fff; }
+.cp-profile-nav .list-group-item.active svg { color: var(--warn); }
+.cp-profile-nav .badge { margin-left: auto; padding: 2px 9px; border-radius: 999px; background: var(--panel-soft); color: var(--ink-2); font-size: 12px; font-weight: 700; }
+.cp-profile-nav .list-group-item.active .badge { background: rgba(255, 255, 255, 0.2); color: #fff; }
+.cp-about-text { font-size: 14.5px; color: var(--ink-2); line-height: 1.65; }
+.cp-about-text:empty::before { content: 'Tell us a few words about yourself from the Edit Details tab.'; color: var(--muted); }
+.cp-about-section { margin-top: 18px; }
+.cp-about-section h4 { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 10px; }
+.cp-about-section h4 svg { color: var(--brand); }
+.cp-verified { color: var(--good-deep); margin-left: 6px; }
+.cp-photo-preview { text-align: center; }
+.cp-photo-preview img { max-width: 248px; width: 100%; margin: 0 auto; border-radius: 16px; box-shadow: var(--shadow); }
+.cp-photo-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 18px; }

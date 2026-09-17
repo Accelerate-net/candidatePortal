@@ -1,0 +1,101 @@
+/* App shell: sidebar, page heading, content area and the mobile tab bar. */
+
+.cp-shell { display: flex; min-height: 100dvh; }
+
+.cp-sidebar {
+  display: none;
+  position: sticky; top: 0; width: var(--sidebar-w); flex-shrink: 0;
+  flex-direction: column; gap: 8px;
+  padding: 20px 16px;
+  margin: 16px 0 16px 16px;
+  height: calc(100dvh - 32px);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(14px);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.cp-brand-logo { display: flex; justify-content: center; padding: 12px 6px 18px; }
+.cp-brand-logo img { width: 100%; max-width: 100px; height: auto; }
+
+.cp-nav { display: flex; flex-direction: column; gap: 6px; }
+.cp-nav-link {
+  display: flex; align-items: center; gap: 12px;
+  width: 100%; padding: 12px 14px; border: none; background: transparent;
+  border-radius: 14px; font-weight: 600; font-size: 15px; color: var(--ink-2);
+  text-decoration: none; text-align: left; transition: background .15s, color .15s;
+}
+.cp-nav-link:hover { background: var(--brand-soft); color: var(--brand); }
+.cp-nav-link.is-active { background: var(--brand); color: #fff; }
+.cp-nav-link svg { flex-shrink: 0; }
+.cp-sidebar-foot { margin-top: auto; display: flex; flex-direction: column; gap: 8px; }
+.cp-user-strip {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px; width: 100%;
+  border-radius: 14px; background: var(--panel-soft); border: none; text-align: left; text-decoration: none;
+}
+.cp-user-strip:hover { background: var(--brand-soft); }
+.cp-user-strip > div { min-width: 0; }
+.cp-user-strip strong { display: block; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cp-user-strip small { display: block; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.cp-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+
+/* Page heading: in the page flow, replaces the old sticky top bar. */
+.cp-pagehead {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  margin: 2px 2px 14px; padding-top: env(safe-area-inset-top);
+}
+.cp-pagehead-title {
+  font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--brand-deep);
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.cp-pagehead-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+/* Account menu under the avatar (phones / tablets), with a pointer to the picture */
+.cp-profile-menu { position: relative; }
+.cp-profile-pop {
+  position: absolute; right: 0; top: calc(100% + 12px); z-index: 70; min-width: 190px; padding: 6px;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 18px 44px rgba(0, 95, 115, 0.2);
+  animation: cp-pop .16s ease-out;
+}
+.cp-profile-pop::before {
+  content: ""; position: absolute; top: -7px; right: 14px; width: 12px; height: 12px; transform: rotate(45deg);
+  background: var(--panel); border-left: 1px solid var(--line); border-top: 1px solid var(--line); border-radius: 3px 0 0 0;
+}
+.cp-profile-pop-name { display: block; padding: 8px 12px 6px; font-size: 12px; font-weight: 700; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; }
+.cp-profile-pop-item {
+  display: flex; align-items: center; gap: 10px; width: 100%; padding: 11px 12px; border: none; border-radius: 11px; background: none;
+  font: inherit; font-size: 14.5px; font-weight: 700; color: var(--ink); text-decoration: none; text-align: left; cursor: pointer;
+}
+.cp-profile-pop-item:hover, .cp-profile-pop-item:focus-visible { background: var(--panel-soft); }
+.cp-profile-pop-item.is-danger { color: var(--bad-ink); }
+.cp-profile-pop-item.is-danger:hover { background: var(--bad-soft); }
+
+.cp-content {
+  flex: 1; padding: 14px;
+  padding-bottom: calc(var(--tabbar-h) + 20px + env(safe-area-inset-bottom));
+}
+.cp-foot {
+  padding: 8px 18px calc(var(--tabbar-h) + 16px + env(safe-area-inset-bottom));
+  font-size: 12px; color: var(--muted); text-align: left; /* phones and tablets: bottom left */
+}
+
+/* Bottom tab bar (mobile only) */
+.cp-tabbar {
+  position: fixed; left: 12px; right: 12px; bottom: calc(10px + env(safe-area-inset-bottom)); z-index: 50;
+  display: flex; height: var(--tabbar-h);
+  background: rgba(0, 74, 90, 0.96); backdrop-filter: blur(14px);
+  border-radius: 22px; padding: 6px;
+  box-shadow: 0 10px 30px rgba(0, 74, 90, 0.35);
+}
+.cp-tab {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  border-radius: 16px; border: none; background: transparent;
+  color: rgba(255, 255, 255, 0.7); text-decoration: none;
+  font-size: 11px; font-weight: 700; padding: 0 2px; min-width: 0;
+}
+.cp-tab span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.cp-tab.is-active { background: var(--warn); color: var(--warn-ink); }
+/* Tablets: a compact, centred dock instead of a bar stretched across the screen */
+@media (min-width: 600px) {
+  .cp-tabbar { left: 50%; right: auto; transform: translateX(-50%); width: max-content; max-width: calc(100% - 24px); gap: 4px; }
+  .cp-tab { flex: 0 0 104px; font-size: 11.5px; }
+}

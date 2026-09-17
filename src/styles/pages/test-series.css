@@ -1,0 +1,55 @@
+/* Test Series page: exam tiles and the progress chart. */
+
+/* Test-series exam tiles */
+.courseContentContainer { display: grid; gap: 14px; grid-template-columns: 1fr; }
+.courseContentTile {
+  position: relative; background: var(--panel); border-radius: var(--radius); box-shadow: var(--shadow);
+  overflow: hidden; display: flex; flex-direction: column; min-width: 0;
+}
+.courseContentTile > img { width: 100%; height: 170px; object-fit: cover; background: var(--panel-soft); transition: transform .4s ease; }
+.courseContentTile:hover > img { transform: scale(1.04); }
+.courseContentTileContent { position: relative; padding: 16px 18px 18px; display: flex; flex-direction: column; flex: 1; gap: 8px; }
+.courseContentTileContent h5 { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.3; padding-right: 28px; }
+.courseContentTileContent p { font-size: 13px; color: var(--muted); line-height: 1.55; }
+.courseContentTileContent > span { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 8px; }
+.courseContentTileContent > span a {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 1; min-width: 120px;
+  padding: 10px 14px; border-radius: 999px; font-weight: 700; font-size: 13.5px; text-decoration: none; cursor: pointer;
+  background: var(--brand); color: #fff; transition: background .15s;
+}
+.courseContentTileContent > span a:hover { background: var(--brand-deep); }
+.courseContentTileContent > span a.viewReport { background: var(--brand-soft); color: var(--brand); }
+.courseContentTileContent > span a.viewReport:hover { background: #c9e4e8; }
+.courseContentTileContent > span a.courseContentPurchase { background: var(--warn); color: var(--warn-ink); }
+.courseContentTileContent > span a.courseContentPurchase:hover { background: #f0ab00; }
+.courseContentSummary {
+  position: absolute; top: 12px; left: 12px; max-width: calc(100% - 70px); z-index: 2;
+  display: flex; align-items: center; padding: 6px 12px; border-radius: 999px;
+  background: rgba(30, 41, 59, 0.72); color: #fff; font-size: 12.5px; font-weight: 600; backdrop-filter: blur(6px);
+}
+.courseContentSummary span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.courseContentIcon {
+  position: absolute; top: 12px; right: 12px; z-index: 2; width: 38px; height: 38px; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9) url("/icons/course-completed.png") center / 70% no-repeat;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); transition: transform .2s;
+}
+.courseContentIcon.lockedIcon { background-image: url("/icons/course-locked.png"); }
+.courseContentIcon.availableIcon { background-image: url("/icons/course-unlocked.png"); }
+.courseContentTile:hover .courseContentIcon { transform: scale(1.08); }
+.premiumContentIcon {
+  position: absolute; top: 16px; right: 16px; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--warn); color: var(--warn-ink); font-size: 12px;
+}
+.multiline-ellipsis { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.blockedCourseContent > img { filter: grayscale(100%); opacity: .7; }
+.blockedCourseContent::after {
+  content: 'Not included with the Free Access'; position: absolute; top: 85px; left: 50%; transform: translate(-50%, -50%);
+  background: rgba(30, 41, 59, 0.85); color: #fff; padding: 8px 14px; font-size: 12.5px; font-weight: 700; border-radius: 999px;
+  opacity: 0; transition: opacity .2s; white-space: nowrap; z-index: 3; pointer-events: none;
+}
+.blockedCourseContent:hover::after { opacity: 1; }
+
+/* Progress chart: condensed bars */
+.cp-chart-scroll { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
+.cp-legend .is-not-attempted { background: #d5dde6; }
+.cp-chart { position: relative; width: 100%; }

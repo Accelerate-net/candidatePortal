@@ -1,0 +1,29 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Crispr Learning · Candidate portal (React)
+   Design system shared by every page. Mobile-first: flat light ground, white
+   rounded cards, deep-teal primary actions, amber / green / pink-red status
+   colours, Plus Jakarta Sans. Mirrors the parent portal (herosPortal).
+
+   This file is only the index. The order below is the cascade order, so keep
+   responsive.css last. The course player and the checkout are scoped pages
+   whose CSS is imported by the page component itself (pages/course-player.css,
+   pages/checkout.css) and ships with that page's lazy chunk.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@import './base/tokens.css';
+@import './base/reset.css';
+@import './components/shell.css';
+@import './components/primitives.css';
+@import './components/modals.css';
+@import './pages/login.css';
+@import './pages/performance.css';
+@import './components/tile-dropdown.css';
+@import './pages/attendance.css';
+@import './components/hero.css';
+@import './pages/quizzes.css';
+@import './pages/courses.css';
+@import './pages/test-series.css';
+@import './pages/profile.css';
+@import './pages/report.css';
+@import './pages/revisit.css';
+@import './responsive.css';

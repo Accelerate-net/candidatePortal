@@ -1,0 +1,65 @@
+/* Login page and welcome slider. */
+
+.cp-login {
+  min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 24px 16px; gap: 18px;
+  background: var(--bg) radial-gradient(60% 50% at 100% 0%, rgba(0, 95, 115, 0.12), transparent 70%);
+}
+.cp-login-card {
+  width: 100%; max-width: 440px; background: var(--panel); border-radius: 28px;
+  padding: 28px 24px; box-shadow: var(--shadow);
+}
+.cp-login-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+.cp-login-brand img { width: 120px; height: auto; }
+.cp-login-brand small { display: block; font-size: 12px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+.cp-login h1, .cp-login h2 { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 6px; color: var(--brand-deep); }
+.cp-login h2 span { font-weight: 600; font-size: 14px; color: var(--muted); display: block; margin-top: 4px; letter-spacing: 0; }
+.cp-login-sub { color: var(--muted); font-size: 14px; margin-bottom: 22px; }
+.cp-login-sub strong { color: var(--ink); }
+.cp-otp { display: flex; gap: 10px; justify-content: space-between; margin-bottom: 4px; }
+.cp-otp .otpEntry {
+  flex: 1; min-width: 0; width: 100%; max-width: 76px; aspect-ratio: 1; border: 1.5px solid var(--line); border-radius: 16px;
+  text-align: center; font-size: 26px; font-weight: 800; padding: 0; outline: none; background: #fff; transition: border-color .15s;
+}
+.cp-otp .otpEntry:focus { border-color: var(--teal); }
+.cp-login .resend-btn { display: none; margin: 14px auto 6px; }
+.cp-login .resend-btn:disabled { color: var(--muted); }
+.cp-login .continue-btn { position: relative; margin-top: 4px; text-align: center; }
+.cp-login .continue-btn .cp-btn-loader { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); }
+.cp-login .continue-btn .cp-btn-loader .loader { width: 20px; height: 20px; }
+.cp-field-error { min-height: 20px; margin-top: 8px; }
+.cp-field-error p { margin: 0; font-size: 12.5px; font-weight: 700; color: var(--bad-ink); }
+.cp-login-terms { margin-top: 12px; font-size: 12px; color: var(--muted); }
+.cp-login-terms a { color: var(--brand); font-weight: 700; }
+
+/* Welcome slider (mirrors the mobile app login: artwork + caption + dots) */
+.cp-login-hero { width: 100%; max-width: 440px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.cp-slides { display: grid; width: 100%; }
+.cp-slide {
+  grid-area: 1 / 1; margin: 0; display: flex; flex-direction: column; align-items: center; gap: 12px;
+  opacity: 0; pointer-events: none; transition: opacity .26s ease-in;
+}
+.cp-slide.is-active { opacity: 1; pointer-events: auto; transition: opacity 1.2s ease-in; }
+.cp-slide img { width: 100%; max-height: 210px; object-fit: contain; }
+.cp-slide figcaption {
+  font-size: 20px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.35; text-align: center;
+  color: var(--brand-deep); padding: 0 8px;
+}
+.cp-slide.is-active figcaption { animation: cp-caption-in .34s cubic-bezier(.22, 1, .36, 1); }
+@keyframes cp-caption-in { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: none; } }
+.cp-slide-dots { display: flex; justify-content: center; gap: 8px; }
+.cp-slide-dot {
+  width: 8px; height: 8px; border-radius: 999px; border: none; padding: 0; background: #c2ccd8;
+  transition: width .3s, background .3s; cursor: pointer;
+}
+.cp-slide-dot.is-active { width: 22px; background: var(--brand); }
+
+/* Wide screens: illustration panel on the left, sign-in card on the right */
+@media (min-width: 900px) {
+  .cp-login-split { flex-direction: row; justify-content: center; align-items: center; gap: 48px; padding: 32px 40px; }
+  .cp-login-hero { flex: 1 1 auto; max-width: 620px; gap: 18px; }
+  .cp-slide { gap: 22px; }
+  .cp-slide img { max-height: min(52vh, 460px); }
+  .cp-slide figcaption { font-size: 27px; }
+  .cp-login-card { flex: 0 0 440px; }
+}

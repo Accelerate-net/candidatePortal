@@ -1,0 +1,41 @@
+/* Attendance page. */
+
+.cp-select-pill { position: relative; display: inline-flex; align-items: center; }
+.cp-select-pill select {
+  appearance: none; -webkit-appearance: none; padding: 9px 34px 9px 16px; border-radius: 999px; border: none;
+  background: var(--brand); color: #fff; font-weight: 700; font-size: 14px; cursor: pointer;
+}
+.cp-select-pill svg { position: absolute; right: 12px; pointer-events: none; color: #fff; }
+.cp-att-head, .cp-att-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.cp-att-head span { text-align: center; font-size: 12px; font-weight: 700; color: var(--muted); padding-bottom: 4px; }
+.cp-att-cell {
+  aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center;
+  background: var(--panel-soft); color: var(--muted); font-size: 12px; max-width: 52px; margin: 0 auto; width: 100%;
+}
+.cp-att-cell.is-empty { background: transparent; }
+.cp-att-cell.is-present { background: var(--good); color: var(--good-ink); }
+.cp-att-cell.is-absent { background: var(--bad); color: #fff; }
+.cp-att-cell.is-off, .cp-att-cell.is-holiday { background: var(--panel-soft); color: #a3b1c2; }
+.cp-att-cell.is-upcoming { background: transparent; border: 1px dashed var(--line); color: #b7c3d1; }
+.cp-att-cell small { font-weight: 600; }
+.cp-att-legend { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 14px; font-size: 12.5px; color: var(--muted); font-weight: 600; }
+.cp-att-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+.cp-att-legend .is-present { background: var(--good); }
+.cp-att-legend .is-absent { background: var(--bad); }
+.cp-att-legend .is-off { background: #d1dbe6; }
+.cp-att-legend .is-upcoming { background: transparent; border: 1px dashed #b7c3d1; box-sizing: border-box; }
+.cp-att-kpis .cp-kpi-value strong { font-size: 30px; }
+.cp-att-months { display: flex; flex-direction: column; }
+.cp-att-month { border-bottom: 1px solid var(--line); }
+.cp-att-month:last-child { border-bottom: none; }
+.cp-att-month-btn { display: block; width: 100%; padding: 12px 8px; border: none; border-radius: 14px; background: transparent; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+.cp-att-month-btn:hover { background: var(--panel-soft); }
+.cp-att-month.is-active .cp-att-month-btn { background: var(--brand-soft); }
+.cp-att-month-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 6px; }
+.cp-att-month-row strong { font-size: 14.5px; }
+.cp-att-month-val b { font-size: 15px; }
+.cp-att-month-val small { font-size: 12px; color: var(--muted); font-weight: 600; }
+.cp-att-month-meta { display: block; margin-top: 6px; font-size: 12px; color: var(--muted); font-weight: 600; }
+.cp-att-total { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); font-weight: 600; }
+.cp-att-total strong { color: var(--brand-deep); font-size: 16px; }
+.cp-att-total small { color: var(--muted); font-weight: 600; }

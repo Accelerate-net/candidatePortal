@@ -1,0 +1,35 @@
+/* Design tokens: colours, radii, shadows and shell sizes. */
+
+:root {
+  color-scheme: light;
+  --bg: #f3f7fa;
+  --panel: #ffffff;
+  --panel-soft: #f0f5fa;
+  --ink: #1e293b;
+  --ink-2: #334155;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --brand: #005f73;
+  --brand-deep: #004a5a;
+  --brand-soft: #d9eef1;
+  --teal: #2e9da1;
+  --good: #8fdc9a;
+  --good-ink: #0d3b2f;
+  --good-deep: #146a62;
+  --bad: #ff3b6b;
+  --bad-ink: #b0123f;
+  --bad-soft: #ffd6df;
+  --warn: #ffb703;
+  --warn-ink: #4a3000;
+  --warn-soft: #fff1c9;
+  /* Answer status trio, shared by response sheet, bars, summary circles, legends and charts */
+  --status-correct: #146a62;
+  --status-skipped: #94a3b8;
+  --status-wrong: #ff3b6b;
+  --radius: 22px;
+  --radius-sm: 14px;
+  --shadow: 0 1px 2px rgba(0, 95, 115, 0.05), 0 8px 24px rgba(0, 95, 115, 0.07);
+  --sidebar-w: 240px;
+  --tabbar-h: 64px;
+  font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
