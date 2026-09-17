@@ -172,6 +172,14 @@ export async function saveCourseProgress(payload) {
   return raw(await api.post('/user/courses/save-course-progress.php', payload));
 }
 
+// Latest videos watched in the given player courses (course-bundle ids), newest
+// first: user/watch-history.php, read from candidate_course_progress.
+// [{ contentMetadata: { course, module, chapter, part }, type, title, duration, progress, completed, lastWatch, lastWatchEpoch, thumbnail }]
+export async function getWatchHistoryRows(courseIds, size) {
+  const data = unwrap(await api.get('/user/watch-history.php', { params: { course: courseIds.join(','), size } }));
+  return Array.isArray(data) ? data : [];
+}
+
 // ── Checkout ──────────────────────────────────────────────────────────────
 export async function getBillingAddress() {
   return raw(await api.get('/user/get-billing-address.php'));

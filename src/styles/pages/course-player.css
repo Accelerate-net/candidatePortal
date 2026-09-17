@@ -15,6 +15,11 @@
 
 .cp-course .container { display: flex; min-height: 100dvh; }
 
+/* Compact brand mark pinned to the top-right corner of the page */
+.cp-course { position: relative; }
+.cp-course .course-brand { position: absolute; top: 10px; right: 16px; z-index: 5; display: block; line-height: 0; }
+.cp-course .course-brand img { width: 60px; height: auto; }
+
 /* ── Sidebar ────────────────────────────────────────────────────────────── */
 .cp-course .sidebar {
   width: 360px; flex-shrink: 0;
@@ -23,32 +28,44 @@
   margin: 16px 0 16px 16px;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  overflow-y: auto;
+  display: flex; flex-direction: column;
   position: sticky; top: 16px; height: calc(100dvh - 32px);
   transition: transform 0.3s ease-in-out;
 }
-.cp-course .sidebar-brand { display: block; margin-bottom: 18px; }
-.cp-course .sidebar-brand img { width: 110px; height: auto; }
-.cp-course .sidebar h3 {
-  font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
-  color: var(--warn-ink) !important; background: #fff1c9; display: inline-block; padding: 4px 10px; border-radius: 999px; margin-bottom: 10px;
-}
+.cp-course .sidebar h3 { font-size: 13px; font-weight: 800; letter-spacing: .01em; color: var(--warn) !important; margin-bottom: 4px; }
 .cp-course .sidebar h3:empty { display: none; }
-.cp-course .sidebar h2 { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.25; margin-bottom: 14px; color: var(--brand-deep) !important; }
+.cp-course .sidebar h2 { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.25; margin-bottom: 16px; color: var(--brand) !important; }
 
+/* Teacher chip pinned to the bottom of the sidebar; opens the details popup */
 .cp-course .mentor {
-  display: flex; align-items: flex-start; gap: 12px;
-  padding: 12px; border-radius: 16px; background: var(--panel-soft);
-  margin-bottom: 18px;
+  display: flex; align-items: center; gap: 10px; width: 100%; flex-shrink: 0;
+  margin-top: 14px; padding: 8px 12px; border: 1.5px solid transparent; border-radius: 999px;
+  background: var(--panel-soft); color: var(--ink); text-align: left;
+  transition: border-color 0.15s ease;
 }
-.cp-course .mentor:empty { display: none; }
-.cp-course .mentor img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #fff; }
-.cp-course .mentor-info { min-width: 0; }
-.cp-course .mentor-info strong { display: block; font-size: 14px; font-weight: 700; }
-.cp-course .mentor-info p { font-size: 12.5px; color: var(--muted); font-weight: 500; margin-top: 2px; }
+.cp-course .mentor:hover { border-color: var(--teal); }
+.cp-course .mentor img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #fff; }
+.cp-course .mentor strong { font-size: 14px; font-weight: 700; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.cp-course .mentor-backdrop {
+  position: fixed; inset: 0; z-index: 1100; background: rgba(0, 74, 90, 0.55);
+  display: flex; align-items: center; justify-content: center; padding: 16px;
+}
+.cp-course .mentor-popup {
+  position: relative; width: 100%; max-width: 340px; background: var(--panel); border-radius: 24px;
+  padding: 28px 22px 24px; box-shadow: 0 24px 60px rgba(0, 74, 90, 0.3);
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+}
+.cp-course .mentor-popup img { width: 84px; height: 84px; border-radius: 50%; object-fit: cover; background: var(--panel-soft); margin-bottom: 12px; }
+.cp-course .mentor-popup strong { font-size: 18px; font-weight: 800; letter-spacing: -0.02em; color: var(--brand-deep); }
+.cp-course .mentor-popup p { font-size: 14px; color: var(--muted); font-weight: 500; margin-top: 6px; }
+.cp-course .mentor-popup-close {
+  position: absolute; top: 12px; right: 12px; width: 30px; height: 30px; border: none; border-radius: 50%;
+  background: var(--panel-soft); color: var(--muted); font-size: 13px;
+}
 
 /* Chapter list */
-.cp-course .chapter-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.cp-course .chapter-list { list-style: none; display: flex; flex-direction: column; gap: 8px; flex: 1; min-height: 0; overflow-y: auto; }
 .cp-course .chapter {
   padding: 10px 12px; border-radius: 16px; background: var(--panel-soft);
   cursor: pointer; border: 1.5px solid transparent;
@@ -112,7 +129,7 @@
     position: fixed; top: 0; left: 0; height: 100%; z-index: 998; margin: 0;
     transform: translateX(-100%); width: 84%; max-width: 340px;
     border-radius: 0 var(--radius) var(--radius) 0; box-shadow: 2px 0 30px rgba(0, 0, 0, 0.2);
-    padding-top: 72px; overflow-y: auto;
+    padding-top: 72px;
   }
   .cp-course .sidebar.open { transform: translateX(0); }
   .cp-course .content { padding: 72px 16px 24px; }

@@ -1,15 +1,13 @@
 // Watch history for the course pages.
 //
-// The course player records what is opened and how far it was watched in this
-// browser (localStorage). When VITE_WATCH_HISTORY_URL points at the
-// watch-history API (GET {url}/course/{courseId}?size=N, Bearer token), that is
-// used instead, so the history follows the candidate across devices.
-import axios from 'axios';
-import { getToken } from './auth';
+// "Recently watched" comes from the backend (user/watch-history.php, read from
+// candidate_course_progress), so it follows the candidate across devices. The
+// course player also notes what is opened in this browser (localStorage); that
+// copy is only used when the API cannot be reached.
+import { getWatchHistoryRows } from './candidateApi';
 
 const KEY = 'cp_watch_history';
 const MAX_ITEMS = 40;
-const API_URL = (import.meta.env.VITE_WATCH_HISTORY_URL || '').replace(/\/$/, '');
 
 const idOf = (e) => `${e.course}-${e.module}-${e.chapter}-${e.part}`;
 
@@ -51,10 +49,7 @@ export function playerCourseIds(chapters = []) {
 }
 
 async function fromApi(courseIds, size) {
-  const headers = { Authorization: `Bearer ${getToken()}` };
-  const pages = await Promise.all(courseIds.map((id) => axios.get(`${API_URL}/course/${encodeURIComponent(id)}`, { params: { size: size * 3 }, headers, timeout: 15000 })));
-  return pages
-    .flatMap((res) => (Array.isArray(res.data) ? res.data : res.data?.data || []))
+  return (await getWatchHistoryRows(courseIds, size))
     .filter((it) => !it.type || it.type === 'VIDEO')
     .map((it) => ({
       course: it.contentMetadata?.course,
@@ -65,7 +60,9 @@ async function fromApi(courseIds, size) {
       duration: it.duration,
       progress: it.progress,
       thumbnail: it.thumbnail || '',
-      lastWatchLabel: it.lastWatch,
+      // Epoch seconds, shown as "2 days ago"; `lastWatch` is the same moment as text.
+      lastWatch: it.lastWatchEpoch ? it.lastWatchEpoch * 1000 : undefined,
+      lastWatchLabel: it.lastWatchEpoch ? undefined : it.lastWatch,
     }));
 }
 
@@ -73,8 +70,11 @@ async function fromApi(courseIds, size) {
 export async function getWatchHistory(courseIds, size = 3) {
   const wanted = (courseIds || []).map(String);
   if (wanted.length === 0) return [];
-  if (API_URL) {
-    try { return (await fromApi(wanted, size)).slice(0, size); } catch { /* fall back to this browser's history */ }
+  try {
+    return (await fromApi(wanted, size)).slice(0, size);
+  } catch (err) {
+    if (err?.response?.status === 401) throw err;
+    /* API unreachable: fall back to this browser's history */
   }
   return readAll()
     .filter((e) => wanted.includes(String(e.course)))

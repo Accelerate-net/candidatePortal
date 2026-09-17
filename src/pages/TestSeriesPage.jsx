@@ -45,20 +45,20 @@ export default function TestSeriesPage() {
   const [courseIdOpen, setCourseIdOpen] = useState(null);
   const [inProgress, setInProgress] = useState(null); // { examKey, seriesKey, sameTab }
   const [premiumFor, setPremiumFor] = useState(null); // series code awaiting the premium confirmation
-  const [seriesMeta, setSeriesMeta] = useState({}); // code -> { photo, total, attempted }
+  const [seriesMeta, setSeriesMeta] = useState({}); // code -> { total, attempted }
   const handoff = useRef(undefined);
   if (handoff.current === undefined) handoff.current = readHandoff();
   const metaRequested = useRef(new Set());
   const { profile, loading: profileLoading } = useUser() || {};
 
-  // Artwork and test counts for a series come from its own listing.
+  // Test counts for a series come from its own listing.
   const recordMeta = useCallback((data) => {
     const code = data?.currentTestSeriesInfo?.code;
     if (!code) return;
     const list = data.coursesList || [];
     setSeriesMeta((m) => ({
       ...m,
-      [code]: { photo: list.find((c) => c.photo)?.photo || null, total: list.length, attempted: list.filter((c) => c.previousAttemptId).length },
+      [code]: { total: list.length, attempted: list.filter((c) => c.previousAttemptId).length },
     }));
   }, []);
 
@@ -178,7 +178,8 @@ export default function TestSeriesPage() {
     const validity = access ? (access.expiry && access.expiry !== 'Unknown' ? `Access till ${access.expiry}` : 'Unlimited access') : null;
     const tests = meta ? `${plural(meta.total, 'mock test')}${meta.total ? ` · ${meta.attempted} attempted` : ''}` : null;
     const stats = meta ? [{ value: meta.total, label: meta.total === 1 ? 'Mock test' : 'Mock tests' }, { value: meta.attempted, label: 'Attempted' }] : [];
-    return { id: series.code, title: series.title, image: series.photo || meta?.photo || null, fallbackIcon: Icon.Desktop, badges, meta: [validity, tests], coverMeta: [validity], stats };
+    // No artwork: the cover is the plain brand banner with an icon, as on /courses.
+    return { id: series.code, title: series.title, image: null, fallbackIcon: Icon.Desktop, badges, meta: [validity, tests], coverMeta: [validity], stats };
   });
   const coursesList = courseListing?.coursesList || [];
   const showProgressChart = courseListingFound && coursesList.some((c) => c.previousAttemptId);

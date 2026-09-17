@@ -14,6 +14,12 @@ function progressPercent(progress, total) {
   return Math.max(0, Math.min(100, Math.round((progress / total) * 100)));
 }
 
+// "CH01" → "Chapter 1"; any other code is shown as is.
+function chapterLabel(code) {
+  const m = /^CH0*(\d+)$/i.exec(code || '');
+  return m ? `Chapter ${m[1]}` : code;
+}
+
 function ProgressRing({ percent, index }) {
   const r = 18;
   const circumference = 2 * Math.PI * r;
@@ -46,6 +52,7 @@ export default function CoursePage() {
   const [data, setData] = useState(null); // { module, chapter, part }
   const [progress, setProgress] = useState({}); // partId -> percent
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [teacherOpen, setTeacherOpen] = useState(false);
   const iframeRef = useRef(null);
   const playerRef = useRef(null);
   const seekedRef = useRef(false);
@@ -76,6 +83,14 @@ export default function CoursePage() {
       .catch(() => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [unauthorised]);
+
+  // Teacher popup closes on Escape.
+  useEffect(() => {
+    if (!teacherOpen) return undefined;
+    function onKey(e) { if (e.key === 'Escape') setTeacherOpen(false); }
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [teacherOpen]);
 
   // Attach player.js to the Bunny iframe once it loads.
   useEffect(() => {
@@ -156,21 +171,12 @@ export default function CoursePage() {
   return (
     <div className="cp-course">
       <button type="button" className="toggle-sidebar" onClick={() => setSidebarOpen((o) => !o)} aria-label="Toggle chapter list">{sidebarOpen ? 'X' : '☰'}</button>
+      <a className="course-brand" href="/courses"><img src="/logo/crispr-logo.svg" alt="Crispr Learning" /></a>
 
       <div className="container">
         <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
-          <a className="sidebar-brand" href="/courses"><img src="/logo/crispr-logo.svg" alt="Crispr Learning" /></a>
-          {module && <h3>{module.name}: {chapter.code}</h3>}
+          {module && <h3>{module.name}: {chapterLabel(chapter.code)}</h3>}
           {chapter && <h2>{chapter.title}</h2>}
-          {chapter?.teacher && (
-            <div className="mentor">
-              <img src={chapter.teacher.photo} alt="" />
-              <div className="mentor-info">
-                <strong>{chapter.teacher.name}</strong>
-                <p>{chapter.teacher.brief}</p>
-              </div>
-            </div>
-          )}
           <ul className="chapter-list">
             {(chapter?.parts || []).map((p, i) => (
               <li key={p.id} className={`chapter ${p.id === selectedPartId ? 'active' : ''}`} onClick={() => openContent(p.id)}>
@@ -182,6 +188,12 @@ export default function CoursePage() {
               </li>
             ))}
           </ul>
+          {chapter?.teacher && (
+            <button type="button" className="mentor" onClick={() => setTeacherOpen(true)} aria-haspopup="dialog">
+              <img src={chapter.teacher.photo} alt="" />
+              <strong>{chapter.teacher.name}</strong>
+            </button>
+          )}
         </div>
 
         <div className="content">
@@ -202,6 +214,17 @@ export default function CoursePage() {
           </div>
         </div>
       </div>
+
+      {teacherOpen && chapter?.teacher && (
+        <div className="mentor-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) setTeacherOpen(false); }}>
+          <div className="mentor-popup" role="dialog" aria-modal="true" aria-labelledby="mentor-popup-name">
+            <button type="button" className="mentor-popup-close" onClick={() => setTeacherOpen(false)} aria-label="Close">✕</button>
+            <img src={chapter.teacher.photo} alt="" />
+            <strong id="mentor-popup-name">{chapter.teacher.name}</strong>
+            {chapter.teacher.brief && <p>{chapter.teacher.brief}</p>}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
