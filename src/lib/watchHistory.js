@@ -57,6 +57,7 @@ async function fromApi(courseIds, size) {
       chapter: it.contentMetadata?.chapter,
       part: it.contentMetadata?.part,
       title: it.title,
+      chapterTitle: it.chapterTitle || '',
       duration: it.duration,
       progress: it.progress,
       thumbnail: it.thumbnail || '',

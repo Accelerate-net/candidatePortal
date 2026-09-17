@@ -80,9 +80,9 @@ const routes = {
     const size = parseInt(url.searchParams.get('size'), 10) || 3;
     const now = Math.floor(Date.now() / 1000);
     const rows = [
-      { contentMetadata: { course: 1, module: 1, chapter: 1, part: 2 }, type: 'VIDEO', title: "Part 2: Coulomb's Law", duration: 1324, progress: 529, completed: '40%', lastWatch: '', lastWatchEpoch: now - 3 * 3600, thumbnail: '' },
-      { contentMetadata: { course: 1, module: 1, chapter: 1, part: 1 }, type: 'VIDEO', title: 'Part 1: Electric Charge', duration: 980, progress: 980, completed: '100%', lastWatch: '', lastWatchEpoch: now - 2 * 86400, thumbnail: IMG('wh1', 480, 270) },
-      { contentMetadata: { course: 1, module: 2, chapter: 1, part: 1 }, type: 'VIDEO', title: "Part 1: Ohm's Law", duration: 1500, progress: 120, completed: '8%', lastWatch: '', lastWatchEpoch: now - 9 * 86400, thumbnail: '' },
+      { contentMetadata: { course: 1, module: 1, chapter: 1, part: 2 }, type: 'VIDEO', title: "Part 2: Coulomb's Law", chapterTitle: 'Electric Charges and Fields', duration: 1324, progress: 529, completed: '40%', lastWatch: '', lastWatchEpoch: now - 3 * 3600, thumbnail: '' },
+      { contentMetadata: { course: 1, module: 1, chapter: 1, part: 1 }, type: 'VIDEO', title: 'Part 1: Electric Charge', chapterTitle: 'Electric Charges and Fields', duration: 980, progress: 980, completed: '100%', lastWatch: '', lastWatchEpoch: now - 2 * 86400, thumbnail: IMG('wh1', 480, 270) },
+      { contentMetadata: { course: 1, module: 2, chapter: 1, part: 1 }, type: 'VIDEO', title: "Part 1: Ohm's Law", chapterTitle: '', duration: 1500, progress: 120, completed: '8%', lastWatch: '', lastWatchEpoch: now - 9 * 86400, thumbnail: '' },
     ];
     if (isNewUser(req)) return ok([]);
     return ok(rows.filter((r) => wanted.length === 0 || wanted.includes(String(r.contentMetadata.course))).slice(0, size));
