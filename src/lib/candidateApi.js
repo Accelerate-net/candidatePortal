@@ -103,8 +103,9 @@ export async function getExamStats(report) {
 }
 
 // Progress report PDFs issued by the centre: [{ id, title, issuedOn, fileType, url }],
-// the same shape the parent portal uses. Until /user/progress-reports.php exists
-// this falls back to sample rows (flagged `sample: true`).
+// the same shape the parent portal uses (`issuedOn` is null when the centre
+// records no date). If /user/progress-reports.php cannot be reached this falls
+// back to sample rows (flagged `sample: true`).
 export async function getProgressReports() {
   try {
     const data = unwrap(await api.get('/user/progress-reports.php'));

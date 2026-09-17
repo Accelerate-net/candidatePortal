@@ -76,11 +76,17 @@ export default function ExamStatsDialog({ report, onClose }) {
                 <li key={s.name}>
                   <div className="cp-stats-row">
                     <strong>{s.name}</strong>
-                    <span><b>{s.myScore}</b> you · <b>{s.classAverage}</b> class avg. <small>/ {s.maxScore}</small></span>
+                    <small>out of {s.maxScore}</small>
                   </div>
-                  <div className="cp-duo-bar" aria-hidden="true">
-                    <div className="cp-duo-fill is-me" style={{ width: `${pctOf(s.myScore, s.maxScore)}%` }} />
-                    <div className="cp-duo-fill is-class" style={{ width: `${pctOf(s.classAverage, s.maxScore)}%` }} />
+                  <div className="cp-duo-bar">
+                    <div className="cp-duo-line" aria-label={`You: ${s.myScore} out of ${s.maxScore}`}>
+                      <div className="cp-duo-track"><div className="cp-duo-fill is-me" style={{ width: `${pctOf(s.myScore, s.maxScore)}%` }} /></div>
+                      <b>{s.myScore}</b>
+                    </div>
+                    <div className="cp-duo-line" aria-label={`Class average: ${s.classAverage} out of ${s.maxScore}`}>
+                      <div className="cp-duo-track"><div className="cp-duo-fill is-class" style={{ width: `${pctOf(s.classAverage, s.maxScore)}%` }} /></div>
+                      <b>{s.classAverage}</b>
+                    </div>
                   </div>
                 </li>
               ))}

@@ -75,6 +75,7 @@ function attendance() {
 const routes = {
   'GET /user/attendance.php': () => ok(attendance()),
   'GET /user/progress-reports.php': () => ok([
+    { id: 3, title: 'July - September Session', issuedOn: null, fileType: 'pdf', url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' },
     { id: 'PR-2026-Q3', title: 'Progress Report July - September', issuedOn: '2026-09-07', fileType: 'pdf', url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' },
     { id: 'PR-2026-Q2', title: 'Progress Report April - June', issuedOn: '2026-06-08', fileType: 'pdf', url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' },
   ]),

@@ -13,6 +13,7 @@ import {
 
 // "7 Sept, 2026"
 function reportDate(iso) {
+  if (!iso) return '—'; // the progress cards table carries no issue date
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso || '';
   const month = d.toLocaleDateString('en-GB', { month: 'short' });
