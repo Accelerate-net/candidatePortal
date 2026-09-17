@@ -8,7 +8,7 @@ import { useToast } from '../components/Toast';
 import { getCourseBundleProgress } from '../lib/candidateApi';
 import { getSearchParam, replaceSearchParam } from '../lib/browser';
 import WatchHistory from '../components/WatchHistory';
-import CatalogBanner from '../components/CatalogBanner';
+import CatalogBanner, { CATALOG_URL, useCatalogStripClosed } from '../components/CatalogBanner';
 import CatalogSeries from '../components/CatalogSeries';
 import { getWatchHistory, playerCourseIds } from '../lib/watchHistory';
 
@@ -97,6 +97,8 @@ export default function CoursesPage() {
     : bundleContent.chapters.filter((c) => String(c.moduleId) === String(activeModule));
 
   // Access level and validity live on the profile's enrolled courses; match by title.
+  const [stripClosed, closeStrip] = useCatalogStripClosed();
+
   const accessByTitle = useMemo(() => {
     const map = {};
     (profile?.courses || []).forEach((c) => { if (c?.title) map[c.title.trim().toLowerCase()] = c; });
@@ -119,7 +121,7 @@ export default function CoursesPage() {
     <Layout title="Courses" hideTitle>
       <div className="cp-page">
         {/* Already enrolled: a slim reminder that there is more in the catalog. */}
-        {bundles?.length > 0 && <CatalogBanner compact />}
+        {bundles?.length > 0 && <CatalogBanner compact closed={stripClosed} onClose={closeStrip} />}
 
         {/* Not enrolled anywhere: the full invitation to the catalog. */}
         {(bundlesFound === false || (bundlesFound && bundles.length === 0)) && <CatalogBanner />}
@@ -138,6 +140,12 @@ export default function CoursesPage() {
             items={courseItems}
             value={selectedBundle?.id}
             onChange={(id) => { const next = bundles.find((x) => x.id === id); if (next) selectCourseBundle(next); }}
+            actions={stripClosed && (
+              // The strip above was closed, so the way to the catalog moves up here.
+              <a className="cp-btn cp-btn-light cp-btn-sm cp-btn-bordered cp-cover-action" href={CATALOG_URL} target="_blank" rel="noopener noreferrer">
+                <Icon.Graduation width={15} height={15} /> Explore More Courses
+              </a>
+            )}
           />
         )}
 

@@ -54,7 +54,10 @@
 .cp-cover-stats > div { min-width: 78px; padding: 8px 12px; border-radius: 14px; background: var(--panel-soft); text-align: center; }
 .cp-cover-stats dt { font-size: 19px; font-weight: 800; color: var(--brand-deep); line-height: 1.1; }
 .cp-cover-stats dd { margin: 2px 0 0; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
-.cp-cover-switch { position: absolute; top: -104px; right: 16px; z-index: 5; }
+.cp-cover-actions { position: absolute; top: -104px; right: 16px; z-index: 5; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; max-width: calc(100% - 32px); }
+.cp-cover-switch { position: relative; }
+.cp-cover-actions > .cp-btn { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18); }
+.cp-cover-action svg { color: var(--teal); }
 .cp-cover-switch > .cp-btn { display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18); }
 .cp-cover-switch > .cp-btn b { background: var(--brand-soft); border-radius: 99px; padding: 0 7px; font-size: 12px; }
 .cp-cover-caret { display: inline-grid; transition: transform .15s; }
@@ -65,7 +68,7 @@
   .cp-cover-body { padding: 0 22px 20px; gap: 12px 20px; }
   .cp-cover-thumb { width: 104px; height: 104px; margin-top: -44px; border-radius: 26px; }
   .cp-cover-title { font-size: 25px; }
-  .cp-cover-switch { top: -134px; right: 22px; }
+  .cp-cover-actions { top: -134px; right: 22px; max-width: calc(100% - 44px); }
 }
 
 @media (max-width: 480px) {

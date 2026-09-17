@@ -85,7 +85,7 @@ function Cover({ item, eyebrow, children }) {
   );
 }
 
-export default function TileDropdown({ items, value, onChange, label, placeholder = 'Select', variant = 'tile', switchLabel = 'Switch' }) {
+export default function TileDropdown({ items, value, onChange, label, placeholder = 'Select', variant = 'tile', switchLabel = 'Switch', actions = null }) {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
   const rootRef = useRef(null);
@@ -151,20 +151,26 @@ export default function TileDropdown({ items, value, onChange, label, placeholde
     return (
       <div className={`cp-tiledd is-cover ${open ? 'is-open' : ''}`}>
         <Cover item={selected || { title: placeholder }} eyebrow={label}>
-          {items.length > 1 && (
-            <div className="cp-cover-switch" ref={rootRef}>
-              <button
-                type="button"
-                className="cp-btn cp-btn-light cp-btn-sm cp-btn-bordered"
-                aria-haspopup="listbox"
-                aria-expanded={open}
-                onClick={() => setOpen((o) => !o)}
-                onKeyDown={onKeyDown}
-              >
-                {switchLabel} <b>{items.length}</b>
-                <span className="cp-cover-caret"><Icon.ChevronDown width={16} height={16} /></span>
-              </button>
-              {menu}
+          {/* Top-right of the banner: any extra actions from the page, then the switcher. */}
+          {(actions || items.length > 1) && (
+            <div className="cp-cover-actions">
+              {actions}
+              {items.length > 1 && (
+                <div className="cp-cover-switch" ref={rootRef}>
+                  <button
+                    type="button"
+                    className="cp-btn cp-btn-light cp-btn-sm cp-btn-bordered"
+                    aria-haspopup="listbox"
+                    aria-expanded={open}
+                    onClick={() => setOpen((o) => !o)}
+                    onKeyDown={onKeyDown}
+                  >
+                    {switchLabel} <b>{items.length}</b>
+                    <span className="cp-cover-caret"><Icon.ChevronDown width={16} height={16} /></span>
+                  </button>
+                  {menu}
+                </div>
+              )}
             </div>
           )}
         </Cover>

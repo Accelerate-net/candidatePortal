@@ -139,10 +139,7 @@ export default function PerformancePage() {
             </div>
           </div>
             <div className="cp-table-wrap">
-              <table className="cp-table" style={{ minWidth: 320 }}>
-                <thead>
-                  <tr><th>Title</th><th>Report</th></tr>
-                </thead>
+              <table className="cp-table" style={{ minWidth: 320 }} aria-label="Progress reports">
                 <tbody>
                   {progressReports.map((r) => (
                     <tr key={r.id}>

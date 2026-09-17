@@ -14,14 +14,21 @@ const PERKS = [
   { icon: Icon.FileText, text: 'PYQ solutions and weekly quizzes' },
 ];
 
+/** Whether the slim strip was closed (cookie), and a function to close it. */
+export function useCatalogStripClosed() {
+  const [closed, setClosed] = useState(() => getCookie(DISMISS_COOKIE) === '1');
+  const close = () => { setCookie(DISMISS_COOKIE, '1', DISMISS_DAYS); setClosed(true); };
+  return [closed, close];
+}
+
 /**
  * Invitation to the course catalog. Full size for candidates with no course
  * yet; `compact` is a slim one-line strip for those already enrolled, which
- * can be closed and then stays away for 14 days.
+ * can be closed and then stays away for 14 days. The page owns that state
+ * through useCatalogStripClosed, so it can offer another way in once the
+ * strip is gone.
  */
-export default function CatalogBanner({ compact = false }) {
-  const [closed, setClosed] = useState(() => getCookie(DISMISS_COOKIE) === '1');
-
+export default function CatalogBanner({ compact = false, closed = false, onClose }) {
   if (compact) {
     if (closed) return null;
     return (
@@ -36,7 +43,7 @@ export default function CatalogBanner({ compact = false }) {
           className="cp-catalog-strip-close"
           aria-label="Close. Hidden for 14 days."
           title="Close"
-          onClick={() => { setCookie(DISMISS_COOKIE, '1', DISMISS_DAYS); setClosed(true); }}
+          onClick={onClose}
         >
           <Icon.X width={14} height={14} />
         </button>

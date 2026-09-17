@@ -26,6 +26,9 @@ function readHandoff() {
 }
 
 // Status icon on each mock-test tile: locked / available / attempted.
+// Every exam tile shows the same artwork; the photo the API sends is not used.
+const TILE_IMAGE = '/default-images/test-series-default.jpg';
+
 function courseIconClass(course) {
   if (course.locked) return 'lockedIcon';
   if (course.previousAttemptId) return '';
@@ -239,7 +242,7 @@ export default function TestSeriesPage() {
                     <div className="courseContentSummary"><span>Scored <b>{pct(course.lastScore)}</b> on {course.lastAttempted}</span></div>
                   ) : null}
                   <div className={`courseContentIcon ${courseIconClass(course)}`} />
-                  <img src={course.photo} alt="" />
+                  <img src={TILE_IMAGE} alt="" />
                   <div className="courseContentTileContent">
                     {!course.locked && course.premium && <div className="premiumContentIcon" title="Premium Content"><Icon.Crown width={13} height={13} /></div>}
                     <h5>{course.title}</h5>
