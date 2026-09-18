@@ -37,6 +37,11 @@
   .cp-modal-backdrop { align-items: center; }
 }
 
+/* Exam Start Key: six digit boxes inside the modal */
+.cp-modal .cp-otp-key { gap: 8px; margin-bottom: 0; }
+.cp-modal .cp-otp-key .otpEntry { max-width: none; border-radius: 12px; font-size: 22px; }
+.cp-modal .cp-otp-key .otpEntry:disabled { background: var(--panel-soft); color: var(--muted); }
+
 /* Profile completion popup */
 .cp-profile-modal { max-width: 440px; max-height: calc(100dvh - 32px); overflow-y: auto; }
 .cp-modal-head { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
