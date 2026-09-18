@@ -26,8 +26,6 @@ export default function SecretKeyDialog({ open, title = 'Enter the secret key', 
     };
   }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!open) return null;
-
   async function handleSubmit(e) {
     e.preventDefault();
     const value = secret.trim();
@@ -35,12 +33,17 @@ export default function SecretKeyDialog({ open, title = 'Enter the secret key', 
     setBusy(true); setError('');
     try {
       const failure = await onSubmit(value);
-      if (failure) { setError(failure); setBusy(false); inputRef.current?.focus(); }
+      if (failure) setError(failure);
     } catch (err) {
       setError(err?.message || 'Something went wrong. Please try again.');
-      setBusy(false);
     }
+    setBusy(false);
   }
+
+  // Back to the field once it is enabled again after a failed try.
+  useEffect(() => { if (open && !busy && error) inputRef.current?.focus(); }, [open, busy, error]);
+
+  if (!open) return null;
 
   return (
     <div className="cp-modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget && !busy) onCancel?.(); }}>
