@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import ConfirmDialog from '../components/ConfirmDialog';
+import ExploreSeriesDialog from '../components/ExploreSeriesDialog';
 import TileDropdown from '../components/TileDropdown';
 import { useUser } from '../components/UserProvider';
 import { Icon } from '../components/Icons';
@@ -48,6 +49,7 @@ export default function TestSeriesPage() {
   const [courseIdOpen, setCourseIdOpen] = useState(null);
   const [inProgress, setInProgress] = useState(null); // { examKey, seriesKey, sameTab }
   const [premiumFor, setPremiumFor] = useState(null); // series code awaiting the premium confirmation
+  const [exploreOpen, setExploreOpen] = useState(false); // "Explore all" catalog popup
   const [seriesMeta, setSeriesMeta] = useState({}); // code -> { total, attempted }
   const handoff = useRef(undefined);
   if (handoff.current === undefined) handoff.current = readHandoff();
@@ -220,8 +222,14 @@ export default function TestSeriesPage() {
             items={seriesItems}
             value={courseIdOpen}
             onChange={(code) => getCourseListingData(code)}
+            actions={enrolled.length > 1 && (
+              <button type="button" className="cp-btn cp-btn-light cp-btn-sm cp-btn-bordered" onClick={() => setExploreOpen(true)}>
+                <Icon.Search width={14} height={14} /> Explore all
+              </button>
+            )}
           />
         )}
+        <ExploreSeriesDialog open={exploreOpen} onClose={() => setExploreOpen(false)} onOpen={(code) => { setExploreOpen(false); if (code !== courseIdOpen) getCourseListingData(code); }} />
 
         {courseListingFound === false && (
           <Card>

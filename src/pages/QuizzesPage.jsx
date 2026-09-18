@@ -4,8 +4,12 @@ import Layout from '../components/Layout';
 import { Icon } from '../components/Icons';
 import { Card, Pill } from '../components/ui';
 import { useToast } from '../components/Toast';
+import SecretKeyDialog from '../components/SecretKeyDialog';
 import { browserFingerprint } from '../lib/browser';
 import { getCourseBundleProgress, getTestSeriesProgress, listWeeklyExams, startWeeklyExam } from '../lib/candidateApi';
+
+// Every weekly-exam card shows the same artwork; the photo the API sends is not used.
+const TILE_IMAGE = '/default-images/quiz-default.jpg';
 
 /**
  * Weekly exams (quizzes) available to attempt. Shown only to candidates with
@@ -25,18 +29,38 @@ export default function QuizzesPage() {
     });
   }, []);
 
+  const [lockedQuiz, setLockedQuiz] = useState(null); // quiz waiting for its secret key
+
+  // Start the exam. A locked quiz answers `secretKeyRequired` first; the
+  // candidate types the key in a popup and the call is repeated with it.
+  // Returns an error message to show, or null when the exam was opened.
+  async function startQuiz(quizId, secret) {
+    const response = await startWeeklyExam({ quiz: quizId, fingerprint: browserFingerprint(), secret });
+    if (response.status === 'success' && response.data?.url) {
+      const redirectUrl = `${response.data.url}&metadata=${encodeURIComponent(JSON.stringify(response.data.metadata))}`;
+      window.open(redirectUrl, '_blank');
+      return null;
+    }
+    if (response.secretKeyRequired || response.data?.secretKeyRequired) {
+      if (!secret) { setLockedQuiz(quizId); return null; }
+      return response.message || response.error || 'Incorrect secret key. Please try again.';
+    }
+    return response.message || response.error || 'Something went wrong';
+  }
+
   async function attemptWeeklyExam(quizId) {
     try {
-      const response = await startWeeklyExam({ quiz: quizId, fingerprint: browserFingerprint() });
-      if (response.status === 'success') {
-        const redirectUrl = `${response.data.url}&metadata=${encodeURIComponent(JSON.stringify(response.data.metadata))}`;
-        window.open(redirectUrl, '_blank');
-      } else {
-        toast(response.message || response.error);
-      }
+      const failure = await startQuiz(quizId);
+      if (failure) toast(failure);
     } catch (err) {
       toast(err?.message || 'Something went wrong');
     }
+  }
+
+  async function submitSecret(secret) {
+    const failure = await startQuiz(lockedQuiz, secret);
+    if (!failure) setLockedQuiz(null);
+    return failure;
   }
 
   const loading = exams === null || access === null;
@@ -44,6 +68,7 @@ export default function QuizzesPage() {
 
   return (
     <Layout title="Quizzes">
+      <SecretKeyDialog open={lockedQuiz !== null} onSubmit={submitSecret} onCancel={() => setLockedQuiz(null)} />
       <div className="cp-page">
 
         {loading && (
@@ -75,7 +100,7 @@ export default function QuizzesPage() {
             {list.map((exam) => (
               <Card key={exam.id} className="cp-exam">
                 <div className="cp-exam-media">
-                  <img src={exam.photo} alt={exam.title} />
+                  <img src={TILE_IMAGE} alt="" />
                   {exam.attempted
                     ? <Pill tone="lime"><Icon.Check width={13} height={13} /> Attempted</Pill>
                     : <Pill tone="sky">New</Pill>}

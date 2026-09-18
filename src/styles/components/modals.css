@@ -47,3 +47,9 @@
 .cp-req { color: var(--bad-ink); }
 .cp-opt { color: var(--muted); }
 .cp-profile-modal .cp-modal-actions { margin-top: 6px; }
+
+/* "Explore all" test series popup */
+.cp-modal.cp-explore-modal { max-width: 780px; max-height: calc(100dvh - 32px); overflow-y: auto; }
+.cp-explore-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.cp-explore-head h2 { margin-bottom: 2px; }
+.cp-explore-head p { margin: 0; font-size: 13.5px; }

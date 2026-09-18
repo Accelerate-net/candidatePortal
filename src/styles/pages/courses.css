@@ -60,11 +60,13 @@
   .cp-catalog-art { display: block; }
 }
 
-/* Catalog test series: small tiles in a sideways-scrolling row */
+/* Catalog test series: small tiles in a sideways-scrolling row, or a grid in the "Explore all" popup */
 .cp-series-strip-head { display: flex; align-items: baseline; gap: 10px; margin: 2px 4px 10px; }
 .cp-series-strip-head h2 { font-size: 16px; font-weight: 800; letter-spacing: -0.01em; color: var(--brand-deep); }
 .cp-series-strip-head small { font-size: 12.5px; font-weight: 600; color: var(--muted); }
 .cp-series-row { display: flex; gap: 12px; overflow-x: auto; padding: 2px 2px 10px; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+.cp-series-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; padding: 2px; }
+.cp-series-grid .cp-series-tile { flex: none; }
 .cp-series-tile {
   flex: 0 0 216px; display: flex; flex-direction: column; gap: 10px; padding: 10px 10px 12px; border-radius: 18px; scroll-snap-align: start;
   background: var(--panel); box-shadow: var(--shadow); text-decoration: none; color: inherit; border: 1.5px solid transparent; transition: border-color .15s, transform .15s;
