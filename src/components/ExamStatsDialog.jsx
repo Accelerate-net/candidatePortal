@@ -142,13 +142,13 @@ export default function ExamStatsDialog({ report, onClose }) {
                         </div>
                         <div className="cp-duo-bar">
                           {me != null && (
-                            <div className="cp-duo-line" aria-label={`You: ${marks(me)} out of ${marks(max)}`}>
+                            <div className="cp-duo-line is-me" aria-label={`You: ${marks(me)} out of ${marks(max)}`}>
                               <div className="cp-duo-track"><div className="cp-duo-fill is-me" style={{ width: `${pctOf(me, max)}%` }} /></div>
                               <b>{marks(me)}</b>
                             </div>
                           )}
                           {avg != null && (
-                            <div className="cp-duo-line" aria-label={`Class average: ${marks(avg)} out of ${marks(max)}`}>
+                            <div className="cp-duo-line is-class" aria-label={`Class average: ${marks(avg)} out of ${marks(max)}`}>
                               <div className="cp-duo-track"><div className="cp-duo-fill is-class" style={{ width: `${pctOf(avg, max)}%` }} /></div>
                               <b>{marks(avg)}</b>
                             </div>
@@ -179,7 +179,7 @@ export default function ExamStatsDialog({ report, onClose }) {
                           <small>avg. marks</small>
                         </div>
                         <div className="cp-duo-bar">
-                          <div className="cp-duo-line" aria-label={`${label}: class average ${marks(score)} marks`}>
+                          <div className="cp-duo-line is-class" aria-label={`${label}: class average ${marks(score)} marks`}>
                             <div className="cp-duo-track"><div className="cp-duo-fill is-class" style={{ width: `${pctOf(score, sectionMax)}%` }} /></div>
                             <b>{marks(score)}</b>
                           </div>
