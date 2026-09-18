@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import ConfirmDialog from '../components/ConfirmDialog';
 import ExploreSeriesDialog from '../components/ExploreSeriesDialog';
+import SeriesPromoCarousel from '../components/SeriesPromoCarousel';
 import TileDropdown from '../components/TileDropdown';
 import { useUser } from '../components/UserProvider';
 import { Icon } from '../components/Icons';
@@ -292,16 +293,20 @@ export default function TestSeriesPage() {
               ))}
             </div>
 
-            {showProgressChart && (
-              <Card>
-                <div className="cp-card-head"><h2>Your Progress</h2></div>
-                <ProgressChart courses={coursesList} />
-                <div className="cp-legend is-squares" style={{ justifyContent: 'center', marginTop: 8 }}>
-                  <span><i className="is-correct" />Attempted (score)</span>
-                  <span><i className="is-not-attempted" />Not attempted</span>
-                </div>
-              </Card>
-            )}
+            <div className="cp-series-side">
+              {/* Other series to buy, then the progress chart. */}
+              <SeriesPromoCarousel exclude={courseIdOpen} />
+              {showProgressChart && (
+                <Card>
+                  <div className="cp-card-head"><h2>Your Progress</h2></div>
+                  <ProgressChart courses={coursesList} />
+                  <div className="cp-legend is-squares" style={{ justifyContent: 'center', marginTop: 8 }}>
+                    <span><i className="is-correct" />Attempted (score)</span>
+                    <span><i className="is-not-attempted" />Not attempted</span>
+                  </div>
+                </Card>
+              )}
+            </div>
           </div>
         )}
       </div>

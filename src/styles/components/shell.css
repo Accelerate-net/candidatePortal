@@ -4,7 +4,8 @@
 
 .cp-sidebar {
   display: none;
-  position: sticky; top: 0; width: var(--sidebar-w); flex-shrink: 0;
+  /* Stays put while the page scrolls, keeping its 16px inset from the top. */
+  position: sticky; top: 16px; align-self: flex-start; width: var(--sidebar-w); flex-shrink: 0;
   flex-direction: column; gap: 8px;
   padding: 20px 16px;
   margin: 16px 0 16px 16px;

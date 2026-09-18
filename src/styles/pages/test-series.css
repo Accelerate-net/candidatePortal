@@ -53,3 +53,54 @@
 .cp-chart-scroll { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
 .cp-legend .is-not-attempted { background: #d5dde6; }
 .cp-chart { position: relative; width: 100%; }
+
+/* ── Promo carousel: other test series to buy, above "Your Progress" ───── */
+.cp-series-side { display: grid; gap: 14px; align-content: start; }
+.cp-promo {
+  position: relative; border-radius: var(--radius); overflow: hidden; color: #fff;
+  background: radial-gradient(circle at 100% 0%, rgba(255, 183, 3, 0.45), transparent 42%), linear-gradient(135deg, var(--brand-deep), var(--teal));
+  box-shadow: 0 14px 34px rgba(0, 74, 90, 0.28);
+}
+.cp-promo-viewport { overflow: hidden; }
+.cp-promo-track { display: flex; transition: transform .45s cubic-bezier(.22, 1, .36, 1); }
+.cp-promo-slide { position: relative; flex: 0 0 100%; min-width: 0; padding: 18px 18px 14px; display: flex; flex-direction: column; gap: 8px; }
+.cp-promo-glow {
+  position: absolute; top: -70px; right: -60px; width: 190px; height: 190px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.28), transparent 65%); pointer-events: none;
+  animation: cp-promo-breathe 3.2s ease-in-out infinite;
+}
+@keyframes cp-promo-breathe { 0%, 100% { transform: scale(1); opacity: .8; } 50% { transform: scale(1.18); opacity: 1; } }
+.cp-promo-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.cp-promo-tag {
+  display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 999px;
+  background: var(--warn); color: var(--warn-ink); font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase;
+  animation: cp-promo-pulse 2.4s ease-in-out infinite;
+}
+@keyframes cp-promo-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255, 183, 3, 0.55); } 60% { box-shadow: 0 0 0 9px rgba(255, 183, 3, 0); } }
+.cp-promo-art { width: 52px; height: 52px; border-radius: 14px; object-fit: cover; flex-shrink: 0; border: 2px solid rgba(255, 255, 255, 0.35); }
+.cp-promo-art.is-icon { display: grid; place-items: center; background: rgba(255, 255, 255, 0.14); color: var(--warn); }
+.cp-promo-title { font-size: 18px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.25; }
+.cp-promo-brief { font-size: 13px; line-height: 1.45; opacity: .85; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.cp-promo-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 4px; }
+.cp-promo-price { display: flex; align-items: baseline; gap: 7px; }
+.cp-promo-price strong { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
+.cp-promo-price s { font-size: 12.5px; font-weight: 600; opacity: .7; }
+.cp-promo-cta {
+  display: inline-flex; align-items: center; gap: 3px; padding: 10px 14px 10px 16px; border-radius: 999px; white-space: nowrap;
+  background: var(--warn); color: var(--warn-ink); font-size: 13.5px; font-weight: 800; text-decoration: none;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22); transition: transform .15s, background .15s;
+}
+.cp-promo-cta:hover { background: #f0ab00; transform: translateY(-1px); }
+.cp-promo-nav { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 10px 10px; }
+.cp-promo-arrow {
+  width: 30px; height: 30px; border-radius: 50%; border: 0; display: grid; place-items: center; cursor: pointer;
+  background: rgba(255, 255, 255, 0.16); color: #fff; transition: background .15s;
+}
+.cp-promo-arrow:hover { background: rgba(255, 255, 255, 0.3); }
+.cp-promo-dots { display: flex; gap: 6px; }
+.cp-promo-dot { width: 7px; height: 7px; padding: 0; border: 0; border-radius: 999px; cursor: pointer; background: rgba(255, 255, 255, 0.4); transition: width .2s, background .2s; }
+.cp-promo-dot.is-active { width: 20px; background: var(--warn); }
+@media (prefers-reduced-motion: reduce) {
+  .cp-promo-track { transition: none; }
+  .cp-promo-glow, .cp-promo-tag { animation: none; }
+}

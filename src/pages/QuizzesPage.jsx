@@ -73,8 +73,20 @@ export default function QuizzesPage() {
 
         {loading && (
           <div className="cp-grid cp-grid-exams" aria-busy="true">
-            <div className="cp-card cp-skeleton" />
-            <div className="cp-card cp-skeleton" />
+            {[0, 1, 2, 3].map((i) => (
+              // Same shape as a loaded tile: image, title, two lines, meta, button.
+              <div key={i} className="cp-card cp-exam cp-exam-skeleton">
+                <div className="cp-exam-media cp-skeleton" />
+                <div className="cp-exam-body">
+                  <span className="cp-skeleton is-line" />
+                  <span className="cp-skeleton is-line is-title2" style={{ width: '55%' }} />
+                  <span className="cp-skeleton is-line is-thin" />
+                  <span className="cp-skeleton is-line is-thin" style={{ width: '80%' }} />
+                  <span className="cp-skeleton is-line is-thin" style={{ width: '45%' }} />
+                  <span className="cp-skeleton is-btn" />
+                </div>
+              </div>
+            ))}
           </div>
         )}
 
