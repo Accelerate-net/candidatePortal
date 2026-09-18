@@ -83,11 +83,10 @@ export async function getWeeklyExamSummary() {
   return unwrap(await api.get('/user/quiz/quiz-summary.php'));
 }
 
-// Some quizzes are locked with a numeric secret key: the first call answers
-// with `secretKeyRequired: true`, the second call repeats with `secret=`.
-export async function startWeeklyExam({ quiz, fingerprint, secret }) {
-  const query = `?termsAccepted=0${secret ? `&secret=${encodeURIComponent(secret)}` : ''}`;
-  return raw(await api.post(`/user/quiz/start-quiz.php${query}`, { quiz, fingerprint }));
+// Answers { url, metadata, secretKeyRequired }. When `secretKeyRequired` is
+// true the candidate's Exam Start Key is appended to `url` as `&secret=`.
+export async function startWeeklyExam({ quiz, fingerprint }) {
+  return raw(await api.post('/user/quiz/start-quiz.php?termsAccepted=0', { quiz, fingerprint }));
 }
 
 export async function startExam({ exam, series, fingerprint, continueExam = false }) {

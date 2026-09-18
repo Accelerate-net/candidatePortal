@@ -61,9 +61,12 @@
   background: radial-gradient(circle at 100% 0%, rgba(255, 183, 3, 0.45), transparent 42%), linear-gradient(135deg, var(--brand-deep), var(--teal));
   box-shadow: 0 14px 34px rgba(0, 74, 90, 0.28);
 }
+.cp-promo-title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 16px 18px 0; }
+.cp-promo-title-row h2 { font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--warn); }
+.cp-promo-title-row small { font-size: 11.5px; font-weight: 700; opacity: .7; }
 .cp-promo-viewport { overflow: hidden; }
 .cp-promo-track { display: flex; transition: transform .45s cubic-bezier(.22, 1, .36, 1); }
-.cp-promo-slide { position: relative; flex: 0 0 100%; min-width: 0; padding: 18px 18px 14px; display: flex; flex-direction: column; gap: 8px; }
+.cp-promo-slide { position: relative; flex: 0 0 100%; min-width: 0; padding: 12px 18px 14px; display: flex; flex-direction: column; gap: 8px; }
 .cp-promo-glow {
   position: absolute; top: -70px; right: -60px; width: 190px; height: 190px; border-radius: 50%;
   background: radial-gradient(circle, rgba(255, 255, 255, 0.28), transparent 65%); pointer-events: none;

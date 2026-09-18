@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Icon } from './Icons';
 
 /**
- * Asks for the numeric secret key of a locked quiz. `onSubmit(secret)` returns
- * a promise; a rejection or a resolved string is shown as the error and the
- * dialog stays open so the candidate can try again.
+ * Asks for the numeric key of a locked quiz. `onSubmit(secret)` returns a
+ * value or a promise; a rejection or a resolved string is shown as the error
+ * and the dialog stays open so the candidate can try again.
  */
 export default function SecretKeyDialog({ open, title = 'Enter the secret key', message, onSubmit, onCancel }) {
   const [secret, setSecret] = useState('');
@@ -57,7 +57,7 @@ export default function SecretKeyDialog({ open, title = 'Enter the secret key', 
         </div>
 
         <label className="cp-field">
-          <span>Secret key</span>
+          <span>Exam Start Key</span>
           <input
             ref={inputRef}
             className="cp-input"

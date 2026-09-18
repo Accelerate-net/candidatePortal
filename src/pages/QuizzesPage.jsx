@@ -29,38 +29,37 @@ export default function QuizzesPage() {
     });
   }, []);
 
-  const [lockedQuiz, setLockedQuiz] = useState(null); // quiz waiting for its secret key
+  const [lockedQuiz, setLockedQuiz] = useState(null); // { url } of a started quiz waiting for its Exam Start Key
 
-  // Start the exam. A locked quiz answers `secretKeyRequired` first; the
-  // candidate types the key in a popup and the call is repeated with it.
-  // Returns an error message to show, or null when the exam was opened.
-  async function startQuiz(quizId, secret) {
-    const response = await startWeeklyExam({ quiz: quizId, fingerprint: browserFingerprint(), secret });
-    if (response.status === 'success' && response.data?.url) {
-      const redirectUrl = `${response.data.url}&metadata=${encodeURIComponent(JSON.stringify(response.data.metadata))}`;
-      window.open(redirectUrl, '_blank');
-      return null;
-    }
-    if (response.secretKeyRequired || response.data?.secretKeyRequired) {
-      if (!secret) { setLockedQuiz(quizId); return null; }
-      return response.message || response.error || 'Incorrect secret key. Please try again.';
-    }
-    return response.message || response.error || 'Something went wrong';
+  // Where the exam runs: the API's url plus its metadata, and the Exam Start
+  // Key when the quiz asked for one. The exam page itself checks the key.
+  function openExam(data, secret) {
+    let url = `${data.url}&metadata=${encodeURIComponent(JSON.stringify(data.metadata))}`;
+    if (secret) url += `&secret=${encodeURIComponent(secret)}`;
+    window.open(url, '_blank');
   }
 
+  // Start the exam. On success the API answers with the exam url and
+  // `secretKeyRequired`: when true the candidate types the Exam Start Key in
+  // a popup and it is appended to that url.
   async function attemptWeeklyExam(quizId) {
     try {
-      const failure = await startQuiz(quizId);
-      if (failure) toast(failure);
+      const response = await startWeeklyExam({ quiz: quizId, fingerprint: browserFingerprint() });
+      if (response.status !== 'success' || !response.data?.url) {
+        toast(response.message || response.error || 'Something went wrong');
+        return;
+      }
+      if (response.data.secretKeyRequired) setLockedQuiz(response.data);
+      else openExam(response.data);
     } catch (err) {
       toast(err?.message || 'Something went wrong');
     }
   }
 
-  async function submitSecret(secret) {
-    const failure = await startQuiz(lockedQuiz, secret);
-    if (!failure) setLockedQuiz(null);
-    return failure;
+  function submitSecret(secret) {
+    openExam(lockedQuiz, secret);
+    setLockedQuiz(null);
+    return null;
   }
 
   const loading = exams === null || access === null;
@@ -68,7 +67,13 @@ export default function QuizzesPage() {
 
   return (
     <Layout title="Quizzes">
-      <SecretKeyDialog open={lockedQuiz !== null} onSubmit={submitSecret} onCancel={() => setLockedQuiz(null)} />
+      <SecretKeyDialog
+        open={lockedQuiz !== null}
+        title="Enter the Exam Start Key"
+        message="This exam needs a start key. Enter the number key shared with you to begin."
+        onSubmit={submitSecret}
+        onCancel={() => setLockedQuiz(null)}
+      />
       <div className="cp-page">
 
         {loading && (

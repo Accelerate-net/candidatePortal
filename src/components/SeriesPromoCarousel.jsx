@@ -75,6 +75,10 @@ export default function SeriesPromoCarousel({ exclude = [] }) {
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
+      <div className="cp-promo-title-row">
+        <h2>More Test Series</h2>
+        {count > 1 && <small>{index + 1} / {count}</small>}
+      </div>
       <div className="cp-promo-viewport">
         <div className="cp-promo-track" style={{ transform: `translateX(-${index * 100}%)` }}>
           {slides.map((s, i) => {

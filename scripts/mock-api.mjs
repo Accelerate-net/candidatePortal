@@ -149,15 +149,8 @@ const routes = {
       { section: 4, label: 'Physics', score: 16 },
     ],
   }),
-  // Quiz 8 is locked with the secret key 249295.
-  'POST /user/quiz/start-quiz.php': (body, url) => {
-    if (String(body.quiz) === '8') {
-      const secret = url.searchParams.get('secret');
-      if (!secret) return { status: 'error', secretKeyRequired: true, message: 'This quiz needs a secret key' };
-      if (secret !== '249295') return { status: 'error', secretKeyRequired: true, message: 'Incorrect secret key' };
-    }
-    return ok({ url: 'https://example.com/quiz?x=1', metadata: { demo: true } });
-  },
+  // Quiz 8 needs an Exam Start Key; the portal appends it to `url` as &secret=.
+  'POST /user/quiz/start-quiz.php': (body) => ok({ url: 'https://example.com/quiz?x=1', metadata: { demo: true }, secretKeyRequired: String(body.quiz) === '8' }),
   'POST /user/start-exam.php': (body) => (body.exam === 'M3' ? ok({ url: 'https://example.com/exam?attempt=1', metadata: { demo: true } }) : { status: 'error', message: 'Test already in progress' }),
   'GET /user/exam-report.php': () => ok({
     title: 'Mock Test 2', startedAt: '27 Aug 2026, 10:00 AM', customisedSummary: 'You scored above the batch average this time.',
