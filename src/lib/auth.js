@@ -25,4 +25,5 @@ export function setToken(token) {
 
 export function clearToken() {
   document.cookie = `${TOKEN_COOKIE}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+  try { window.sessionStorage.removeItem('cp_profile'); } catch { /* ignore */ } // see lib/profileCache.js
 }

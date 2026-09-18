@@ -189,10 +189,13 @@ export default function CoursePage() {
             ))}
           </ul>
           {chapter?.teacher && (
-            <button type="button" className="mentor" onClick={() => setTeacherOpen(true)} aria-haspopup="dialog">
-              <img src={chapter.teacher.photo} alt="" />
-              <strong>{chapter.teacher.name}</strong>
-            </button>
+            <div className="mentor-block">
+              <p className="mentor-heading">Instructor</p>
+              <button type="button" className="mentor" onClick={() => setTeacherOpen(true)} aria-haspopup="dialog">
+                <img src={chapter.teacher.photo} alt="" />
+                <strong>{chapter.teacher.name}</strong>
+              </button>
+            </div>
           )}
         </div>
 

@@ -27,6 +27,25 @@ export function defaultPhoto(gender) {
 // Empty, or the old neutral placeholder saved as the photo, both mean "no photo".
 const hasOwnPhoto = (src) => Boolean(src) && src !== DEFAULT_PHOTO;
 
+// Profile photos arrive as base64 data URLs. Each <img> given the raw data URL
+// decodes it again, so the data is turned into a blob once and every avatar on
+// every screen points at the same blob URL, which the browser keeps decoded.
+const blobUrls = new Map(); // data URL -> blob: URL
+function photoUrl(src) {
+  if (!src || !src.startsWith('data:')) return src;
+  let url = blobUrls.get(src);
+  if (!url) {
+    try {
+      const [head, data] = src.split(',', 2);
+      const type = head.slice(5).split(';')[0] || 'image/jpeg';
+      const bytes = head.includes(';base64') ? Uint8Array.from(atob(data), (c) => c.charCodeAt(0)) : new TextEncoder().encode(decodeURIComponent(data));
+      url = URL.createObjectURL(new Blob([bytes], { type }));
+    } catch { url = src; }
+    blobUrls.set(src, url);
+  }
+  return url;
+}
+
 /**
  * Profile picture with a shimmer placeholder. The shimmer shows while the
  * profile is still being fetched (`pending`) and until the image itself has
@@ -39,7 +58,7 @@ export function Avatar({ src, gender, size = 'sm', className = '', alt = '', pen
   const fallback = defaultPhoto(gender ?? profile?.gender);
   const [broken, setBroken] = useState(false);
   useEffect(() => { setBroken(false); }, [src]);
-  const url = hasOwnPhoto(src) && !broken ? src : fallback;
+  const url = hasOwnPhoto(src) && !broken ? photoUrl(src) : fallback;
   const [loaded, setLoaded] = useState(false);
   const imgRef = useRef(null);
 

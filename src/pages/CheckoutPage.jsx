@@ -133,7 +133,7 @@ export default function CheckoutPage() {
   // Profile photo for the "Logged in as" header (billing details carry no photo).
   useEffect(() => {
     if (step !== 'loggedIn') return;
-    getProfile().then((p) => { setGender(p?.gender || ''); setPhoto(p?.photo || ''); }).catch(() => setPhoto(''));
+    getProfileCached().then((p) => { setGender(p?.gender || ''); setPhoto(p?.photo || ''); }).catch(() => setPhoto(''));
   }, [step]);
 
   function logoutCurrentUser() {
