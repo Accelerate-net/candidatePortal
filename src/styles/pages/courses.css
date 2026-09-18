@@ -61,6 +61,10 @@
 }
 
 /* Catalog test series: small tiles in a sideways-scrolling row, or a grid in the "Explore all" popup */
+/* Intro above the catalog strip on an empty /test-series */
+.cp-series-intro { margin: 4px 4px 14px; }
+.cp-series-intro h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--brand-deep); margin: 0 0 4px; }
+.cp-series-intro p { margin: 0; color: var(--muted); font-size: 14px; }
 .cp-series-strip-head { display: flex; align-items: baseline; gap: 10px; margin: 2px 4px 10px; }
 .cp-series-strip-head h2 { font-size: 16px; font-weight: 800; letter-spacing: -0.01em; color: var(--brand-deep); }
 .cp-series-strip-head small { font-size: 12.5px; font-weight: 600; color: var(--muted); }

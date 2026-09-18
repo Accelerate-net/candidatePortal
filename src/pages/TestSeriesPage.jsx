@@ -238,13 +238,10 @@ export default function TestSeriesPage() {
             enroll in, as /courses does when there is no course to show. */}
         {noSeries && (
           <>
-            <Card>
-              <div className="cp-state">
-                <span className="cp-state-icon"><Icon.Graduation /></span>
-                <p>Enroll in test series to start practicing</p>
-                <a href="https://crisprlearning.com/courses/" target="new" className="cp-btn cp-btn-primary">Enroll Now</a>
-              </div>
-            </Card>
+            <div className="cp-series-intro">
+              <h1>No test series yet</h1>
+              <p>Pick one below to start practicing.</p>
+            </div>
             <CatalogSeries />
           </>
         )}

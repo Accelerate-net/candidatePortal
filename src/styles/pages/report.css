@@ -82,6 +82,8 @@
 .cp-pay-tile.is-dark strong { color: #fff; }
 .cp-pay-tile.is-lime { background: #e3f6d4; }
 .cp-pay-tile.is-sky { background: #dff1f8; }
+.cp-pay-tile.is-warn { background: var(--warn); }
+.cp-pay-tile.is-warn small, .cp-pay-tile.is-warn em, .cp-pay-tile.is-warn strong span { color: var(--warn-ink); }
 .cp-stats-sub { font-size: 14px; font-weight: 800; margin: 20px 0 12px; }
 .cp-stats-subjects { list-style: none; margin: 0 0 14px; padding: 0; display: flex; flex-direction: column; gap: 14px; }
 .cp-stats-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; font-size: 13.5px; margin-bottom: 6px; min-width: 0; }

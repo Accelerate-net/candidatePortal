@@ -10,6 +10,9 @@ const marks = (value) => {
   return Number.isInteger(n) ? String(n) : n.toFixed(1);
 };
 const num = (value) => (Number.isFinite(Number(value)) && value !== null && value !== '' ? Number(value) : null);
+// Class averages are whole marks, rounded up (the API stores them ceiled; older
+// responses may still carry decimals).
+const ceilNum = (value) => { const n = num(value); return n == null ? null : Math.ceil(n); };
 
 const pctOf = (value, max) => (max > 0 ? Math.max(2, Math.min(100, Math.round((value / max) * 100))) : 0);
 
@@ -51,7 +54,7 @@ export default function ExamStatsDialog({ report, onClose }) {
 
   const maxScore = num(stats?.maxScore) || 0;
   const topScore = num(stats?.topScore);
-  const classAverage = num(stats?.classAverage) ?? num(stats?.avgTotal);
+  const classAverage = ceilNum(stats?.classAverage) ?? ceilNum(stats?.avgTotal);
   const myRank = num(stats?.myRank);
   const classStrength = num(stats?.classStrength) ?? num(stats?.attemptedCount);
 
@@ -100,7 +103,7 @@ export default function ExamStatsDialog({ report, onClose }) {
                   <em>{myScoreNote}</em>
                 </div>
               )}
-              <div className="cp-pay-tile is-lime">
+              <div className="cp-pay-tile is-warn">
                 <small>Class average</small>
                 <strong>{marks(classAverage)}<span> / {marks(maxScore)}</span></strong>
                 <em>{classStrength != null ? `${classStrength} student${classStrength === 1 ? '' : 's'}` : (maxScore > 0 && classAverage != null ? `${Math.round((classAverage / maxScore) * 100)}% of the total` : 'total marks')}</em>
@@ -133,7 +136,7 @@ export default function ExamStatsDialog({ report, onClose }) {
                     const name = s.name || `Subject ${i + 1}`;
                     const max = num(s.maxScore) || 0;
                     const me = num(s.myScore);
-                    const avg = num(s.classAverage);
+                    const avg = ceilNum(s.classAverage);
                     const top = num(s.topScore);
                     return (
                       <li key={`${name}-${i}`}>
@@ -171,7 +174,7 @@ export default function ExamStatsDialog({ report, onClose }) {
                 <h3 className="cp-stats-sub">Section-wise class average</h3>
                 <ul className="cp-stats-subjects">
                   {sections.map((s, i) => {
-                    const score = Number(s.score);
+                    const score = Math.ceil(Number(s.score));
                     const label = s.label || `Section ${s.section ?? i + 1}`;
                     return (
                       <li key={`${s.section ?? label}-${i}`}>
