@@ -12,6 +12,8 @@
   .courseContentContainer { grid-template-columns: 1fr 1fr; }
   .cp-grid-2 { grid-template-columns: 1fr 1fr; }
   .cp-att-kpis { grid-template-columns: repeat(2, 1fr); }
+  .cp-grid-attendance { grid-template-columns: 1fr 1fr; align-items: start; }
+  .cp-grid-attendance > :nth-child(3) { grid-column: 1 / -1; }
   .cp-grid-exams { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
   .cp-kpi-grid { grid-template-columns: repeat(4, 1fr); }
   .cp-report-kpis { grid-template-columns: repeat(2, 1fr); }
@@ -39,8 +41,9 @@
   .cp-grid-series { grid-template-columns: 2fr 1fr; align-items: start; }
   .courseContentContainer { grid-template-columns: 1fr 1fr; }
 
-  .cp-att-kpis { grid-template-columns: repeat(4, 1fr); }
-  .cp-grid-attendance { grid-template-columns: 1.3fr 1fr; align-items: start; }
+  .cp-grid-attendance { grid-template-columns: repeat(3, 1fr); align-items: start; }
+  .cp-grid-attendance > :nth-child(3) { grid-column: auto; }
+  .cp-grid-attendance .cp-att-kpis { grid-template-columns: repeat(2, 1fr); gap: 10px; }
 
   /* Profile */
   .cp-grid-profile { grid-template-columns: 300px 1fr; align-items: start; }
@@ -56,6 +59,7 @@
 }
 
 @media (min-width: 1280px) {
+  .cp-grid-attendance .cp-att-kpis { grid-template-columns: repeat(2, 1fr); }
   .cp-kpi-grid { grid-template-columns: repeat(4, 1fr); }
   .cp-grid-dash-top { grid-template-columns: 1fr 2.2fr; }
   .courseContentContainer { grid-template-columns: repeat(3, 1fr); }
