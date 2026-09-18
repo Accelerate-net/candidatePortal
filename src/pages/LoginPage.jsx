@@ -246,7 +246,6 @@ export default function LoginPage() {
     <div className="cp-login">
       <header className="cp-login-brand">
         <img src="/logo/crispr-logo.svg" alt="Crispr Learning" />
-        <small>Candidate Portal</small>
       </header>
 
       <div className="cp-login-split">
