@@ -2,14 +2,29 @@ import React, { useEffect, useState } from 'react';
 import { Icon } from './Icons';
 import { getExamStats } from '../lib/candidateApi';
 
-// Marks can carry one decimal (72.5); keep differences free of float noise.
-const diff = (a, b) => Math.round(Math.abs(a - b) * 10) / 10;
+// Marks can carry decimals (100.69); show one decimal at most, whole numbers as they are.
+const marks = (value) => {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return '–';
+  return Number.isInteger(n) ? String(n) : n.toFixed(1);
+};
+const diff = (a, b) => marks(Math.abs(a - b));
 
-const pctOf = (value, max) => (max ? Math.max(2, Math.min(100, Math.round((value / max) * 100))) : 0);
+const pctOf = (value, max) => (max > 0 ? Math.max(2, Math.min(100, Math.round((value / max) * 100))) : 0);
+
+// quiz-summary.php rows carry the candidate's score as "92 / 120" (or a number).
+function myScoreOf(report) {
+  const raw = report?.score;
+  if (typeof raw === 'number') return { score: raw, max: null };
+  const nums = String(raw ?? '').match(/-?\d+(?:\.\d+)?/g) || [];
+  if (!nums.length) return null;
+  return { score: Number(nums[0]), max: nums.length > 1 ? Number(nums[1]) : null };
+}
 
 /**
- * Class statistics for one quiz attempt (user/quiz/quiz-stats.php): top score,
- * my rank, class average, and my score against the class average per subject.
+ * Class statistics for one quiz (user/quiz/quiz-stats.php):
+ * { topScore, maxScore, avgTotal, attemptedCount, avgSectionWise: [{ section, label, score }] }
+ * "My score" comes from the summary row the popup was opened from.
  */
 export default function ExamStatsDialog({ report, onClose }) {
   const [stats, setStats] = useState(null);
@@ -20,7 +35,7 @@ export default function ExamStatsDialog({ report, onClose }) {
     let alive = true;
     setStats(null); setError('');
     getExamStats(report)
-      .then((data) => { if (alive) setStats(data); })
+      .then((data) => { if (alive) setStats(data && typeof data === 'object' ? data : {}); })
       .catch((e) => { if (alive) setError(e?.message || 'Could not load the class statistics.'); });
     function onKey(e) { if (e.key === 'Escape') onClose?.(); }
     document.addEventListener('keydown', onKey);
@@ -30,6 +45,24 @@ export default function ExamStatsDialog({ report, onClose }) {
   }, [report, onClose]);
 
   if (!report) return null;
+
+  const maxScore = Number(stats?.maxScore) || 0;
+  const topScore = Number(stats?.topScore);
+  const avgTotal = Number(stats?.avgTotal);
+  const attempted = Number(stats?.attemptedCount);
+  const mine = myScoreOf(report);
+  const myScore = mine?.score ?? null;
+  const myMax = mine?.max || maxScore;
+  const sections = Array.isArray(stats?.avgSectionWise)
+    ? stats.avgSectionWise.filter((s) => s && Number.isFinite(Number(s.score)))
+    : [];
+  const sectionMax = sections.reduce((m, s) => Math.max(m, Number(s.score)), 0);
+
+  let myScoreNote = '';
+  if (myScore != null && Number.isFinite(avgTotal)) {
+    if (myScore === avgTotal) myScoreNote = 'same as the class average';
+    else myScoreNote = `${diff(myScore, avgTotal)} ${myScore > avgTotal ? 'above' : 'below'} the class average`;
+  }
 
   return (
     <div className="cp-modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose?.(); }}>
@@ -48,56 +81,57 @@ export default function ExamStatsDialog({ report, onClose }) {
         {stats && (
           <>
             <div className="cp-stats-tiles">
-              <div className="cp-pay-tile is-dark">
-                <small>My rank</small>
-                <strong>{stats.myRank}<span> / {stats.classStrength}</span></strong>
-                <em>in this exam</em>
-              </div>
               <div className="cp-pay-tile is-lime">
                 <small>Top score</small>
-                <strong>{stats.topScore}<span> / {stats.maxScore}</span></strong>
+                <strong>{marks(topScore)}<span> / {marks(maxScore)}</span></strong>
                 <em>highest in class</em>
               </div>
-              <div className="cp-pay-tile">
-                <small>My score</small>
-                <strong>{stats.myScore}<span> / {stats.maxScore}</span></strong>
-                <em>{stats.myScore === stats.classAverage ? 'same as the average' : `${diff(stats.myScore, stats.classAverage)} ${stats.myScore > stats.classAverage ? 'above' : 'below'} average`}</em>
-              </div>
               <div className="cp-pay-tile is-sky">
-                <small>Class avg. total</small>
-                <strong>{stats.classAverage}<span> / {stats.maxScore}</span></strong>
-                <em>{stats.classStrength} student{stats.classStrength === 1 ? '' : 's'}</em>
+                <small>Class average</small>
+                <strong>{marks(avgTotal)}<span> / {marks(maxScore)}</span></strong>
+                <em>{maxScore > 0 && Number.isFinite(avgTotal) ? `${Math.round((avgTotal / maxScore) * 100)}% of the total` : 'total marks'}</em>
+              </div>
+              {myScore != null && (
+                <div className="cp-pay-tile">
+                  <small>My score</small>
+                  <strong>{marks(myScore)}<span> / {marks(myMax)}</span></strong>
+                  <em>{myScoreNote || 'in this exam'}</em>
+                </div>
+              )}
+              <div className="cp-pay-tile is-dark">
+                <small>Attempted</small>
+                <strong>{Number.isFinite(attempted) ? attempted : '–'}</strong>
+                <em>student{attempted === 1 ? '' : 's'} took this exam</em>
               </div>
             </div>
 
-            {stats.subjects?.length > 0 && (
-            <>
-            <h3 className="cp-stats-sub">Subject-wise: you vs class average</h3>
-            <ul className="cp-stats-subjects">
-              {stats.subjects.map((s, i) => (
-                <li key={`${s.name}-${i}`}>
-                  <div className="cp-stats-row">
-                    <strong>{s.name}</strong>
-                    <small>out of {s.maxScore}</small>
-                  </div>
-                  <div className="cp-duo-bar">
-                    <div className="cp-duo-line" aria-label={`You: ${s.myScore} out of ${s.maxScore}`}>
-                      <div className="cp-duo-track"><div className="cp-duo-fill is-me" style={{ width: `${pctOf(s.myScore, s.maxScore)}%` }} /></div>
-                      <b>{s.myScore}</b>
-                    </div>
-                    <div className="cp-duo-line" aria-label={`Class average: ${s.classAverage} out of ${s.maxScore}`}>
-                      <div className="cp-duo-track"><div className="cp-duo-fill is-class" style={{ width: `${pctOf(s.classAverage, s.maxScore)}%` }} /></div>
-                      <b>{s.classAverage}</b>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <div className="cp-legend">
-              <span><i className="is-me" />You</span>
-              <span><i className="is-class" />Class average</span>
-            </div>
-            </>
+            {sections.length > 0 && (
+              <>
+                <h3 className="cp-stats-sub">Section-wise class average</h3>
+                <ul className="cp-stats-subjects">
+                  {sections.map((s, i) => {
+                    const score = Number(s.score);
+                    const label = s.label || `Section ${s.section ?? i + 1}`;
+                    return (
+                      <li key={`${s.section ?? label}-${i}`}>
+                        <div className="cp-stats-row">
+                          <strong>{label}</strong>
+                          <small>avg. marks</small>
+                        </div>
+                        <div className="cp-duo-bar">
+                          <div className="cp-duo-line" aria-label={`${label}: class average ${marks(score)} marks`}>
+                            <div className="cp-duo-track"><div className="cp-duo-fill is-class" style={{ width: `${pctOf(score, sectionMax)}%` }} /></div>
+                            <b>{marks(score)}</b>
+                          </div>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <div className="cp-legend">
+                  <span><i className="is-class" />Class average per section</span>
+                </div>
+              </>
             )}
           </>
         )}
