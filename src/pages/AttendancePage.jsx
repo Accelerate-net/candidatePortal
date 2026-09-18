@@ -38,13 +38,11 @@ function AttendanceGrid({ month }) {
       <div className="cp-att-grid">
         {cells.map((c, i) => {
           if (!c) return <span key={`pad-${i}`} className="cp-att-cell is-empty" />;
-          const icon = c.status === 'present' ? <Icon.Check width={16} height={16} />
-            : c.status === 'absent' ? <Icon.X width={16} height={16} />
-              : null;
+          // Present/absent are shown as a green/red ring around the date (see attendance.css).
           const title = `${formatDay(c.date)} · ${c.status}`;
           return (
             <span key={c.date} className={`cp-att-cell is-${c.status}`} title={title} aria-label={title}>
-              {icon || <small>{c.day}</small>}
+              <small>{c.day}</small>
             </span>
           );
         })}
@@ -119,7 +117,53 @@ export default function AttendancePage() {
 
         {data && tracked && (
           <>
-            {/* Last 3 months · calendar · summary tiles, 1:1:1 on desktop */}
+            {/* SUMMARY TILES: four in a row on desktop */}
+            <div className="cp-kpi-grid cp-att-kpis">
+              <Card>
+                <div className="cp-kpi-head">
+                  <h2>Last 30 days</h2>
+                  <span className="cp-kpi-icon"><Icon.Calendar width={16} height={16} /></span>
+                </div>
+                <div className="cp-kpi-value">
+                  <strong>{data.percent}%</strong>
+                  <Pill tone={tone(data.percent)}>{label(data.percent)}</Pill>
+                </div>
+                <p className="cp-kpi-sub">
+                  {delta !== 0 && (
+                    <span className={`cp-trend ${delta > 0 ? 'is-up' : 'is-down'}`}>
+                      {delta > 0 ? <Icon.ArrowUp width={13} height={13} /> : <Icon.ArrowDown width={13} height={13} />}{Math.abs(delta)}%
+                    </span>
+                  )}
+                  {delta !== 0 ? ' vs the previous 30 days' : 'same as the previous 30 days'}
+                </p>
+              </Card>
+              <Card>
+                <div className="cp-kpi-head">
+                  <h2>This month</h2>
+                  <span className="cp-kpi-icon"><Icon.Check width={16} height={16} /></span>
+                </div>
+                <div className="cp-kpi-value"><strong>{months[0]?.present ?? 0} <small>/ {months[0]?.total ?? 0}</small></strong></div>
+                <p className="cp-kpi-sub">classes attended in {months[0]?.label}</p>
+              </Card>
+              <Card>
+                <div className="cp-kpi-head">
+                  <h2>Since June</h2>
+                  <span className="cp-kpi-icon"><Icon.BarChart width={16} height={16} /></span>
+                </div>
+                <div className="cp-kpi-value"><strong>{overall.percent}%</strong></div>
+                <p className="cp-kpi-sub"><b>{overall.present}</b> present · <b>{overall.absent}</b> absent of {overall.counted} class days</p>
+              </Card>
+              <Card>
+                <div className="cp-kpi-head">
+                  <h2>Current streak</h2>
+                  <span className="cp-kpi-icon"><Icon.Flash width={16} height={16} /></span>
+                </div>
+                <div className="cp-kpi-value"><strong>{streak} <small>day{streak === 1 ? '' : 's'}</small></strong></div>
+                <p className="cp-kpi-sub">consecutive classes attended</p>
+              </Card>
+            </div>
+
+            {/* Last 3 months · calendar, 1:1 on desktop */}
             <div className="cp-grid cp-grid-attendance">
               {/* LAST 3 MONTHS (months[] is newest first) */}
               <Card>
@@ -171,51 +215,6 @@ export default function AttendancePage() {
                 </div>
               </Card>
 
-              {/* SUMMARY TILES (2x2 in the third column) */}
-              <div className="cp-kpi-grid cp-att-kpis">
-                <Card>
-                  <div className="cp-kpi-head">
-                    <h2>Last 30 days</h2>
-                    <span className="cp-kpi-icon"><Icon.Calendar width={16} height={16} /></span>
-                  </div>
-                  <div className="cp-kpi-value">
-                    <strong>{data.percent}%</strong>
-                    <Pill tone={tone(data.percent)}>{label(data.percent)}</Pill>
-                  </div>
-                  <p className="cp-kpi-sub">
-                    {delta !== 0 && (
-                      <span className={`cp-trend ${delta > 0 ? 'is-up' : 'is-down'}`}>
-                        {delta > 0 ? <Icon.ArrowUp width={13} height={13} /> : <Icon.ArrowDown width={13} height={13} />}{Math.abs(delta)}%
-                      </span>
-                    )}
-                    {delta !== 0 ? ' vs the previous 30 days' : 'same as the previous 30 days'}
-                  </p>
-                </Card>
-                <Card>
-                  <div className="cp-kpi-head">
-                    <h2>This month</h2>
-                    <span className="cp-kpi-icon"><Icon.Check width={16} height={16} /></span>
-                  </div>
-                  <div className="cp-kpi-value"><strong>{months[0]?.present ?? 0} <small>/ {months[0]?.total ?? 0}</small></strong></div>
-                  <p className="cp-kpi-sub">classes attended in {months[0]?.label}</p>
-                </Card>
-                <Card>
-                  <div className="cp-kpi-head">
-                    <h2>Since June</h2>
-                    <span className="cp-kpi-icon"><Icon.BarChart width={16} height={16} /></span>
-                  </div>
-                  <div className="cp-kpi-value"><strong>{overall.percent}%</strong></div>
-                  <p className="cp-kpi-sub"><b>{overall.present}</b> present · <b>{overall.absent}</b> absent of {overall.counted} class days</p>
-                </Card>
-                <Card>
-                  <div className="cp-kpi-head">
-                    <h2>Current streak</h2>
-                    <span className="cp-kpi-icon"><Icon.Flash width={16} height={16} /></span>
-                  </div>
-                  <div className="cp-kpi-value"><strong>{streak} <small>day{streak === 1 ? '' : 's'}</small></strong></div>
-                  <p className="cp-kpi-sub">consecutive classes attended</p>
-                </Card>
-              </div>
             </div>
           </>
         )}
