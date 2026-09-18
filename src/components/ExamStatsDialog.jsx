@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Icon } from './Icons';
 import { getExamStats } from '../lib/candidateApi';
+import { examDate } from '../lib/format';
 
 // Marks can carry decimals (94.8); show one decimal at most, whole numbers as they are.
 const marks = (value) => {
@@ -8,7 +9,6 @@ const marks = (value) => {
   if (!Number.isFinite(n)) return '–';
   return Number.isInteger(n) ? String(n) : n.toFixed(1);
 };
-const diff = (a, b) => marks(Math.abs(a - b));
 const num = (value) => (Number.isFinite(Number(value)) && value !== null && value !== '' ? Number(value) : null);
 
 const pctOf = (value, max) => (max > 0 ? Math.max(2, Math.min(100, Math.round((value / max) * 100))) : 0);
@@ -70,9 +70,10 @@ export default function ExamStatsDialog({ report, onClose }) {
 
   let myScoreNote = 'in this exam';
   if (myScore != null && classAverage != null) {
-    myScoreNote = myScore === classAverage
-      ? 'same as the class average'
-      : `${diff(myScore, classAverage)} ${myScore > classAverage ? 'above' : 'below'} the class average`;
+    const gap = Math.round(Math.abs(myScore - classAverage));
+    myScoreNote = gap === 0
+      ? 'same as class avg'
+      : `${gap} ${myScore > classAverage ? 'above' : 'below'} class avg`;
   }
 
   return (
@@ -80,8 +81,8 @@ export default function ExamStatsDialog({ report, onClose }) {
       <div className="cp-modal cp-stats-modal" role="dialog" aria-modal="true" aria-labelledby="cp-stats-title">
         <div className="cp-stats-head">
           <div>
-            <h2 id="cp-stats-title">Class stats</h2>
-            <p>{report.title}{report.dateOfExam ? ` · ${report.dateOfExam}` : ''}</p>
+            <h2 id="cp-stats-title">Exam Stats</h2>
+            <p>{report.title}{report.dateOfExam ? ` · ${examDate(report.dateOfExam)}` : ''}</p>
           </div>
           <button type="button" className="cp-icon-btn" onClick={onClose} aria-label="Close"><Icon.X width={18} height={18} /></button>
         </div>
@@ -92,35 +93,35 @@ export default function ExamStatsDialog({ report, onClose }) {
         {stats && (
           <>
             <div className="cp-stats-tiles">
-              {myRank != null ? (
-                <div className="cp-pay-tile is-dark">
-                  <small>My rank</small>
-                  <strong>{myRank}{classStrength != null && <span> / {classStrength}</span>}</strong>
-                  <em>in this exam</em>
-                </div>
-              ) : (
-                <div className="cp-pay-tile is-dark">
-                  <small>Attempted</small>
-                  <strong>{classStrength ?? '–'}</strong>
-                  <em>student{classStrength === 1 ? '' : 's'} took this exam</em>
-                </div>
-              )}
-              <div className="cp-pay-tile is-lime">
-                <small>Top score</small>
-                <strong>{marks(topScore)}<span> / {marks(maxScore)}</span></strong>
-                <em>highest in class</em>
-              </div>
               {myScore != null && (
-                <div className="cp-pay-tile">
+                <div className="cp-pay-tile is-dark">
                   <small>My score</small>
                   <strong>{marks(myScore)}<span> / {marks(myMax)}</span></strong>
                   <em>{myScoreNote}</em>
                 </div>
               )}
-              <div className="cp-pay-tile is-sky">
+              <div className="cp-pay-tile is-lime">
                 <small>Class average</small>
                 <strong>{marks(classAverage)}<span> / {marks(maxScore)}</span></strong>
                 <em>{classStrength != null ? `${classStrength} student${classStrength === 1 ? '' : 's'}` : (maxScore > 0 && classAverage != null ? `${Math.round((classAverage / maxScore) * 100)}% of the total` : 'total marks')}</em>
+              </div>
+              {myRank != null ? (
+                <div className="cp-pay-tile">
+                  <small>My rank</small>
+                  <strong>{myRank}{classStrength != null && <span> / {classStrength}</span>}</strong>
+                  <em>in this exam</em>
+                </div>
+              ) : (
+                <div className="cp-pay-tile">
+                  <small>Attempted</small>
+                  <strong>{classStrength ?? '–'}</strong>
+                  <em>student{classStrength === 1 ? '' : 's'} took this exam</em>
+                </div>
+              )}
+              <div className="cp-pay-tile is-sky">
+                <small>Topper's score</small>
+                <strong>{marks(topScore)}<span> / {marks(maxScore)}</span></strong>
+                <em>highest in class</em>
               </div>
             </div>
 
