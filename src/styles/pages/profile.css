@@ -31,6 +31,16 @@
 .cp-profile-nav .list-group-item.active .badge { background: rgba(255, 255, 255, 0.2); color: #fff; }
 .cp-about-text { font-size: 14.5px; color: var(--ink-2); line-height: 1.65; }
 .cp-about-text:empty::before { content: 'Tell us a few words about yourself from the Edit Details tab.'; color: var(--muted); }
+/* The candidate's own words, set as a pull quote */
+.cp-about-quote {
+  position: relative; margin: 4px 0 0; padding: 18px 20px 18px 54px;
+  background: var(--brand-soft); border-left: 4px solid var(--brand); border-radius: 0 18px 18px 0;
+}
+.cp-about-quote::before {
+  content: '\201C'; position: absolute; left: 16px; top: 4px;
+  font-family: Georgia, 'Times New Roman', serif; font-size: 58px; line-height: 1; font-weight: 700; color: var(--brand); opacity: .55;
+}
+.cp-about-quote p { margin: 0; font-size: 15.5px; font-style: italic; line-height: 1.7; color: var(--brand-deep); white-space: pre-line; }
 .cp-about-section { margin-top: 18px; }
 .cp-about-section h4 { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 10px; }
 .cp-about-section h4 svg { color: var(--brand); }

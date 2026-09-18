@@ -257,6 +257,12 @@ export default function TestSeriesPage() {
                     <p className="multiline-ellipsis">{course.brief}</p>
                     {!course.locked ? (
                       <span>
+                        {/* Attempted: a compact score-card button, then "Attempt Again" filling the rest. */}
+                        {course.previousAttemptId && (
+                          <a role="button" tabIndex={0} className="viewReport" title="Score card" onClick={() => navigate(`/report?attemptId=${course.previousAttemptId}`)}>
+                            <Icon.FileText width={15} height={15} /> Score
+                          </a>
+                        )}
                         {course.availableForAttempt && (
                           <a
                             role="button"
@@ -266,9 +272,6 @@ export default function TestSeriesPage() {
                           >
                             {course.previousAttemptId ? 'Attempt Again' : 'Attempt Now'}
                           </a>
-                        )}
-                        {course.previousAttemptId && (
-                          <a role="button" tabIndex={0} className="viewReport" onClick={() => navigate(`/report?attemptId=${course.previousAttemptId}`)}>Score Card</a>
                         )}
                       </span>
                     ) : (

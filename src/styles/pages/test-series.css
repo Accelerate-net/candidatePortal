@@ -11,14 +11,14 @@
 .courseContentTileContent { position: relative; padding: 16px 18px 18px; display: flex; flex-direction: column; flex: 1; gap: 8px; }
 .courseContentTileContent h5 { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.3; padding-right: 28px; }
 .courseContentTileContent p { font-size: 13px; color: var(--muted); line-height: 1.55; }
-.courseContentTileContent > span { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 8px; }
+.courseContentTileContent > span { display: flex; align-items: stretch; gap: 8px; margin-top: auto; padding-top: 8px; }
 .courseContentTileContent > span a {
-  display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 1; min-width: 120px;
-  padding: 10px 14px; border-radius: 999px; font-weight: 700; font-size: 13.5px; text-decoration: none; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 1; min-width: 0;
+  padding: 10px 8px; border-radius: 999px; font-weight: 700; font-size: 13.5px; text-decoration: none; cursor: pointer; white-space: nowrap;
   background: var(--brand); color: #fff; transition: background .15s;
 }
 .courseContentTileContent > span a:hover { background: var(--brand-deep); }
-.courseContentTileContent > span a.viewReport { background: var(--brand-soft); color: var(--brand); }
+.courseContentTileContent > span a.viewReport { flex: 0 0 auto; padding: 10px 11px; background: var(--brand-soft); color: var(--brand); white-space: nowrap; }
 .courseContentTileContent > span a.viewReport:hover { background: #c9e4e8; }
 .courseContentTileContent > span a.courseContentPurchase { background: var(--warn); color: var(--warn-ink); }
 .courseContentTileContent > span a.courseContentPurchase:hover { background: #f0ab00; }
