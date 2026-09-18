@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Icon } from './Icons';
 import { playerUrl } from '../lib/watchHistory';
 
@@ -30,6 +30,31 @@ function ago(timestamp) {
  * carries one, else a generated cover.
  * items: [{ course, module, chapter, part, title, chapterTitle, moduleName, duration, progress, thumbnail, lastWatch, lastWatchLabel }]
  */
+// One card. The Bunny poster is swapped for the generated cover when it fails
+// to load (expired token, CDN 403), instead of leaving an empty frame.
+function WatchCard({ it, moduleName }) {
+  const [broken, setBroken] = useState(false);
+  const duration = Number(it.duration) || 0;
+  const watched = duration ? Math.min(100, Math.round(((Number(it.progress) || 0) / duration) * 100)) : 0;
+  const when = it.lastWatchLabel || ago(it.lastWatch);
+  const poster = Boolean(it.thumbnail) && !broken;
+  return (
+    <a className="cp-watch-card" href={it.href || playerUrl(it)} target="_blank" rel="noopener noreferrer">
+      <span className={`cp-watch-thumb ${poster ? '' : POSTERS[(Number(it.module) || 0) % POSTERS.length]}`}>
+        {poster
+          ? <img src={it.thumbnail} alt="" loading="lazy" onError={() => setBroken(true)} />
+          : <span className="cp-watch-poster" aria-hidden="true">{moduleName || 'Crispr'}</span>}
+        <span className="cp-watch-play"><Icon.Play width={20} height={20} /></span>
+        {watched >= 95 && <span className="cp-watch-done">Watched</span>}
+        {duration > 0 && <span className="cp-watch-duration">{clock(duration)}</span>}
+        {watched > 0 && <span className="cp-watch-progress"><i style={{ width: `${watched}%` }} /></span>}
+      </span>
+      <strong className="cp-watch-name">{it.title || it.chapterTitle || 'Video'}</strong>
+      <small className="cp-watch-meta">{[when, it.title && it.chapterTitle, poster && moduleName].filter(Boolean).join(' · ')}</small>
+    </a>
+  );
+}
+
 export default function WatchHistory({ items, moduleNames = {} }) {
   if (!items || items.length === 0) return null;
   return (
@@ -38,27 +63,9 @@ export default function WatchHistory({ items, moduleNames = {} }) {
         <Icon.PlayCircle width={16} height={16} /> Recently watched
       </h3>
       <div className="cp-watch-row">
-        {items.map((it) => {
-          const duration = Number(it.duration) || 0;
-          const watched = duration ? Math.min(100, Math.round(((Number(it.progress) || 0) / duration) * 100)) : 0;
-          const moduleName = it.moduleName || moduleNames[it.module] || '';
-          const when = it.lastWatchLabel || ago(it.lastWatch);
-          return (
-            <a key={`${it.course}-${it.module}-${it.chapter}-${it.part}`} className="cp-watch-card" href={it.href || playerUrl(it)} target="_blank" rel="noopener noreferrer">
-              <span className={`cp-watch-thumb ${it.thumbnail ? '' : POSTERS[(Number(it.module) || 0) % POSTERS.length]}`}>
-                {it.thumbnail
-                  ? <img src={it.thumbnail} alt="" loading="lazy" />
-                  : <span className="cp-watch-poster" aria-hidden="true">{moduleName || 'Crispr'}</span>}
-                <span className="cp-watch-play"><Icon.Play width={20} height={20} /></span>
-                {watched >= 95 && <span className="cp-watch-done">Watched</span>}
-                {duration > 0 && <span className="cp-watch-duration">{clock(duration)}</span>}
-                {watched > 0 && <span className="cp-watch-progress"><i style={{ width: `${watched}%` }} /></span>}
-              </span>
-              <strong className="cp-watch-name">{it.title || it.chapterTitle || 'Video'}</strong>
-              <small className="cp-watch-meta">{[when, it.title && it.chapterTitle, it.thumbnail && moduleName].filter(Boolean).join(' · ')}</small>
-            </a>
-          );
-        })}
+        {items.map((it) => (
+          <WatchCard key={`${it.course}-${it.module}-${it.chapter}-${it.part}`} it={it} moduleName={it.moduleName || moduleNames[it.module] || ''} />
+        ))}
       </div>
     </section>
   );
