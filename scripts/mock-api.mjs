@@ -140,13 +140,14 @@ const routes = {
     { attemptId: 11, quizId: 1, title: 'Weekly Test 12 · Organic Chemistry', dateOfExam: '12 Sep 2026', score: '84 / 120', accuracy: 78 },
     { attemptId: 10, quizId: 3, title: 'Weekly Test 11 · Thermodynamics', dateOfExam: '05 Sep 2026', score: '66 / 120', accuracy: 61 },
   ]),
-  'GET /user/quiz/quiz-stats.php': () => ok({
-    topScore: 112, maxScore: 120, avgTotal: 100.69, attemptedCount: 64,
-    avgSectionWise: [
-      { section: 1, label: 'Biology', score: 28 },
-      { section: 2, label: 'Chemistry', score: 28 },
-      { section: 3, label: 'Mathematics', score: 31 },
-      { section: 4, label: 'Physics', score: 16 },
+  'GET /user/quiz/quiz-stats.php': (_b, url) => ok({
+    quizId: Number(url.searchParams.get('quizId')), attemptId: Number(url.searchParams.get('attemptId')) || 13, title: 'Weekly Test 7',
+    maxScore: 240, myScore: 104, myRank: 29, classStrength: 70, topScore: 191, classAverage: 94.8,
+    subjects: [
+      { name: 'Biology', myScore: 27, classAverage: 27.7, topScore: 55, maxScore: 60 },
+      { name: 'Chemistry', myScore: 19, classAverage: 25, topScore: 51, maxScore: 60 },
+      { name: 'Mathematics', myScore: 22, classAverage: 17.5, topScore: 44, maxScore: 60 },
+      { name: 'Physics', myScore: 36, classAverage: 24.5, topScore: 47, maxScore: 60 },
     ],
   }),
   // Quiz 8 needs an Exam Start Key; the portal appends it to `url` as &secret=.

@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Icon } from './Icons';
 import { getExamStats } from '../lib/candidateApi';
 
-// Marks can carry decimals (100.69); show one decimal at most, whole numbers as they are.
+// Marks can carry decimals (94.8); show one decimal at most, whole numbers as they are.
 const marks = (value) => {
   const n = Number(value);
   if (!Number.isFinite(n)) return '–';
   return Number.isInteger(n) ? String(n) : n.toFixed(1);
 };
 const diff = (a, b) => marks(Math.abs(a - b));
+const num = (value) => (Number.isFinite(Number(value)) && value !== null && value !== '' ? Number(value) : null);
 
 const pctOf = (value, max) => (max > 0 ? Math.max(2, Math.min(100, Math.round((value / max) * 100))) : 0);
 
@@ -23,8 +24,10 @@ function myScoreOf(report) {
 
 /**
  * Class statistics for one quiz (user/quiz/quiz-stats.php):
- * { topScore, maxScore, avgTotal, attemptedCount, avgSectionWise: [{ section, label, score }] }
- * "My score" comes from the summary row the popup was opened from.
+ * { maxScore, myScore, myRank, classStrength, topScore, classAverage,
+ *   subjects: [{ name, myScore, classAverage, topScore, maxScore }] }
+ * Older responses send { avgTotal, attemptedCount, avgSectionWise: [{ section, label, score }] }
+ * instead; both are rendered. Without `myScore` the summary row's score stands in.
  */
 export default function ExamStatsDialog({ report, onClose }) {
   const [stats, setStats] = useState(null);
@@ -46,22 +49,30 @@ export default function ExamStatsDialog({ report, onClose }) {
 
   if (!report) return null;
 
-  const maxScore = Number(stats?.maxScore) || 0;
-  const topScore = Number(stats?.topScore);
-  const avgTotal = Number(stats?.avgTotal);
-  const attempted = Number(stats?.attemptedCount);
+  const maxScore = num(stats?.maxScore) || 0;
+  const topScore = num(stats?.topScore);
+  const classAverage = num(stats?.classAverage) ?? num(stats?.avgTotal);
+  const myRank = num(stats?.myRank);
+  const classStrength = num(stats?.classStrength) ?? num(stats?.attemptedCount);
+
   const mine = myScoreOf(report);
-  const myScore = mine?.score ?? null;
-  const myMax = mine?.max || maxScore;
-  const sections = Array.isArray(stats?.avgSectionWise)
-    ? stats.avgSectionWise.filter((s) => s && Number.isFinite(Number(s.score)))
+  const myScore = num(stats?.myScore) ?? mine?.score ?? null;
+  const myMax = num(stats?.myScore) != null ? maxScore : (mine?.max || maxScore);
+
+  // Per-subject "you vs class" bars; older responses only carry class averages per section.
+  const subjects = Array.isArray(stats?.subjects)
+    ? stats.subjects.filter((s) => s && (num(s.myScore) != null || num(s.classAverage) != null))
+    : [];
+  const sections = !subjects.length && Array.isArray(stats?.avgSectionWise)
+    ? stats.avgSectionWise.filter((s) => s && num(s.score) != null)
     : [];
   const sectionMax = sections.reduce((m, s) => Math.max(m, Number(s.score)), 0);
 
-  let myScoreNote = '';
-  if (myScore != null && Number.isFinite(avgTotal)) {
-    if (myScore === avgTotal) myScoreNote = 'same as the class average';
-    else myScoreNote = `${diff(myScore, avgTotal)} ${myScore > avgTotal ? 'above' : 'below'} the class average`;
+  let myScoreNote = 'in this exam';
+  if (myScore != null && classAverage != null) {
+    myScoreNote = myScore === classAverage
+      ? 'same as the class average'
+      : `${diff(myScore, classAverage)} ${myScore > classAverage ? 'above' : 'below'} the class average`;
   }
 
   return (
@@ -81,29 +92,78 @@ export default function ExamStatsDialog({ report, onClose }) {
         {stats && (
           <>
             <div className="cp-stats-tiles">
+              {myRank != null ? (
+                <div className="cp-pay-tile is-dark">
+                  <small>My rank</small>
+                  <strong>{myRank}{classStrength != null && <span> / {classStrength}</span>}</strong>
+                  <em>in this exam</em>
+                </div>
+              ) : (
+                <div className="cp-pay-tile is-dark">
+                  <small>Attempted</small>
+                  <strong>{classStrength ?? '–'}</strong>
+                  <em>student{classStrength === 1 ? '' : 's'} took this exam</em>
+                </div>
+              )}
               <div className="cp-pay-tile is-lime">
                 <small>Top score</small>
                 <strong>{marks(topScore)}<span> / {marks(maxScore)}</span></strong>
                 <em>highest in class</em>
               </div>
-              <div className="cp-pay-tile is-sky">
-                <small>Class average</small>
-                <strong>{marks(avgTotal)}<span> / {marks(maxScore)}</span></strong>
-                <em>{maxScore > 0 && Number.isFinite(avgTotal) ? `${Math.round((avgTotal / maxScore) * 100)}% of the total` : 'total marks'}</em>
-              </div>
               {myScore != null && (
                 <div className="cp-pay-tile">
                   <small>My score</small>
                   <strong>{marks(myScore)}<span> / {marks(myMax)}</span></strong>
-                  <em>{myScoreNote || 'in this exam'}</em>
+                  <em>{myScoreNote}</em>
                 </div>
               )}
-              <div className="cp-pay-tile is-dark">
-                <small>Attempted</small>
-                <strong>{Number.isFinite(attempted) ? attempted : '–'}</strong>
-                <em>student{attempted === 1 ? '' : 's'} took this exam</em>
+              <div className="cp-pay-tile is-sky">
+                <small>Class average</small>
+                <strong>{marks(classAverage)}<span> / {marks(maxScore)}</span></strong>
+                <em>{classStrength != null ? `${classStrength} student${classStrength === 1 ? '' : 's'}` : (maxScore > 0 && classAverage != null ? `${Math.round((classAverage / maxScore) * 100)}% of the total` : 'total marks')}</em>
               </div>
             </div>
+
+            {subjects.length > 0 && (
+              <>
+                <h3 className="cp-stats-sub">Subject-wise: you vs class average</h3>
+                <ul className="cp-stats-subjects">
+                  {subjects.map((s, i) => {
+                    const name = s.name || `Subject ${i + 1}`;
+                    const max = num(s.maxScore) || 0;
+                    const me = num(s.myScore);
+                    const avg = num(s.classAverage);
+                    const top = num(s.topScore);
+                    return (
+                      <li key={`${name}-${i}`}>
+                        <div className="cp-stats-row">
+                          <strong>{name}</strong>
+                          <small>out of {marks(max)}{top != null ? ` · top ${marks(top)}` : ''}</small>
+                        </div>
+                        <div className="cp-duo-bar">
+                          {me != null && (
+                            <div className="cp-duo-line" aria-label={`You: ${marks(me)} out of ${marks(max)}`}>
+                              <div className="cp-duo-track"><div className="cp-duo-fill is-me" style={{ width: `${pctOf(me, max)}%` }} /></div>
+                              <b>{marks(me)}</b>
+                            </div>
+                          )}
+                          {avg != null && (
+                            <div className="cp-duo-line" aria-label={`Class average: ${marks(avg)} out of ${marks(max)}`}>
+                              <div className="cp-duo-track"><div className="cp-duo-fill is-class" style={{ width: `${pctOf(avg, max)}%` }} /></div>
+                              <b>{marks(avg)}</b>
+                            </div>
+                          )}
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <div className="cp-legend">
+                  <span><i className="is-me" />You</span>
+                  <span><i className="is-class" />Class average</span>
+                </div>
+              </>
+            )}
 
             {sections.length > 0 && (
               <>

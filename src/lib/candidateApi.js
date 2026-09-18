@@ -95,9 +95,11 @@ export async function startExam({ exam, series, fingerprint, continueExam = fals
 }
 
 // ── My Performance ────────────────────────────────────────────────────────
-// Class statistics for one quiz, from user/quiz/quiz-stats.php:
-// { topScore, maxScore, avgTotal, attemptedCount,
-//   avgSectionWise: [{ section, label, score }] }
+// Class statistics for one quiz attempt, from user/quiz/quiz-stats.php:
+// { quizId, attemptId, title, maxScore, myScore, myRank, classStrength, topScore,
+//   classAverage, subjects: [{ name, myScore, classAverage, topScore, maxScore }] }
+// Older deployments answer { topScore, maxScore, avgTotal, attemptedCount,
+//   avgSectionWise: [{ section, label, score }] }; the popup renders both.
 // `report` is a row of getWeeklyExamSummary() ({ quizId, attemptId, ... }).
 // The API answers 404 with a message when the report is not generated yet.
 export async function getExamStats(report) {
