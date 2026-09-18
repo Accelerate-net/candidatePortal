@@ -4,6 +4,7 @@ import Layout from '../components/Layout';
 import ConfirmDialog from '../components/ConfirmDialog';
 import ExploreSeriesDialog from '../components/ExploreSeriesDialog';
 import SeriesPromoCarousel from '../components/SeriesPromoCarousel';
+import CatalogSeries from '../components/CatalogSeries';
 import TileDropdown from '../components/TileDropdown';
 import { useUser } from '../components/UserProvider';
 import { Icon } from '../components/Icons';
@@ -188,6 +189,7 @@ export default function TestSeriesPage() {
     return { id: series.code, title: series.title, image: null, fallbackIcon: Icon.Desktop, badges, meta: [validity, tests], coverMeta: [validity], stats };
   });
   const coursesList = courseListing?.coursesList || [];
+  const noSeries = courseListingFound === false || (courseListingFound === true && enrolled.length === 0);
   const showProgressChart = courseListingFound && coursesList.some((c) => c.previousAttemptId);
 
   return (
@@ -232,14 +234,19 @@ export default function TestSeriesPage() {
         )}
         <ExploreSeriesDialog open={exploreOpen} onClose={() => setExploreOpen(false)} onOpen={(code) => { setExploreOpen(false); if (code !== courseIdOpen) getCourseListingData(code); }} />
 
-        {courseListingFound === false && (
-          <Card>
-            <div className="cp-state">
-              <span className="cp-state-icon"><Icon.Graduation /></span>
-              <p>Enroll in test series to start practicing</p>
-              <a href="https://crisprlearning.com/courses/" target="new" className="cp-btn cp-btn-primary">Enroll Now</a>
-            </div>
-          </Card>
+        {/* No series yet: the invitation, then the test series in the catalog to
+            enroll in, as /courses does when there is no course to show. */}
+        {noSeries && (
+          <>
+            <Card>
+              <div className="cp-state">
+                <span className="cp-state-icon"><Icon.Graduation /></span>
+                <p>Enroll in test series to start practicing</p>
+                <a href="https://crisprlearning.com/courses/" target="new" className="cp-btn cp-btn-primary">Enroll Now</a>
+              </div>
+            </Card>
+            <CatalogSeries />
+          </>
         )}
 
         {courseIdOpen && (
