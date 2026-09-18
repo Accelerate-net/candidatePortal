@@ -261,9 +261,17 @@ export default function ProfilePage() {
             {activeTab === 1 && (
               <Card>
                 <div className="cp-card-head"><h2>About {p.name}</h2></div>
-                {p.about
-                  ? <blockquote className="cp-about-quote"><p>{p.about}</p></blockquote>
-                  : <p className="cp-about-text" />}
+                {p.about ? (
+                  <figure className="cp-about-quote">
+                    <span className="cp-about-quote-mark" aria-hidden="true">&ldquo;</span>
+                    <blockquote><p>{p.about}</p></blockquote>
+                    <figcaption>
+                      <span className="cp-about-quote-rule" aria-hidden="true" />
+                      <strong>{p.name}</strong>
+                      {p.aspiration && <small>{p.aspiration}</small>}
+                    </figcaption>
+                  </figure>
+                ) : <p className="cp-about-text" />}
 
                 <div className="cp-about-section">
                   <h4>{p.gender === 'Female' ? <Icon.User width={16} height={16} /> : <Icon.User width={16} height={16} />}Personal Information</h4>

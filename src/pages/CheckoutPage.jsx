@@ -2,9 +2,10 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Icon } from '../components/Icons';
 import { Avatar } from '../components/ui';
 import { useToast } from '../components/Toast';
+import { getProfileCached } from '../lib/profileCache';
 import { clearToken, isAuthenticated, setToken } from '../lib/auth';
 import {
-  acknowledgePurchase, authenticate, getBillingAddress, getProfile, login, lookupCourse, processPurchase, validateCart,
+  acknowledgePurchase, authenticate, getBillingAddress, login, lookupCourse, processPurchase, validateCart,
 } from '../lib/candidateApi';
 import {
   addCourseToCart, clearCheckoutData, forgetCouponCode, getCouponCode, rememberCouponCode, removeFromCart, retrieveCart, saveCart,

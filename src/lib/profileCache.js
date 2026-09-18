@@ -9,7 +9,8 @@ import { getProfile } from './candidateApi';
 import { getToken } from './auth';
 
 const KEY = 'cp_profile';
-let memory = null; // { token, profile }
+const FRESH_MS = 5 * 60 * 1000; // refetch in the background after this
+let memory = null; // { token, profile, savedAt }
 
 function fromStorage() {
   try {
@@ -29,8 +30,13 @@ export function readCachedProfile() {
 export function writeCachedProfile(profile) {
   const token = getToken();
   if (!token || !profile) return;
-  memory = { token, profile };
+  memory = { token, profile, savedAt: Date.now() };
   try { window.sessionStorage.setItem(KEY, JSON.stringify(memory)); } catch { /* quota or private mode: memory copy still works */ }
+}
+
+// True while the cached copy is recent enough to skip a background refresh.
+export function isCachedProfileFresh() {
+  return Boolean(readCachedProfile()) && Date.now() - (memory?.savedAt || 0) < FRESH_MS;
 }
 
 export function clearCachedProfile() {

@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { getProfile } from '../lib/candidateApi';
 import { isAuthenticated } from '../lib/auth';
-import { readCachedProfile, writeCachedProfile } from '../lib/profileCache';
+import { isCachedProfileFresh, readCachedProfile, writeCachedProfile } from '../lib/profileCache';
 
 /**
  * Holds the logged-in candidate's profile (user-profile.php) so the shell can
@@ -35,7 +35,8 @@ export default function UserProvider({ children }) {
     }
   }, []);
 
-  useEffect(() => { refresh(); }, [refresh]);
+  // A recent cached copy is trusted as is; edits on the profile page update it.
+  useEffect(() => { if (!isCachedProfileFresh()) refresh(); }, [refresh]);
 
   const updateProfile = useCallback((next) => {
     setProfile((current) => {
