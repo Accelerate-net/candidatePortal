@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Layout from '../components/Layout';
+import MonthPicker from '../components/MonthPicker';
 import { Icon } from '../components/Icons';
 import { Card, Pill } from '../components/ui';
 import { getAttendance } from '../lib/candidateApi';
@@ -199,12 +200,7 @@ export default function AttendancePage() {
               <Card>
                 <div className="cp-card-head">
                   <h2>Class attendance</h2>
-                  <label className="cp-select-pill">
-                    <select value={monthKey} onChange={(e) => setMonthKey(e.target.value)} aria-label="Attendance month">
-                      {months.map((m) => <option key={m.key} value={m.key}>{m.label}</option>)}
-                    </select>
-                    <Icon.ChevronDown width={16} height={16} />
-                  </label>
+                  <MonthPicker months={months} value={month?.key} onChange={setMonthKey} />
                 </div>
                 <AttendanceGrid month={month} />
                 <div className="cp-att-legend">

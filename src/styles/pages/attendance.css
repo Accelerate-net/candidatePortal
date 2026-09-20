@@ -1,11 +1,36 @@
 /* Attendance page. */
 
-.cp-select-pill { position: relative; display: inline-flex; align-items: center; }
-.cp-select-pill select {
-  appearance: none; -webkit-appearance: none; padding: 9px 34px 9px 16px; border-radius: 999px; border: none;
-  background: var(--brand); color: #fff; font-weight: 700; font-size: 14px; cursor: pointer;
+/* Attendance month picker: pill trigger + styled menu (replaces the native <select> list). */
+.cp-monthpick { position: relative; display: inline-block; }
+.cp-monthpick-btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 9px 12px 9px 14px; border-radius: 999px; border: none;
+  background: var(--brand); color: #fff; font: inherit; font-weight: 700; font-size: 14px; cursor: pointer;
+  transition: background .15s ease, box-shadow .15s ease;
 }
-.cp-select-pill svg { position: absolute; right: 12px; pointer-events: none; color: #fff; }
+.cp-monthpick-btn:hover, .cp-monthpick.is-open .cp-monthpick-btn { background: var(--brand-deep); box-shadow: 0 6px 16px rgba(0, 95, 115, 0.25); }
+.cp-monthpick-btn:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+.cp-monthpick-caret { display: grid; place-items: center; opacity: .85; transition: transform .15s ease; }
+.cp-monthpick.is-open .cp-monthpick-caret { transform: rotate(180deg); }
+.cp-monthpick-menu {
+  position: absolute; right: 0; top: calc(100% + 8px); z-index: 60; min-width: 264px; max-width: calc(100vw - 28px);
+  padding: 6px; background: #fff; border: 1px solid var(--line); border-radius: 18px;
+  box-shadow: 0 18px 44px rgba(0, 95, 115, 0.18); max-height: min(60vh, 380px); overflow-y: auto;
+  animation: cp-monthpick-pop .16s ease-out;
+}
+@keyframes cp-monthpick-pop { from { opacity: 0; transform: translateY(-6px) scale(.98); } to { opacity: 1; transform: none; } }
+.cp-monthpick-title { padding: 8px 12px 6px; font-size: 11.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.cp-monthpick-item {
+  display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border: none; border-radius: 12px;
+  background: transparent; text-align: left; font: inherit; color: inherit; cursor: pointer;
+}
+.cp-monthpick-item:hover { background: var(--panel-soft); }
+.cp-monthpick-item.is-active { background: var(--brand-soft); }
+.cp-monthpick-item:focus-visible { outline: 2px solid var(--teal); outline-offset: -2px; }
+.cp-monthpick-meta { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.cp-monthpick-meta strong { font-size: 14px; white-space: nowrap; }
+.cp-monthpick-item.is-active .cp-monthpick-meta strong { color: var(--brand-deep); }
+.cp-monthpick-meta small { font-size: 12px; color: var(--muted); font-weight: 600; }
+.cp-monthpick-check { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--brand); color: #fff; flex-shrink: 0; }
 .cp-att-head, .cp-att-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
 .cp-att-head span { text-align: center; font-size: 12px; font-weight: 700; color: var(--muted); padding-bottom: 4px; }
 .cp-att-cell {
@@ -25,12 +50,28 @@
 .cp-att-legend .is-off { background: #d1dbe6; }
 .cp-att-legend .is-upcoming { background: transparent; border: 1px dashed #b7c3d1; box-sizing: border-box; }
 .cp-att-kpis .cp-kpi-value strong { font-size: 30px; }
-.cp-att-months { display: flex; flex-direction: column; }
-.cp-att-month { border-bottom: 1px solid var(--line); }
-.cp-att-month:last-child { border-bottom: none; }
-.cp-att-month-btn { display: block; width: 100%; padding: 12px 8px; border: none; border-radius: 14px; background: transparent; text-align: left; font: inherit; color: inherit; cursor: pointer; }
-.cp-att-month-btn:hover { background: var(--panel-soft); }
-.cp-att-month.is-active .cp-att-month-btn { background: var(--brand-soft); }
+/* Month rows are selectable tiles: spaced out (no hairline separators), a
+   soft tint on hover, and a teal accent bar + tinted fill for the selected one. */
+.cp-att-months { display: flex; flex-direction: column; gap: 6px; }
+.cp-att-month-btn {
+  position: relative; display: block; width: 100%; padding: 12px 14px 12px 16px;
+  border: 1px solid transparent; border-radius: 14px; background: transparent;
+  text-align: left; font: inherit; color: inherit; cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+.cp-att-month-btn::before {
+  content: ''; position: absolute; left: 6px; top: 12px; bottom: 12px; width: 3px;
+  border-radius: 3px; background: var(--brand); opacity: 0; transition: opacity .15s ease;
+}
+.cp-att-month-btn:hover { background: var(--panel-soft); border-color: var(--line); }
+.cp-att-month-btn:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+.cp-att-month.is-active .cp-att-month-btn {
+  background: var(--brand-soft); border-color: rgba(0, 95, 115, 0.18);
+  box-shadow: 0 1px 2px rgba(0, 95, 115, 0.08);
+}
+.cp-att-month.is-active .cp-att-month-btn::before { opacity: 1; }
+.cp-att-month.is-active .cp-att-month-row strong { color: var(--brand-deep); }
+.cp-att-month.is-active .cp-att-month-val b { color: var(--brand); }
 .cp-att-month-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 6px; }
 .cp-att-month-row strong { font-size: 14.5px; }
 .cp-att-month-val b { font-size: 15px; }
