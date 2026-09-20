@@ -170,7 +170,6 @@ export default function AttendancePage() {
               <Card>
                 <div className="cp-card-head">
                   <h2>Last 3 months</h2>
-                  <Pill tone="ghost">{Math.min(months.length, 3)} month{Math.min(months.length, 3) === 1 ? '' : 's'}</Pill>
                 </div>
                 <ul className="cp-att-months">
                   {months.slice(0, 3).map((m) => (
@@ -199,7 +198,7 @@ export default function AttendancePage() {
               {/* CALENDAR */}
               <Card>
                 <div className="cp-card-head">
-                  <h2>Class attendance</h2>
+                  <h2>Attendance</h2>
                   <MonthPicker months={months} value={month?.key} onChange={setMonthKey} />
                 </div>
                 <AttendanceGrid month={month} />
